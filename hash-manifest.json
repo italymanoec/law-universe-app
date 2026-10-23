@@ -1,0 +1,10 @@
+{
+  "version": "v69-neuron-1",
+  "algorithm": "SHA-384",
+  "files": {
+    "essay.html": "e6b02b099d8e98ba29df25e34b17ba905007f4e57d1a3fcba445750ce4367caf5ad787017cff21b64dc46517e3a1c5c6",
+    "vendor/mindmap.js": "51f32cf10e6f10679acc4dc5b8d73e99dfe2482cfe19e9a8738a9273ef62d821e74d084a53d9b63c541ff9854f3a678c",
+    "sw.js": "5e029bf3ad0c654bddc01efaaf071ec4cccc931b645187e46d33c3478b757d52eaeeb4efdc0c4ee3a241cceccbe07b0d",
+    "data/essay_packs.json": "c00d93d5bffff37a8d52de59017543a69fd4a5a98fa58e93a63e8165ce15348397d0b1633fbafb8e5d0d4cf81c177975"
+  }
+}
