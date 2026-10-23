@@ -1,5 +1,5 @@
 /* Change the product name here, then run: python3 tools/finalize-musk.py */
-window.LAWU_CONFIG = Object.freeze({name: '法學記憶宇宙'});
+window.LAWU_CONFIG = Object.freeze({name: 'LEXO'});
 (function () {
   function apply() {
     const name = window.LAWU_CONFIG.name;
