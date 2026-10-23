@@ -18,3 +18,9 @@ PASS 16科2,502題與原始src/qb逐位元相同；改一byte雜湊拒絕；prot
 限制：本環境 Chrome headless 啟動即 SIGABRT / kill EPERM，真實瀏覽器腳本未能執行完成，沒有宣稱實機觸控或截圖驗收通過。上述已通過項目是 jsdom / 靜態與保守幾何檢查。
 
 部署：僅同步 /tmp/lua_deploy，remote 已確認 italymanoec/law-universe-app；不操作 italymanoec/law-universe。保留部署倉庫 data/DONE_data.txt。
+
+部署實證：
+功能主提交 4a8f70f8c8b504f437ecaea44b65771fff2efe09；後續清除隱藏格的圈層 metadata，並優先讀取明確年度欄位，最終程式提交 fbfc325344cfe6f548fb2fdda160956b5fac89a7，皆成功 push 至 italymanoec/law-universe-app/main。
+GitHub Pages https://italymanoec.github.io/law-universe-app/ 已 HTTP 200 讀回 essay.html、index.html、vendor/mindmap.js、vendor/journey.js、pwa/paper.css、sw.js、hash-manifest.json 與首次部署的 DONE_hive2.txt，全數與本機逐位元一致。
+部署工作樹乾淨；題庫與答案、防竄改保護資料未改。最後再同步本份部署實證報告並提交。
+補強測試 PASS：相鄰格切換、上一步回原中心並更新面板、展開／收起 aria 狀態、關閉仍保留中心。
