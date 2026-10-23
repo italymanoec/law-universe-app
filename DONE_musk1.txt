@@ -26,4 +26,10 @@
 僅 /tmp/lua_deploy → italymanoec/law-universe-app/main；不操作 italymanoec/law-universe。
 新版：https://italymanoec.github.io/law-universe-app/
 舊版：https://italymanoec.github.io/law-universe-app/classic/
-推送與線上讀回實證將於完成後補入本報告。
+部署實證
+- 視覺改版與 classic 主提交：6068604。
+- 手機教學首屏補強最終程式提交：9329ef1dbc929cee86e1e5443939c0572e7b17ff；已成功 push origin HEAD:main。
+- python3 tools/verify-musk1-live.py：PASS，新版與 /classic/ 首頁皆 HTTP 200 並與部署檔逐位元一致；以 HTTP 逐檔讀回兩版合計107個檔案，全部 SHA-384 與部署 manifest 一致（含 JS、CSS、SW、題庫、法條、JSON、圖示、報告）。
+- 完整驗證時間：HTTP verification UTC 2026-10-23 11:07:47。
+- /tmp/lua_deploy 程式提交後工作樹乾淨；本報告與其 manifest 另行補交部署實證。
+- 本次未開啟任何視窗／瀏覽器，未列印 token；僅操作 italymanoec/law-universe-app。
