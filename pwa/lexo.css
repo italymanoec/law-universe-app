@@ -113,6 +113,27 @@ details.law .in{padding:12px 16px 16px}
 .upd{position:fixed;top:calc(60px + env(safe-area-inset-top));left:0;right:0;margin:0 auto;width:calc(100% - 32px);max-width:448px;min-height:48px;border:0;border-radius:8px;background:#111;color:#fff;font-weight:700;z-index:20;cursor:pointer}
 .empty{padding:24px 0;color:#6E6E73}
 
+/* countdown, daily plan, daily quote */
+.cd{padding:16px 0 4px}
+.cd h1{font-size:20px;line-height:1.35;margin:0 0 6px}
+.cd-n{display:block;font-size:22px;font-weight:800}
+.cd-n b{font-size:64px;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cd-set{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:12px}
+.cd-set label{font-size:14px;color:#6E6E73}
+.cd-set input{flex:0 1 180px;min-width:0;min-height:44px;padding:0 10px;border:1px solid #D1D1D6;border-radius:8px;background:#fff;color:#111;font:inherit;font-size:16px}
+.linkbtn{min-height:44px;padding:0 4px;border:0;background:none;color:#6E6E73;font-size:14px;text-decoration:underline;cursor:pointer}
+.plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.plan a{display:block;min-width:0;padding:12px 4px;border:1px solid #E5E5EA;border-radius:8px;text-align:center;text-decoration:none}
+.plan a:active{background:#F5F5F7}
+.plan b{display:block;font-size:30px;line-height:1.2;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plan b small{margin-left:2px;font-size:14px;font-weight:600}
+.plan span{display:block;font-size:13px;color:#6E6E73;white-space:nowrap}
+.plan-note{margin-top:8px}
+.quote{margin:0;padding:16px;border-radius:8px;background:#F5F5F7}
+.quote .tag{margin:0}
+.quote blockquote{margin:8px 0;font-size:18px;line-height:1.6;font-weight:700;overflow-wrap:anywhere}
+.quote figcaption{font-size:13px;color:#6E6E73;overflow-wrap:anywhere}
+
 @media (min-width:600px){
   body{padding:0}
   .shell,.top,.tabs,.act{border-left:1px solid #E5E5EA;border-right:1px solid #E5E5EA}

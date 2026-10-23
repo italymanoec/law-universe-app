@@ -137,6 +137,65 @@
   function searchBox(query = '') {
     return `<form id="law-search" class="search"><label for="law-query">條號搜尋</label><div class="searchline"><input id="law-query" name="q" type="search" value="${esc(query)}" placeholder="例如：民法 87、刑法 28" required><button type="submit" aria-label="搜尋法條">搜尋</button></div></form>`;
   }
+  /* ---------- countdown, daily plan, daily quote (data: vendor/countdown-data.js) ---------- */
+  const CD = window.LEXO_COUNTDOWN || null;
+  const dayNum = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? Math.floor(Date.UTC(+m[1], m[2] - 1, +m[3]) / 86400000) : null; };
+  const fmtDay = n => { const d = new Date(n * 86400000); return `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日（週${'日一二三四五六'[d.getUTCDay()]}）`; };
+  const num = n => n.toLocaleString('en-US');
+  function examTarget() {
+    const mine = getLS('lexo-exam-date', null);
+    if (dayNum(mine) != null) return {day: dayNum(mine), mine: true};
+    const off = CD && CD.exam && dayNum(CD.exam.date);
+    return off != null ? {day: off, mine: false} : null;
+  }
+  // Even pace: unseen questions spread over the days before the review window; due wrong answers come from the SRS schedule.
+  function dailyPlan(left) {
+    const {mcq, essay} = CD.bank, R = CD.reviewDays, wrong = wrongIds();
+    const due = wrong.filter(id => store.srs[id].d <= todayNum()).length;
+    const restQ = Math.max(0, mcq - Object.keys(store.srs).length), restE = Math.max(0, essay - getLS('lexo-seen', []).length);
+    const study = left - R;
+    if (study > 0) {
+      const every = restE && restE < study ? Math.floor(study / restE) : 1;
+      return {review: false, study, restQ, restE, every, wrong: due,
+        mcq: Math.ceil(restQ / study), essay: !restE ? 0 : every > 1 ? (study % every === 0 ? 1 : 0) : Math.ceil(restE / study)};
+    }
+    return {review: true, mcq: Math.ceil(mcq / left), essay: Math.ceil(essay / left), wrong: Math.max(due, Math.ceil(wrong.length / left))};
+  }
+  function countdownBlock() {
+    if (!CD) return '';
+    const t = examTarget(), left = t ? t.day - todayNum() : null;
+    const off = CD.exam && dayNum(CD.exam.date) != null;
+    const name = t && !t.mine ? CD.exam.name : t ? '我的考試日' : CD.exam.name;
+    let head;
+    if (!t) head = '考試日期待公告';
+    else if (left > 0) head = `距離考試還有<span class="cd-n"><b>${num(left)}</b> 天</span>`;
+    else if (left === 0) head = '今天就是考試日，<br>加油！';
+    else head = '這個考試日已經過了';
+    let html = `<section class="cd"><p class="kicker">${esc(name)}</p><h1 tabindex="-1">${head}</h1>`;
+    if (t) html += `<p class="note">${fmtDay(t.day)}${t.mine ? '・你設定的日期' : `・${esc(CD.exam.status)}・<a href="${esc(CD.exam.source)}" target="_blank" rel="noopener">考選部公告</a>`}</p>`;
+    else html += `<p class="note">考選部還沒公告日期，可以先填你自己的目標日。</p>`;
+    const val = t ? new Date(t.day * 86400000).toISOString().slice(0, 10) : '';
+    html += `<div class="cd-set"><label for="exam-date">考試日期</label><input id="exam-date" type="date" value="${val}" min="${new Date(todayNum() * 86400000).toISOString().slice(0, 10)}">`;
+    if (t && t.mine && off) html += `<button type="button" class="linkbtn" data-act="exam-reset">改回官方日期</button>`;
+    html += `</div></section>`;
+    if (t && left > 0) {
+      const p = dailyPlan(left), unit = '<small>題</small>';
+      html += `<h2>${p.review ? '今天的總複習' : '今天最少要做'}</h2><div class="plan">` +
+        `<a href="#/drill"><b>${num(p.mcq)}${unit}</b><span>${p.review ? '選擇題重做' : '選擇題'}</span></a>` +
+        `<a href="#/essay"><b>${p.essay}${unit}</b><span>${p.review ? '申論重寫' : '申論'}</span></a>` +
+        `<a href="#/wrong"><b>${num(p.wrong)}${unit}</b><span>錯題複習</span></a></div>`;
+      html += p.review
+        ? `<p class="note plan-note">最後 ${CD.reviewDays} 天總複習：全部 ${num(CD.bank.mcq)} 題選擇題再做一輪、${CD.bank.essay} 題申論重寫，錯題優先。</p>`
+        : `<p class="note plan-note">還有 ${num(p.restQ)} 題選擇題、${p.restE} 題申論沒做過，平均分到 ${num(p.study)} 天${p.every > 1 ? `（申論約每 ${p.every} 天 1 題）` : ''}；最後 ${CD.reviewDays} 天（${fmtDay(t.day - CD.reviewDays).replace(/（.*$/, '')}起）留給總複習。</p>`;
+    }
+    const qs = CD.quotes || [];
+    if (qs.length) {
+      const q = qs[todayNum() % qs.length];
+      html += `<h2>每日金句</h2><figure class="quote"><span class="tag">${q.t === 'law' ? '可引用在申論' : '給今天的你'}</span><blockquote>${esc(q.q)}</blockquote><figcaption>— ${q.by === 'LEXO' ? 'LEXO・原創' : q.by.startsWith('《') ? esc(q.src) : esc(q.by) + (/^[《〈]/.test(q.src) ? '' : '，') + esc(q.src)}</figcaption></figure>`;
+    }
+    return html;
+  }
+
   function home() {
     const last = getLS('lexo-last-q', null), lastQ = essay && last && essay.q[last];
     const today = (store.log[todayStr()] || {}).n || 0, wrong = wrongIds().length;
@@ -144,7 +203,7 @@
     const choices = (window.QBD && window.QBD.civil || []).filter(q => Array.isArray(q.o));
     const daily = choices.length ? choices[todayNum() % choices.length] : null;
     const recent = getLS('lexo-last-drill', null);
-    let html = `<section class="hero"><p class="kicker">律師・司法官考試</p><h1 tabindex="-1">每天一題，<br>慢慢累積實力。</h1><p>先從選擇題開始。</p></section>`;
+    let html = countdownBlock() || `<section class="hero"><p class="kicker">律師・司法官考試</p><h1 tabindex="-1">每天一題，<br>慢慢累積實力。</h1><p>先從選擇題開始。</p></section>`;
     html += `<div class="stats"><a href="#/drill"><b>${today}</b><span>今日已刷</span></a><a href="#/wrong"><b>${wrong}</b><span>錯題本</span></a><a href="#/drill"><b>${Object.keys(store.srs).length}</b><span>累計作答</span></a></div>`;
     if (recent && SUBJ[recent.k]) html += '<h2>繼續上次</h2>' + card('#/drill/' + recent.k + '/' + enc(recent.id), '選擇題・' + esc(SUBJ[recent.k].name), '接著做上一題');
     else if (lastQ) html += '<h2>繼續上次</h2>' + card('#/q/' + enc(last), esc('申論・' + qName(lastQ)), '回到上次的申論題');
@@ -156,7 +215,9 @@
     }
     html += `<div class="foot"><p class="note">題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</p><a class="note" href="classic/">舊版</a></div>`;
     if (!essay && !essayErr) loadEssay();
-    return {title: '首頁', html, primary: {label: '開始刷選擇題', href: '#/drill/civil'}};
+    return {title: '首頁', html, primary: {label: '開始刷選擇題', href: '#/drill/civil'}, onAct(act) {
+      if (act === 'exam-reset') { try { localStorage.removeItem('lexo-exam-date'); } catch (e) {} render(); }
+    }};
   }
   function searchResults(query) {
     const wait = needEssay(); if (wait) return wait;
@@ -452,6 +513,12 @@
       const notes = getLS('lexo-notes', {}); notes[e.target.dataset.note] = e.target.value;
       try { localStorage.setItem('lexo-notes', JSON.stringify(notes)); $('#note-status').textContent = '已儲存在這台裝置'; }
       catch (err) { $('#note-status').textContent = '儲存失敗，請先複製你的筆記'; }
+    });
+    $('#main').addEventListener('change', e => {
+      if (e.target.id !== 'exam-date') return;
+      const v = e.target.value;
+      if (dayNum(v) != null) setLS('lexo-exam-date', v); else { try { localStorage.removeItem('lexo-exam-date'); } catch (x) {} }
+      render(); const box = $('#exam-date'); if (box) try { box.focus({preventScroll: true}); } catch (x) {}
     });
     $('#main').addEventListener('click', onAct);
     $('#act').addEventListener('click', onAct);
