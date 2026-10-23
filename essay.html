@@ -8,7 +8,7 @@
 @media(max-width:600px){body:has(.mm-layout) header{padding:8px 12px}body:has(.mm-layout) header h1,body:has(.mm-layout) header .muted,body:has(.mm-layout) #status{display:none}body:has(.mm-layout) nav{margin-top:6px;flex-wrap:nowrap;gap:4px}body:has(.mm-layout) nav a{padding:7px 6px;font-size:12px}body:has(.mm-layout) main{padding:6px}body:has(.mm-layout) main>h2{font-size:17px;margin:4px}.mm-controls{gap:4px;margin:4px 0;overflow-x:auto}.mm-controls select{max-width:98px;padding:7px;font-size:12px}.mm-controls input{width:80px;padding:7px;font-size:12px}.mm-controls button{padding:7px;font-size:12px}.mm-stage{height:73vh;min-height:70vh}.mm-legend{font-size:11px}#mm-detail{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;max-height:42vh;border-radius:16px 16px 0 0;padding-bottom:calc(12px + env(safe-area-inset-bottom))}.mm-help{margin:4px}}
 </style>
 <header><div><a href="index.html">← 法學宇宙首頁</a><h1>申論法條組合包</h1><div class="muted">從題目抓爭點，把法條串成解題路徑。</div><div id="status" class="status" role="status"></div><nav aria-label="模組導覽"><a href="#questions">題目列表</a><a href="#packs">組合包</a><a href="#reverse">條號反查</a><a href="#mindmap">神經元網路</a></nav></div></header><main id="main"></main>
-<script src="vendor/mindmap.js" integrity="sha384-U4MmDpTHQ3x8aZB3aCEJf4UNJNG87Q70r8IIUwJ3Sx2CBLn6t39TVicIFZIek720" crossorigin="anonymous"></script>
+<script src="vendor/mindmap.js" integrity="sha384-UZYmNeQIOuzCT5iCK+I9SxLHZFiKt6BctiUKWnBl2khXySSjvYVsUsjVR67rFRzA" crossorigin="anonymous"></script>
 <script>
 'use strict';
 const DEMO={questions:[{id:'demo-q1',title:'一物二賣的請求權分析（示範）',subject:'民法',content:'【介面示範，非正式考題】甲將物品出售給乙，嗣後又交付給丙。乙可以如何主張權利？',issues:[{title:'契約義務與不履行',description:'先辨識契約義務，再依給付障礙與可歸責性分析。',articleIds:['demo-a1','demo-a2']}],packIds:['demo-p1']}],packs:[{id:'demo-p1',title:'買賣與給付障礙（示範）',description:'練習從契約義務連結損害賠償。',articleIds:['demo-a1','demo-a2'],questionIds:['demo-q1']}],articles:[{id:'demo-a1',law:'民法',number:'348',title:'出賣人義務',text:'【示範摘要，非條文全文】出賣人負有交付標的物及移轉所有權等義務。',requirements:['辨識契約當事人','確認約定的給付內容'],practice:['示範欄位：正式實務見解待資料完成後載入。'],issues:['債權契約與物權變動的區分'],relatedArticleIds:['demo-a2']},{id:'demo-a2',law:'民法',number:'226',title:'給付不能',text:'【示範摘要，非條文全文】因可歸責於債務人之事由致給付不能時，涉及損害賠償。',requirements:['給付不能','可歸責事由','損害及因果關係'],practice:[],issues:['給付不能與其他給付障礙的區別'],relatedArticleIds:['demo-a1']}]};
@@ -43,8 +43,9 @@ window.addEventListener('hashchange',()=>{search='';render();window.scrollTo(0,0
 
 // Network labels use only source fields; never fall back to internal IDs.
 function questionLabel(q){
- const topic=pick(q,'topic','theme','title','name','label')||arr(q.issues).map(i=>typeof i==='string'?i:pick(i,'title','name','issue')).find(Boolean)||pick(q,'prompt_text','stem_text','content','question','text','body')||'';
- return [pick(q,'year_roc','year','年度'),topic].filter(v=>v!=null&&v!=='').join(' ');
+ const issues=arr(q.issues).map(i=>typeof i==='string'?i:pick(i,'title','name','issue')).filter(Boolean);
+ const topic=pick(q,'topic','theme','title','name','label')||issues.find(t=>!/^第\s*[\d一二三四五六七八九十]+/.test(t))||issues[0]||pick(q,'prompt_text','stem_text','content','question','text','body')||'';
+ return [topic,pick(q,'year_roc','year','年度')].filter(v=>v!=null&&v!=='').join(' ');
 }
 function mapGraph(){
  const nodes=[],edges=[],seen=new Map(),pairs=new Set();
