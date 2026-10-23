@@ -1,5 +1,5 @@
 // All required files, including Three.js and every subject, install atomically.
-const VERSION = 'v73-neuron-7';
+const VERSION = 'v74-neuron-8';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
 // neuron-8: viewport tutorial, source-linked example, readable unlocked exploration.
