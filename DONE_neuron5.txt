@@ -4068,3 +4068,7 @@ Distances: screen pixels from node center to nearest label text rectangle; conse
   ]
 }
 PASS: mobile both-axis coverage >=80%, all mobile visible labels <=24px in default/selected/zoom states; desktop unchanged; SRI/manifest/data/no CDN.
+
+Deployment: commit 206d8e807cca8bce367dd73a9087d524d4a7fc97 pushed to italymanoec/law-universe-app main. All five live assets HTTP 200 and byte-for-byte match local app. SRI and SW v71-neuron-5 verified.
+https://italymanoec.github.io/law-universe-app/essay.html#mindmap
+Only law-universe-app repository accessed; no token printed.
