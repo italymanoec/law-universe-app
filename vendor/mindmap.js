@@ -1,4 +1,5 @@
-/* Original local force-directed neuron network. No third-party code. */
+/* Original local force-directed neuron network. No third-party code.
+ * Node labels are supplied by the source-data adapter in essay.html. */
 (function(global){
 'use strict';
 function mount(host,graph,onSelect){
