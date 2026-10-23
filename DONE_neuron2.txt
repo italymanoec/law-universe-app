@@ -20,3 +20,11 @@ PASS JS語法、SRI、所有manifest雜湊。
 截圖限制：已使用 Playwright 嘗試本機 Chrome headless 1280x900 / 390x844；Chrome 啟動遭環境 SIGABRT，未取得截圖，不能宣稱已做像素畫面人工驗收。可重跑 tools/check-neuron2-browser.cjs（先以8765提供app）。
 
 部署目標只允許 italymanoec/law-universe-app；後續部署結果附記。
+
+部署結果：
+- /tmp/lua_deploy origin 確認為 https://github.com/italymanoec/law-universe-app.git。
+- 程式提交 85509ce5411c45ccb99e6ac698eff2c356ba9fe5 已 push main。
+- GitHub Pages build status=built，error.message=null，commit 與上列一致。
+- https://italymanoec.github.io/law-universe-app/essay.html 已 HTTP 200，逐位元比對本機一致。
+- 線上 vendor/mindmap.js、sw.js、hash-manifest.json、data/essay_packs.json 均 HTTP 200 且與本機完全相同。
+- 未接觸 italymanoec/law-universe。
