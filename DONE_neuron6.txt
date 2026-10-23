@@ -4058,3 +4058,11 @@ PASS: mobile both-axis coverage >=80%, all mobile visible labels <=24px in defau
 
 PASS: 2,502 questions / 16 subject files byte-identical to original src/qb; altered-byte digest rejection; inline JS syntax and no external CDN/fonts.
 部署同步保留既有 data/DONE_data.txt（本機與既有部署的說明紀錄原本不同），不發布該筆無關差異。
+
+Deployment: 4ab22b02146b0f87ee113cca7c10a490cfcff19c pushed to italymanoec/law-universe-app main.
+GitHub Pages run 39921947686: completed / success.
+https://italymanoec.github.io/law-universe-app/index.html
+https://italymanoec.github.io/law-universe-app/essay.html#mindmap
+All seven live assets HTTP 200 and byte-for-byte match local app (index, essay, paper CSS, mindmap JS, SW, hash-manifest, manifest).
+Independent graph check: 196 nodes / 646 edges; real-data relationships, deduplication, detail, selection, second layer, filter, pan/pinch PASS; consoleErrors=[].
+Only italymanoec/law-universe-app accessed for git/Pages operations; no token printed.
