@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>法學記憶宇宙｜律師司法官考試</title>
+<link rel="icon" href="icons/favicon-32.png"><title>法學記憶宇宙｜律師司法官考試</title>
 <style>[hidden]:not([hidden=until-found i]){display:none!important}img{max-width:100%}html,body{background:#fffdf8}</style>
 <style>
 :root{
@@ -378,7 +378,7 @@ body.nrOn{overflow:hidden}
 .nk-red{color:#2b2b2b}.nk-hl{background:#fffdf8}.nk-green{color:#2b2b2b}.nk-blue{color:#2b2b2b}.nk-gray{color:#2b2b2b}.nk-orange{color:#2b2b2b}.nk-purple{color:#2b2b2b}.nk-u{text-decoration:underline}
 @media (max-width:760px){ .cbt-paper textarea{--fz:min(18px,calc((100vw - 50px) / 25))} }
 </style>
-<link rel="stylesheet" href="pwa/paper.css" integrity="sha384-F3lNuF9TSoqY9HG0DCEd0TqaGcPopVcWl8eX/zcd4TxqnpV2X50PPkrStMh4PoAj" crossorigin="anonymous">
+<link rel="stylesheet" href="pwa/paper.css" integrity="sha384-r09pIec2n5ZX591hWrcFyHJSv2KA/F8c52qow9uqBmrriliF1FAZKJkirRXZ9bNv" crossorigin="anonymous">
 <script>
 (function(){ 
   let k='civil'; try{ const r=JSON.parse(localStorage.getItem('civil-globe-v2')||'{}'); if(r&&r.last) k=r.last; }catch(e){}
@@ -401,7 +401,7 @@ body.nrOn{overflow:hidden}
 <div class="scan"></div><div class="vignette"></div><div class="topfade"></div>
 
 <div class="hud">
-  <div class="brand"><h1 id="subjName">民法記憶星球</h1><span id="subjSub"></span><span id="syncDot" class="syncDot" hidden></span></div>
+  <a class="neuron-start" href="essay.html#mindmap">第一次來？從這裡開始 → 神經元網路新手教學</a><div class="brand"><h1 id="subjName">法學記憶宇宙</h1><span id="subjSub"></span><span id="syncDot" class="syncDot" hidden></span></div>
   <div id="staleW" class="staleW" hidden></div>
   <div id="discW" class="discW" role="note" hidden><span>本站為個人備考整理，題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</span><button type="button" class="btn" id="discOk">知道了</button></div>
   <div class="bar">
@@ -1727,9 +1727,9 @@ function refreshMastery(){
 }
 function updateHud(){
   document.body.classList.toggle('uni', uniMode);
-  document.getElementById('subjName').textContent = uniMode ? '法學記憶宇宙' : S.name+'記憶星球';
+  document.getElementById('subjName').textContent = '法學記憶宇宙';
   document.getElementById('subjSub').textContent = uniMode ? '律師・司法官考試全科' : S.paper+'・'+(!S._qbOK?(qbErr===SK?(qbStale?'題庫版本不符，請重新整理頁面':'題庫載入失敗，會自動重試（或點今日刷題）'):QN[SK]+' 題（載入中）'):QB.length?QB.length+(isEss()?' 題二試申論':' 題真題'):'題庫建置中');
-  document.title = (uniMode?'法學記憶宇宙':S.name+'記憶星球')+'｜律師司法官考試';
+  document.title = '法學記憶宇宙'+'｜律師司法官考試';
   if(typeof syncHud==='function') syncHud();
 }
 
@@ -2375,7 +2375,7 @@ function renderLaw(){ const v=lawView, M=LAWM[v.pc], D=window.LAWDATA&&LAWDATA[v
       if(rc.qs.length) h+='<div class="acts"><button class="btn" id="ldrill">刷引用本條的 '+rc.qs.length+' 題</button></div>';
       const own=lawOwner(v.pc); if(!rc.nodes.length&&!rc.qs.length&&own&&own!==SK) h+='<div class="acts"><button class="btn" id="lown">到「'+esc(SUBJ[own].name)+'」星球看相關考點</button></div>'; } }
   const ck=(LAWPATCH&&S_(LAWPATCH.checked))||S_(PMETA.checked), age=patchAge();
-  if(age!==null&&age>10) h+='<div class="pend bad"><b>修法狀態已 '+age+' 天沒有查核</b><br>每週一的自動更新可能卡住了：請到 Claude 桌面版「排程 →【每週一】法學宇宙法典更新 → Runs」查看。上面的修法與違憲備註可能已經過時。</div>';
+  if(age!==null&&age>10) h+='<div class="pend bad"><b>修法狀態已 '+age+' 天沒有查核</b><br>每週一的自動更新可能卡住了：請到 Claude 桌面版「排程 →【每週一】法學記憶宇宙法典更新 → Runs」查看。上面的修法與違憲備註可能已經過時。</div>';
   h+='<div class="lawsrc">條文來源：全國法規資料庫（本法最後修正 '+esc(M.d)+'，資料擷取 '+esc((LAWPATCH&&S_(LAWPATCH.data_date))||S_(PMETA.data_date)||'2026-09-24')+(ck?'；修法狀態查核 '+esc(ck):'')+'）。修法備註另查立法院與總統府公報。'+(patchState==='none'?'<br>未連上共用資料庫，修法備註為內建版。':'')+'</div>';
   panel.innerHTML=h; panel.classList.add('show'); syncHud();
   panel.querySelector('.x').onclick=closePanel;
