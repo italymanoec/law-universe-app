@@ -98,7 +98,7 @@
     if (a === 'q' && essay && essay.q[b]) return 'essay/' + enc(essay.q[b].category);
     if (a === 'essay' && b) return 'essay';
     if (a === 'a' && c) return 'q/' + enc(c);
-    if (a === 'search') return 'map';
+    if (a === 'search') return getLS('lexo-search-origin', 'home') === 'home' ? '' : getLS('lexo-search-origin', 'home');
     if (a === 'a' || a === 'g') return 'essay';
     if (a === 'drill' && b) return 'drill';
     if (a === 'wrong') return 'drill';
@@ -134,8 +134,8 @@
     const notes = getLS('lexo-notes', {});
     return `<section class="notes"><label for="my-note">我的筆記</label><textarea id="my-note" data-note="${esc(id)}" rows="4" placeholder="寫下你的想法、答題草稿或容易忘記的地方">${esc(notes[id] || '')}</textarea><span class="note" id="note-status" role="status">只儲存在這台裝置</span></section>`;
   }
-  function searchBox() {
-    return `<form id="law-search" class="search"><label for="law-query">條號搜尋</label><div class="searchline"><input id="law-query" name="q" type="search" placeholder="例如：民法 87、刑法 28" required><button type="submit" aria-label="搜尋法條">搜尋</button></div></form>`;
+  function searchBox(query = '') {
+    return `<form id="law-search" class="search"><label for="law-query">條號搜尋</label><div class="searchline"><input id="law-query" name="q" type="search" value="${esc(query)}" placeholder="例如：民法 87、刑法 28" required><button type="submit" aria-label="搜尋法條">搜尋</button></div></form>`;
   }
   function home() {
     const last = getLS('lexo-last-q', null), lastQ = essay && last && essay.q[last];
@@ -162,7 +162,7 @@
     const wait = needEssay(); if (wait) return wait;
     const norm = t => String(t).replace(/第|條|§|\s/g, '').replace(/之/g, '-');
     const term = norm(query), found = essay.arts.filter(a => norm(a.law + a.article_no).includes(term) || norm(a.label).includes(term));
-    return {title: '條號搜尋', html: `<h1 tabindex="-1">條號搜尋</h1>${searchBox()}<h2>「${esc(query)}」・${found.length} 筆</h2>` + (found.length ? rows(found.map(a => ['#/a/' + enc(a.id), esc(a.label), freq(a.id) + ' 題用到'])) : '<p class="empty">找不到這個條號。試試「87」或「民法 87」。</p>')};
+    return {title: '條號搜尋', html: `<h1 tabindex="-1">條號搜尋</h1>${searchBox(query)}<h2>「${esc(query)}」・${found.length} 筆</h2>` + (found.length ? rows(found.map(a => ['#/a/' + enc(a.id), esc(a.label), freq(a.id) + ' 題用到'])) : '<p class="empty">找不到這個條號。試試「87」或「民法 87」。</p>')};
   }
 
   function essayHome() {
@@ -208,7 +208,7 @@
     let html = `<p class="kicker">${esc(q.category)}・${esc(qName(q))}${q.points ? '・' + q.points + ' 分' : ''}</p><h1 tabindex="-1">申論・小題 ${esc(digits(q.sub_question_no || q.question_no))}</h1>`;
     html += `<div class="box question-stem"><p class="kicker">題目</p><div class="txt">${esc(q.stem_text)}</div></div><div class="box ask"><p class="kicker">請回答</p><div class="txt">${esc(q.prompt_text)}</div></div>`;
     html += noteBox('essay:' + id);
-    if (!shown) return {title: '申論・小題 ' + digits(q.sub_question_no || q.question_no), html, primary: {label: '看答案和爭點', act: 'essay-reveal'}, onAct(act) { if (act === 'essay-reveal') { revealed.add(id); render(); const h = $('#answer-start'); if (h) h.focus({preventScroll: true}); } }};
+    if (!shown) return {title: '申論・小題 ' + digits(q.sub_question_no || q.question_no), html, primary: {label: '看答案和爭點', act: 'essay-reveal'}, onAct(act) { if (act === 'essay-reveal') { revealed.add(id); render(); const h = $('#answer-start'); if (h) { h.focus({preventScroll: true}); h.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'}); } } }};
     html += '<div id="answer-start" tabindex="-1" class="answer-heading">答案和爭點</div>';
     html += `<h2>爭點（關鍵問題）</h2>` + (q.issues || []).map((s, n) => `<div class="issue"><strong>${n + 1}. ${esc(s.title)}</strong><p>${esc(s.description)}</p>
       ${(s.articles || []).length ? `<div class="uses">要用到的法條</div><div class="chips">${s.articles.map(a => artChip(a, q.id)).join('')}</div>` : ''}
@@ -292,6 +292,7 @@
       if (st.picked != null) {
         const ok = accs.includes(st.picked);
         html += `<div class="verdict ${ok ? 'ok' : 'bad'}">${ok ? '答對了' : '答錯了，正確答案是 ' + accs.map(i => '(' + 'ABCDEFG'[i] + ')').join('或')}</div>`;
+        if (!ok) html += '<p class="note" role="status">已加入錯題本</p>';
         html += `<h2>解析</h2><div class="card txt">${esc(q.ex)}</div>`;
       }
     } else {
@@ -342,7 +343,7 @@
 
   /* ---------- map ---------- */
   function layoutHex(n, width) {
-    const cols = Math.max(3, Math.floor(width / 62 - 0.5)), w = width / (cols + 0.5), h = w * 1.1547, step = h * 0.75, gap = 3;
+    const cols = Math.max(3, Math.floor(width / 68 - 0.5)), w = width / (cols + 0.5), h = w * 1.1547, step = h * 0.75, gap = 3;
     const cells = [];
     for (let i = 0; i < n; i++) {
       const r = Math.floor(i / cols), c = i % cols;
@@ -352,8 +353,8 @@
     return {cols, cells, height: rowsN ? (rowsN - 1) * step + h : 0, width};
   }
   function mapWidth() {
-    const el = $('#main'), cw = el && el.clientWidth ? el.clientWidth - 32 : 0;
-    return cw > 0 ? cw : Math.min(window.innerWidth || 360, 480) - 32;
+    const el = $('#main'), pad = el ? parseFloat(getComputedStyle(el).paddingLeft) + parseFloat(getComputedStyle(el).paddingRight) : 32, cw = el && el.clientWidth ? el.clientWidth - pad - 16 : 0;
+    return cw > 0 ? cw : Math.min(window.innerWidth || 360, window.innerWidth >= 900 ? 720 : 480) - (window.innerWidth >= 900 ? 64 : 32) - 16;
   }
   function hexGrid(items, width) {
     const L = layoutHex(items.length, width);
@@ -373,7 +374,8 @@
     html += `<div class="legend"><span><i class="lg-q"></i>題目</span><span><i class="lg-1"></i>考 1 題</span><span><i class="lg-2"></i>考 2 題</span><span><i class="lg-3"></i>考 3 題以上</span></div>`;
     html += `<h2>題目（${qs.length}）</h2>` + hexGrid(qs.map(q => ({cls: 'q', href: '#/q/' + enc(q.id), a: q.year_roc + '年', b: '題 ' + digits(q.question_no) + (q.sub_question_no ? '・' + digits(q.sub_question_no) : ''), aria: q.category + ' ' + qName(q) + ' ' + qTitle(q)})), width);
     html += `<h2>法條（${arts.length}，顏色越深越常考）</h2>` + hexGrid(arts.map(id => { const a = essay.a[id], f = freq(id); return {cls: f >= 3 ? 'l3' : f === 2 ? 'l2' : 'l1', href: '#/a/' + enc(id), a: artShort(a), b: f + ' 題', aria: a.label + '，考 ' + f + ' 題'}; }), width);
-    return {title: '地圖', html, primary: {label: cat === '全部' ? '開始第一題' : '開始這科第一題', href: '#/q/' + enc(qs[0].id)}, onAct(act, el) {
+    html += `<a class="primary map-start" href="#/q/${enc(qs[0].id)}">${cat === '全部' ? '開始第一題' : '開始這科第一題'}</a>`;
+    return {title: '地圖', html, onAct(act, el) {
       if (act === 'cat') { setLS('lexo-map-cat', el.dataset.cat); render(); }
     }};
   }
@@ -404,7 +406,7 @@
     document.title = s.title && s.title !== '首頁' ? s.title + '｜' + NAME : NAME;
     $('#appName').textContent = NAME;
     $('#back').hidden = ROOTS.includes(r[0] || '') && r.length <= 1;
-    const tab = TAB[r[0] || ''] || 'home';
+    const tab = r[0] === 'search' ? getLS('lexo-search-origin', 'home') : TAB[r[0] || ''] || 'home';
     document.querySelectorAll('#tabs .tab').forEach(t => { if (t.dataset.tab === tab) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
     const act = $('#act');
     if (s.primary) {
@@ -443,7 +445,7 @@
     $('#main').addEventListener('submit', e => {
       if (e.target.id !== 'law-search') return;
       e.preventDefault(); const value = $('#law-query').value.trim();
-      if (value) go('search/' + enc(value));
+      if (value) { if (route()[0] !== 'search') setLS('lexo-search-origin', TAB[route()[0] || ''] || 'home'); go('search/' + enc(value)); }
     });
     $('#main').addEventListener('input', e => {
       if (!e.target.matches('[data-note]')) return;

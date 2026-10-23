@@ -1,5 +1,5 @@
 // App assets and all subject banks install atomically.
-const VERSION = 'v80-polish-1';
+const VERSION = 'v81-polish-2';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
 // shell-1: tabbed app shell; no 3D globe, hive tutorial or old styles.

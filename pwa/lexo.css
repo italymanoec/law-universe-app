@@ -166,3 +166,25 @@ h2{color:#292929;font-size:15px;letter-spacing:.01em;margin-top:26px}
 .hex:focus-visible{filter:brightness(.75);outline-offset:-6px}
 a:hover.card,.rows a:hover{background:#fafafa}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Polish-2: reserve the full fixed chrome plus a comfortable final-content gap. */
+main{padding-bottom:calc(64px + env(safe-area-inset-bottom) + 40px)}
+body.has-act main{padding-bottom:calc(64px + 80px + env(safe-area-inset-bottom) + 48px)}
+.legend{font-size:14px;line-height:1.7}
+.hexes{width:calc(100% - 16px);margin:0 8px 8px;filter:drop-shadow(0 2px 1px #0003)}
+.hex{transition:filter .15s,transform .15s}
+.hex:hover{filter:brightness(1.12)}
+.hex:active{transform:scale(.95);filter:brightness(.82)}
+.map-start{margin-top:16px}
+@media(min-width:900px){
+  .shell,.top,.tabs,.act{max-width:720px}
+  body{font-size:18px}
+  main{padding-left:32px;padding-right:32px}
+  .act{padding-left:32px;padding-right:32px}
+  h1{font-size:30px}
+  h2,.card strong{font-size:19px}
+  .primary{font-size:19px}
+  .search input,.search button,.chip{font-size:16px}
+  .tab{font-size:14px}
+  .upd{max-width:656px}
+}
