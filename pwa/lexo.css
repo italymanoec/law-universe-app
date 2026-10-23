@@ -117,3 +117,52 @@ details.law .in{padding:12px 16px 16px}
   body{padding:0}
   .shell,.top,.tabs,.act{border-left:1px solid #E5E5EA;border-right:1px solid #E5E5EA}
 }
+
+/* Polish-1: restrained surfaces, clear hierarchy and touch targets. */
+html{overflow-x:clip}
+main>*{min-width:0;max-width:100%}
+button,a,input,textarea{-webkit-tap-highlight-color:transparent}
+.top{border-bottom-color:#eee}
+.appname{font-size:18px;letter-spacing:.18em;font-weight:900}
+.hero{padding:12px 0 20px}
+.hero h1{font-size:32px;line-height:1.28;letter-spacing:-.045em;margin:10px 0}
+.hero p{font-size:14px}
+h2{color:#292929;font-size:15px;letter-spacing:.01em;margin-top:26px}
+.card,.box,details.law,.rows{border-radius:14px}
+.card{padding:18px;border-color:#e8e8e8}
+.card strong{font-size:17px;line-height:1.55}
+.card .meta{line-height:1.6}
+.primary{border-radius:14px;font-weight:800;box-shadow:0 4px 12px #0000000d}
+.act{border-top:0;background:linear-gradient(#ffffffeb,#fff 20%)}
+.tab{position:relative;color:#777;font-weight:600;gap:3px}
+.tab[aria-current=page]::before{content:"";position:absolute;top:0;width:24px;height:3px;border-radius:0 0 3px 3px;background:#111}
+.tab[aria-current=page] svg{stroke-width:2.4;background:#f0f0f0;border-radius:7px;box-shadow:0 0 0 5px #f0f0f0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#f6f6f6;border:1px solid #eee;border-radius:16px;padding:18px 0}
+.stats a{display:flex;flex-direction:column;align-items:center;text-decoration:none;min-width:0}
+.stats a+a{border-left:1px solid #dedede}
+.stats b{font-size:28px;line-height:1.2;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:#666;margin-top:7px}
+.rank{font-size:13px;color:#888;margin-right:12px;font-variant-numeric:tabular-nums}
+.search{margin:24px 0}
+.search label,.notes label{display:block;font-size:15px;font-weight:750;margin-bottom:9px}
+.searchline{display:flex;gap:8px;min-width:0}
+.search input{min-width:0;flex:1;width:0;border:1px solid #dedede;background:#f7f7f7;border-radius:12px;padding:12px;font:inherit;font-size:14px;color:#111}
+.search button{flex:none;border:1px solid #111;border-radius:12px;background:#fff;padding:0 14px;min-height:48px;font-size:14px;font-weight:700;cursor:pointer}
+.notes{margin:22px 0}
+.notes textarea{display:block;width:100%;max-width:100%;resize:vertical;min-height:110px;border:1px solid #dedede;border-radius:14px;background:#fafafa;padding:14px;font:inherit;font-size:16px;line-height:1.7;color:#111}
+.notes .note{display:block;margin-top:6px;font-size:12px}
+.question-stem{background:#f7f7f7;line-height:1.85}
+.box.ask{border-radius:14px;line-height:1.85}
+.issue{border-left:3px solid #111;border-radius:14px;padding:18px}
+.answer-heading{font-size:22px;font-weight:800;padding:20px 0 0;scroll-margin-top:72px}
+.seg{padding:4px;background:#f4f4f4;border-radius:12px;gap:3px}
+.seg button{border:0;background:transparent;border-radius:9px;font-size:13px}
+.hexes{isolation:isolate}
+.hex{transition:filter .15s;background-image:linear-gradient(145deg,#ffffff0a,#00000008)}
+.hex b{letter-spacing:-.02em}
+.hex small{margin-top:4px;font-size:11px}
+.hex.q{background-color:#374b61}
+.lg-q{background:#374b61}
+.hex:focus-visible{filter:brightness(.75);outline-offset:-6px}
+a:hover.card,.rows a:hover{background:#fafafa}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}

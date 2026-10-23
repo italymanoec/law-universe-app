@@ -83,7 +83,8 @@
 
   /* ---------- labels ---------- */
   const artShort = a => (a.law === '民法' ? '民' : /刑/.test(a.law) ? '刑' : a.law.slice(0, 1)) + '§' + String(a.article_no).replace('之', '-');
-  const qName = q => q.year_roc + '年 第' + q.question_no + '題' + (q.sub_question_no || '');
+  const digits = v => String(v || '').replace(/[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]/g, c => String('㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩'.indexOf(c) + 1)).replace(/[一二三四五六七八九十]/g, c => String('一二三四五六七八九十'.indexOf(c) + 1));
+  const qName = q => q.year_roc + '年・第 ' + digits(q.question_no) + ' 題' + (q.sub_question_no ? '・小題 ' + digits(q.sub_question_no) : '');
   const qTitle = q => (q.issues && q.issues[0] && q.issues[0].title) || qName(q);
   const freq = id => (essay.usedBy[id] || []).length;
 
@@ -97,6 +98,7 @@
     if (a === 'q' && essay && essay.q[b]) return 'essay/' + enc(essay.q[b].category);
     if (a === 'essay' && b) return 'essay';
     if (a === 'a' && c) return 'q/' + enc(c);
+    if (a === 'search') return 'map';
     if (a === 'a' || a === 'g') return 'essay';
     if (a === 'drill' && b) return 'drill';
     if (a === 'wrong') return 'drill';
@@ -127,16 +129,40 @@
   const failed = (msg) => ({title: '連不上', html: `<h1>${esc(msg || '暫時讀不到資料')}</h1><p class="note">網路恢復後按下面的按鈕。</p>`, primary: {label: '再試一次', act: 'retry'}});
   const needEssay = () => { if (essay) return null; if (essayErr) return failed(); loadEssay(); return loading(); };
 
+  const revealed = new Set();
+  function noteBox(id) {
+    const notes = getLS('lexo-notes', {});
+    return `<section class="notes"><label for="my-note">我的筆記</label><textarea id="my-note" data-note="${esc(id)}" rows="4" placeholder="寫下你的想法、答題草稿或容易忘記的地方">${esc(notes[id] || '')}</textarea><span class="note" id="note-status" role="status">只儲存在這台裝置</span></section>`;
+  }
+  function searchBox() {
+    return `<form id="law-search" class="search"><label for="law-query">條號搜尋</label><div class="searchline"><input id="law-query" name="q" type="search" placeholder="例如：民法 87、刑法 28" required><button type="submit" aria-label="搜尋法條">搜尋</button></div></form>`;
+  }
   function home() {
-    const first = essay ? essay.order[0] : null, last = getLS('lexo-last-q', null);
-    const lastQ = essay && last && essay.q[last];
-    const today = (store.log[todayStr()] || {}).n || 0;
-    let html = `<section class="hero"><h1 tabindex="-1">律師・司法官考試</h1><p>申論題的爭點和法條，加上 2,502 題選擇題。</p></section>`;
-    if (lastQ) html += `<h2>上次看到</h2>` + card('#/q/' + enc(last), esc(lastQ.category + '・' + qName(lastQ)), esc(qTitle(lastQ)));
-    html += `<h2>今天</h2><div class="box">已刷 <b>${today}</b> 題${wrongIds().length ? `，錯題本有 <b>${wrongIds().length}</b> 題` : ''}</div>`;
+    const last = getLS('lexo-last-q', null), lastQ = essay && last && essay.q[last];
+    const today = (store.log[todayStr()] || {}).n || 0, wrong = wrongIds().length;
+    if (!window.QBD || !window.QBD.civil) loadSubject('civil').then(render, () => {});
+    const choices = (window.QBD && window.QBD.civil || []).filter(q => Array.isArray(q.o));
+    const daily = choices.length ? choices[todayNum() % choices.length] : null;
+    const recent = getLS('lexo-last-drill', null);
+    let html = `<section class="hero"><p class="kicker">律師・司法官考試</p><h1 tabindex="-1">每天一題，<br>慢慢累積實力。</h1><p>先從選擇題開始。</p></section>`;
+    html += `<div class="stats"><a href="#/drill"><b>${today}</b><span>今日已刷</span></a><a href="#/wrong"><b>${wrong}</b><span>錯題本</span></a><a href="#/drill"><b>${Object.keys(store.srs).length}</b><span>累計作答</span></a></div>`;
+    if (recent && SUBJ[recent.k]) html += '<h2>繼續上次</h2>' + card('#/drill/' + recent.k + '/' + enc(recent.id), '選擇題・' + esc(SUBJ[recent.k].name), '接著做上一題');
+    else if (lastQ) html += '<h2>繼續上次</h2>' + card('#/q/' + enc(last), esc('申論・' + qName(lastQ)), '回到上次的申論題');
+    html += '<h2>今日一題</h2>' + (daily ? card('#/drill/civil/' + enc(daily.id), esc('民法・' + daily.y + '年・第 ' + daily.n + ' 題'), esc(daily.q), '選擇題 →') : '<p class="note">正在讀取題庫…</p>');
+    html += searchBox();
+    if (essay) {
+      const top = essay.arts.filter(a => freq(a.id)).sort((a,b) => freq(b.id)-freq(a.id) || a.id.localeCompare(b.id)).slice(0,3);
+      html += '<h2>申論常考法條 <span class="note">依現有題庫統計</span></h2>' + rows(top.map((a,i) => ['#/a/' + enc(a.id), `<span class="rank">0${i+1}</span>${esc(a.label)}`, freq(a.id) + ' 題用到']));
+    }
     html += `<div class="foot"><p class="note">題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</p><a class="note" href="classic/">舊版</a></div>`;
     if (!essay && !essayErr) loadEssay();
-    return {title: '首頁', html, primary: first ? {label: '開始第一題', href: '#/q/' + enc(first.id)} : {label: '開始第一題', act: essayErr ? 'retry' : 'none'}};
+    return {title: '首頁', html, primary: {label: '開始刷選擇題', href: '#/drill/civil'}};
+  }
+  function searchResults(query) {
+    const wait = needEssay(); if (wait) return wait;
+    const norm = t => String(t).replace(/第|條|§|\s/g, '').replace(/之/g, '-');
+    const term = norm(query), found = essay.arts.filter(a => norm(a.law + a.article_no).includes(term) || norm(a.label).includes(term));
+    return {title: '條號搜尋', html: `<h1 tabindex="-1">條號搜尋</h1>${searchBox()}<h2>「${esc(query)}」・${found.length} 筆</h2>` + (found.length ? rows(found.map(a => ['#/a/' + enc(a.id), esc(a.label), freq(a.id) + ' 題用到'])) : '<p class="empty">找不到這個條號。試試「87」或「民法 87」。</p>')};
   }
 
   function essayHome() {
@@ -178,10 +204,12 @@
     const q = essay.q[id]; if (!q) return notFound();
     setLS('lexo-last-q', id);
     const seen = getLS('lexo-seen', []); if (!seen.includes(id)) { seen.push(id); setLS('lexo-seen', seen); }
-    const i = essay.order.indexOf(q), next = essay.order[i + 1];
-    let html = `<p class="kicker">${esc(q.category)}・${esc(qName(q))}${q.points ? '・' + q.points + ' 分' : ''}</p><h1 tabindex="-1">${esc(qTitle(q))}</h1>`;
-    html += `<div class="box ask"><p class="kicker">這題在問什麼</p><div class="txt">${esc(q.prompt_text)}</div></div>`;
-    html += `<details class="law"><summary><b>題目原文</b><span>展開</span></summary><div class="in"><div class="lawtext">${esc(q.stem_text)}</div>${q.source_url ? `<a class="btnline" href="${esc(q.source_url)}" target="_blank" rel="noopener">考選部原始試題</a>` : ''}</div></details>`;
+    const i = essay.order.indexOf(q), next = essay.order[i + 1], shown = revealed.has(id);
+    let html = `<p class="kicker">${esc(q.category)}・${esc(qName(q))}${q.points ? '・' + q.points + ' 分' : ''}</p><h1 tabindex="-1">申論・小題 ${esc(digits(q.sub_question_no || q.question_no))}</h1>`;
+    html += `<div class="box question-stem"><p class="kicker">題目</p><div class="txt">${esc(q.stem_text)}</div></div><div class="box ask"><p class="kicker">請回答</p><div class="txt">${esc(q.prompt_text)}</div></div>`;
+    html += noteBox('essay:' + id);
+    if (!shown) return {title: '申論・小題 ' + digits(q.sub_question_no || q.question_no), html, primary: {label: '看答案和爭點', act: 'essay-reveal'}, onAct(act) { if (act === 'essay-reveal') { revealed.add(id); render(); const h = $('#answer-start'); if (h) h.focus({preventScroll: true}); } }};
+    html += '<div id="answer-start" tabindex="-1" class="answer-heading">答案和爭點</div>';
     html += `<h2>爭點（關鍵問題）</h2>` + (q.issues || []).map((s, n) => `<div class="issue"><strong>${n + 1}. ${esc(s.title)}</strong><p>${esc(s.description)}</p>
       ${(s.articles || []).length ? `<div class="uses">要用到的法條</div><div class="chips">${s.articles.map(a => artChip(a, q.id)).join('')}</div>` : ''}
       ${(s.related_articles || []).length ? `<div class="uses">可能也會用到</div><div class="chips">${s.related_articles.map(a => artChip(a, q.id, true)).join('')}</div>` : ''}</div>`).join('');
@@ -249,6 +277,7 @@
     const q = qbFind(k, id); if (!q) return notFound();
     if (!session || !session.items.some(x => x.k === k && x.id === id)) { session = {mode: 'subject', k, items: subjectQueue(k)}; saveSession(); }
     const pos = session.items.findIndex(x => x.k === k && x.id === id), nx = session.items[pos + 1];
+    setLS('lexo-last-drill', {k, id});
     const st = answered[k + '/' + id] || {}, written = !Array.isArray(q.o);
     let html = `<p class="kicker">${esc(SUBJ[k].name)}・${esc(q.y)}年 第${esc(q.n)}題${session.mode === 'wrong' ? '・錯題本' : ''}</p>`;
     html += `<h1 tabindex="-1">第 ${pos + 1} 題 / 共 ${session.items.length} 題</h1><div class="box txt">${esc(q.q)}</div>`;
@@ -277,6 +306,7 @@
     if (q.law_note && (st.picked != null || st.shown)) html += `<h2>法規後來改了</h2><div class="card txt">${esc(q.law_note)}</div>`;
     const done = st.picked != null || st.rated != null;
     if (done) primary = nx ? {label: '下一題', href: '#/drill/' + nx.k + '/' + enc(nx.id)} : {label: session.mode === 'wrong' ? '回到錯題本' : '這科做完了，回到科目', href: session.mode === 'wrong' ? '#/wrong' : '#/drill'};
+    html += noteBox('drill:' + k + ':' + id);
     return {title: SUBJ[k].name + ' 第' + q.n + '題', html, primary, onAct(act, el) {
       if (act === 'pick' && st.picked == null) { const i = +el.dataset.k; answered[k + '/' + id] = {picked: i}; record(q, (Array.isArray(q.acc) ? q.acc : [q.a]).includes(i)); render(); }
       if (act === 'reveal') { answered[k + '/' + id] = {shown: true}; render(); }
@@ -339,9 +369,9 @@
     const qs = cat === '全部' ? essay.order : essay.byCat[cat];
     const arts = [...new Set(qs.flatMap(qArts))].filter(id => essay.a[id]).sort((x, y) => freq(y) - freq(x) || x.localeCompare(y, 'en', {numeric: true}));
     const width = mapWidth();
-    let html = `<h1 tabindex="-1">地圖</h1><div class="seg" role="group" aria-label="科目">${[...essay.cats, '全部'].map(c => `<button type="button" data-act="cat" data-cat="${esc(c)}" aria-pressed="${c === cat}">${esc(c)}</button>`).join('')}</div>`;
+    let html = `<h1 tabindex="-1">地圖</h1>${searchBox()}<div class="seg" role="group" aria-label="科目">${[...essay.cats, '全部'].map(c => `<button type="button" data-act="cat" data-cat="${esc(c)}" aria-pressed="${c === cat}">${esc(c)}</button>`).join('')}</div>`;
     html += `<div class="legend"><span><i class="lg-q"></i>題目</span><span><i class="lg-1"></i>考 1 題</span><span><i class="lg-2"></i>考 2 題</span><span><i class="lg-3"></i>考 3 題以上</span></div>`;
-    html += `<h2>題目（${qs.length}）</h2>` + hexGrid(qs.map(q => ({cls: 'q', href: '#/q/' + enc(q.id), a: q.year_roc + '年', b: q.sub_question_no ? q.question_no + q.sub_question_no : '第' + q.question_no + '題', aria: q.category + ' ' + qName(q) + ' ' + qTitle(q)})), width);
+    html += `<h2>題目（${qs.length}）</h2>` + hexGrid(qs.map(q => ({cls: 'q', href: '#/q/' + enc(q.id), a: q.year_roc + '年', b: '題 ' + digits(q.question_no) + (q.sub_question_no ? '・' + digits(q.sub_question_no) : ''), aria: q.category + ' ' + qName(q) + ' ' + qTitle(q)})), width);
     html += `<h2>法條（${arts.length}，顏色越深越常考）</h2>` + hexGrid(arts.map(id => { const a = essay.a[id], f = freq(id); return {cls: f >= 3 ? 'l3' : f === 2 ? 'l2' : 'l1', href: '#/a/' + enc(id), a: artShort(a), b: f + ' 題', aria: a.label + '，考 ' + f + ' 題'}; }), width);
     return {title: '地圖', html, primary: {label: cat === '全部' ? '開始第一題' : '開始這科第一題', href: '#/q/' + enc(qs[0].id)}, onAct(act, el) {
       if (act === 'cat') { setLS('lexo-map-cat', el.dataset.cat); render(); }
@@ -362,9 +392,10 @@
     if (a === 'drill') return c ? drillQ(b, c) : b ? drillStart(b) : drillHome();
     if (a === 'wrong') return wrongList();
     if (a === 'map') return mapView();
+    if (a === 'search') return searchResults(b || '');
     return notFound();
   }
-  const TAB = {'': 'home', essay: 'essay', q: 'essay', a: 'essay', g: 'essay', drill: 'drill', wrong: 'drill', map: 'map'};
+  const TAB = {'': 'home', essay: 'essay', q: 'essay', a: 'essay', g: 'essay', drill: 'drill', wrong: 'drill', map: 'map', search: 'map'};
   function render() {
     const s = screen(route()), r = route(), key = r.join('/');
     current = s;
@@ -409,6 +440,17 @@
     if (!history.state || typeof history.state.d !== 'number') history.replaceState({d: 0}, '', location.href);
     depth = history.state.d;
     $('#back').addEventListener('click', back);
+    $('#main').addEventListener('submit', e => {
+      if (e.target.id !== 'law-search') return;
+      e.preventDefault(); const value = $('#law-query').value.trim();
+      if (value) go('search/' + enc(value));
+    });
+    $('#main').addEventListener('input', e => {
+      if (!e.target.matches('[data-note]')) return;
+      const notes = getLS('lexo-notes', {}); notes[e.target.dataset.note] = e.target.value;
+      try { localStorage.setItem('lexo-notes', JSON.stringify(notes)); $('#note-status').textContent = '已儲存在這台裝置'; }
+      catch (err) { $('#note-status').textContent = '儲存失敗，請先複製你的筆記'; }
+    });
     $('#main').addEventListener('click', onAct);
     $('#act').addEventListener('click', onAct);
     $('#main').addEventListener('click', onLink, true);
