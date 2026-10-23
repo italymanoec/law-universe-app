@@ -13,7 +13,7 @@ function mount(host,graph,onSelect){
  function transform(){scene.setAttribute('transform',`translate(${host.clientWidth/2+tx} ${(host.clientHeight-(bar.hidden?0:bar.offsetHeight))/2+ty}) scale(${scale})`);}
  function label(n){const limit=mobile()?5:7,cut=v=>Array.from(v).slice(0,limit).join('');
  if(n.kind==='article')return [n.label.replace('民法第','民§').replace('刑法第','刑§').replace('條',''),...(!selected&&!graph.tutorial?['出現 '+n.frequency+' 次']:[])];
- if(n.kind==='question'){const year=n.label.match(/\d{2,3}/)?.[0]||String(n.obj.year||'');return [year+' '+(String(n.obj.category||n.obj.subject||'').includes('物權')?'物權':String(n.obj.category||n.obj.subject||'').includes('刑法')?'刑總':'民總'),cut(n.label.replace(/\s*\d+$/,''))];}
+ if(n.kind==='question'){const year=String(n.obj.year_roc||n.obj.year||n.label.match(/(\d{2,3})$/)?.[1]||'');return [year+' '+(String(n.obj.category||n.obj.subject||'').includes('物權')?'物權':String(n.obj.category||n.obj.subject||'').includes('刑法')?'刑總':'民總'),cut(n.label.replace(/\s*\d+$/,''))];}
  return n.kind==='pack'?['包：',cut(n.label)]:[cut(n.label),Array.from(n.label).slice(limit,limit*2).join('')];}
 
  nodes.forEach(n=>{n.frequency=[...adj.get(n.key)].filter(k=>by.get(k).kind==='question').length;const g=el('g',{tabindex:0,role:'button','aria-label':n.label});g.dataset.key=n.key;g.dataset.kind=n.kind;n.g=g;const p=el('polygon');n.polygon=p;g.append(p);const t=el('text',{'text-anchor':'middle','font-size':13,fill:colors[n.kind][1],'font-family':'system-ui'});n.text=t;g.append(t);const title=el('title');title.textContent=n.label;g.append(title);g.addEventListener('click',()=>{if(!moved)select(n.key);});g.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();select(n.key);}});scene.append(g);});
