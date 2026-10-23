@@ -1,0 +1,15 @@
+// Run with jsdom available in NODE_PATH; uses the unmodified production JSON.
+const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('fs'),assert=require('node:assert/strict'),crypto=require('crypto');
+const html=fs.readFileSync('app/essay.html','utf8'),vendor=fs.readFileSync('app/vendor/mindmap.js','utf8'),data=JSON.parse(fs.readFileSync('app/data/essay_packs.json'));
+async function test(width,height){
+ const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));vc.on('error',e=>errors.push(String(e)));
+ const dom=new JSDOM(html.replace(/<script src=[\s\S]*?<\/script>/,''),{url:'https://test.local/essay.html#mindmap',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.ResizeObserver=class{observe(){}disconnect(){}};w.fetch=async()=>({ok:true,json:async()=>data});w.eval(vendor);Object.defineProperty(w.HTMLElement.prototype,'clientWidth',{get(){return width}});Object.defineProperty(w.HTMLElement.prototype,'clientHeight',{get(){return height*.73}});}});
+ await new Promise(r=>setTimeout(r,200));
+ try{const w=dom.window,d=w.document;assert(d.querySelector('#mm-count').textContent.includes('/ 196'));const count=d.querySelectorAll('[role=button]').length;assert(count>0&&count<196);
+ const collisions=()=>{const boxes=[...d.querySelectorAll('svg text')].filter(t=>t.style.display!=='none').map(t=>{const [x,y]=t.getAttribute('transform').match(/[-\d.]+/g).map(Number),lines=[...t.children].map(e=>e.textContent);return {x,y,w:Math.max(...lines.map(l=>Array.from(l).reduce((s,c)=>s+(/[ -~]/.test(c)?8:14),0))),h:lines.length*17};});for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),'label collision');}return boxes.length;};
+ assert(collisions()>0);assert([...d.querySelectorAll('svg text')].filter(t=>t.style.display!=='none').every(t=>Array.from(t.textContent).length<=10));
+ let selections=0;for(const n of d.querySelectorAll('svg [role=button]')){n.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert(!d.querySelector('#mm-detail').hidden);assert(collisions()>0);assert(d.querySelector('[style*="opacity: 0.025"]'));selections++;}
+ d.querySelector('#mm-subject').value='刑法總則';d.querySelector('#mm-subject').dispatchEvent(new w.Event('change'));assert(d.querySelectorAll('svg [role=button]').length<196);d.querySelector('#mm-fit').click();assert.equal(d.querySelectorAll('svg [role=button]').length,196);assert([...d.querySelectorAll('svg text')].every(t=>t.style.display==='none'));assert.deepEqual(errors,[]);console.log(`PASS ${width}: real data 196, default ${count}, ${selections} selected neighborhoods, zero label collisions, category switch, overview no labels, no console errors`);
+ }finally{dom.window.close();}
+}
+(async()=>{await test(1000,900);await test(378,844);assert(html.includes('sha384-'+crypto.createHash('sha384').update(vendor).digest('base64')));console.log('PASS SRI');})().catch(e=>{console.error(e);process.exitCode=1;});

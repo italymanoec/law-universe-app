@@ -1,0 +1,20 @@
+神經元網路小修 v70-neuron-3 — 2026-10-23
+
+題目節點使用 year_roc + 第一個既有爭點 title；有主題欄位時優先採用主題，無爭點時使用既有題目內容。不從 ID 推測或編造主題。
+側欄題目標題與節點一致，內部 ID 僅呈現在側欄 small 小字。
+其他節點標籤、避讓演算法、力學與手機 CSS 未修改。
+更新本地 vendor SRI、SHA-384 hash-manifest、SW v70-neuron-3 與 PRECACHE 更新註記；PRECACHE 已含全部變動執行檔。
+未引用外部 CDN；未修改任何題目、答案、essay_packs.json。
+資料 SHA384：c00d93d5bffff37a8d52de59017543a69fd4a5a98fa58e93a63e8165ce15348397d0b1633fbafb8e5d0d4cf81c177975
+
+驗證：NODE_PATH=/tmp/neuron-qa/node_modules node tools/check-neuron3.cjs
+PASS 真資料全部題目年度與原始爭點逐筆比對、側欄標題與 small ID、其他種類標籤保持原值。
+PASS 圖區寬度 1000、378、348：196 節點、預設52；逐一選取52個鄰域，零顯示標籤碰撞、科目切換、全網路無標籤、無 console error。
+PASS SRI、全部 manifest 雜湊、資料原始雜湊、無外部 script CDN。
+部署目標僅 italymanoec/law-universe-app；未操作 italymanoec/law-universe。
+
+部署驗收：
+- 已同步 /tmp/lua_deploy，程式 commit d9a76295bd16e5f42613aee99600c95ac692a850 已 push main。
+- GitHub Pages build：built；commit 完全一致；error.message=null。
+- essay.html、vendor/mindmap.js、sw.js、hash-manifest.json、data/essay_packs.json：線上 HTTP 200，逐位元與 app 本機檔一致。
+- 線上：https://italymanoec.github.io/law-universe-app/essay.html#mindmap

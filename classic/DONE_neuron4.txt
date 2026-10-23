@@ -1,0 +1,26 @@
+神經元網路小修 v70-neuron-4 — 2026-10-23
+
+題目標籤優先使用 JSON 既有非條號開頭的爭點，主題在前、年度在後。
+預覽最多14字加省略號，每行7字；完整標籤仍在節點 title 與詳細資料。
+維持碰撞避讓。文字位於螢幕座標層，固定13px，不隨網路縮小。
+fit 使用全部節點實際邊界、對稱22單位節點半徑與12px框邊距，移除1.5倍上限。
+載入、切科目、尺寸變動與力學最後一幀重新fit；使用者縮放、拖曳或選取後停止自動fit。
+題目、答案與data皆未修改；未引用外部CDN。
+SRI、SHA-384 manifest、SW v70-neuron-4 已更新；PRECACHE包含全部變更執行檔。
+
+驗證：NODE_PATH=/tmp/neuron-qa/node_modules node tools/check-neuron4.cjs
+真實JSON 196節點；1000、358（390手機扣內距）、390、348寬。
+逐筆核對題目來源標籤、完整側欄標題、其他節點標籤、52個選取鄰域避讓。
+三科目各執行完整力學後核對節點邊界與填滿限制方向至少85%、固定字體>=11px。
+無console error；全網路無標籤；SRI與manifest逐檔雜湊一致。
+data SHA384 c00d93d5bffff37a8d52de59017543a69fd4a5a98fa58e93a63e8165ce15348397d0b1633fbafb8e5d0d4cf81c177975
+額外Playwright Chrome啟動遭環境SIGABRT，未完成實際瀏覽器視覺驗證。
+
+部署僅使用 /tmp/lua_deploy 與 italymanoec/law-universe-app。
+
+部署驗收：
+- 程式 commit 1d37f482ba62b1e34ca9ba71bcc1bffde9451bee，已push main。
+- GitHub Pages build built，commit一致，error.message=null。
+- 線上essay.html、vendor/mindmap.js、sw.js、hash-manifest.json、data/essay_packs.json 全部HTTP 200且逐位元與app一致。
+- https://italymanoec.github.io/law-universe-app/essay.html#mindmap
+- 未操作 italymanoec/law-universe，未輸出token。

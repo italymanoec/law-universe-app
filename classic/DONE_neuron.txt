@@ -1,0 +1,23 @@
+神經元網路完成紀錄 — 2026-10-23
+
+修改 app/essay.html、app/vendor/mindmap.js、app/sw.js，新增 app/hash-manifest.json。
+本地原創 SVG 力導向網路：電荷排斥、彈簧連結、阻尼收斂；有限 280 幀後停止計算。
+四類發光圓點、半透明柔和曲線。全圖預設 196 個節點：22 題、21 組合包、70 唯一法條、83 爭點；646 條無向去重連線。
+以類型＋原始 ID 去重法條；共用法條、題目、爭點、組合包與關聯法條交叉連結。
+單擊保留全圖，亮起本節點和直接鄰居；雙擊（觸控雙點）切換第二層亮起／收合。
+詳細側欄重用既有完整詳細頁 renderer；爭點顯示原始描述、適用及關聯法條。
+拖曳節點、背景平移、滾輪／雙指縮放、科目與文字搜尋、全網路重設、鍵盤 Enter／Shift+Enter。
+手機側欄移至下方；Pointer Events、pointer capture、touch-action:none；resize 自動適應。
+修正顯示對應真資料 stem_text/prompt_text、plain_requirements 欄位，沒有更動資料內容。
+SRI SHA-384 更新；hash manifest 覆蓋 essay.html、模組、sw.js 與真資料。
+SW 版本 v69-neuron-1，PRECACHE 增加 hash manifest 與真資料供完整離線使用。
+
+驗證：
+node tools/check-essay.cjs 通過：七種路由、反查、資料載入、離線副本、escaping。
+NODE_PATH=/tmp/neuron-qa/node_modules node tools/check-neuron.cjs 通過：
+  用真資料獨立重算並比對全部 196 節點／646 邊、去重、側欄、明暗選取、第二層、篩選、平移／雙指縮放、SRI。
+  Node/jsdom console errors = 0。
+node --check app/vendor/mindmap.js、app/sw.js 通過。
+Chrome headless 在目前沙箱啟動時 SIGABRT；未完成瀏覽器視覺及 iPhone Safari 實機測試，沒有宣稱已完成。
+app/data/essay_packs.json、data/essay_packs.json 與部署 repo 原資料逐位元一致。
+題目與答案資料未更動；僅部署 italymanoec/law-universe-app，未操作 italymanoec/law-universe。

@@ -1,0 +1,8 @@
+DONE 2026-10-22
+data/essay_packs.json  schema_version 1
+  questions 22（民法總則 6／物權 8／刑法總則 8；考選部 105–114 年律師二試，人工挑選）
+  packs     21（occurrence_count = 本 22 題樣本內共現次數，非全量統計）
+  articles  70（民法 38、刑法 32；條文逐字取自 law.moj.gov.tw 現行條文）
+  cases     71（最高法院 70、憲法法庭 1；摘錄逐字取自裁判全文；7 個條號 case_status=待查證）
+說明：data/SOURCES.md
+未部署、未 git push。

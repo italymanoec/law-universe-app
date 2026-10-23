@@ -1,0 +1,18 @@
+法學記憶宇宙 hive-1 / v75-hive-1
+
+修改清單：
+- app/vendor/mindmap.js：以固定六角蜂巢取代力導向圓點與連線。四種淺底深字，13px、最多兩行，長名稱省略並以 aria-label/title 保留完整名稱。中心、直接關係第一圈、延伸關係第二圈；第一圈蜂蜜粗框。超過六筆直接關係分頁，避免縮小點選區。點選平順置中、上一步、拖曳、雙指／滾輪縮放。
+- 科目總覽保留該科所有題目與相關內容，每格固定大小向外鋪排，可拖曳探索。法條依關聯題數加深綠色並標示出現次數。手機格寬82px、桌機120px（不含間隙）。
+- app/vendor/journey.js：五關蜂巢用語、逐格長出鄰居；沿用 neuron-8 題目→不同名爭點→民法79條→另一題→組合包。保留每關必點、卡內來源回饋、下一步、跳過／重玩、三題解鎖下一科及進度。
+- app/essay.html、index.html、pwa/paper.css：蜂巢入口與操作說明、暖紙色、蜂蜜框、手機緊湊排列、教學首屏、一般詳情面板、觸控命中區。保留空路由、首頁入口、隱藏內部代碼。
+- sw.js、hash-manifest.json：v75-hive-1，更新 SRI、SHA-384 與 PRECACHE。
+- tools/check-hive1.cjs：390x844、1280x900 的 jsdom 教學／探索／解鎖／幾何檢查。
+
+驗證：
+NODE_PATH=/tmp/neuron7-tools/node_modules node tools/check-hive1.cjs
+PASS 兩種尺寸：五關逐格必點、兩行13px文字容量、蜂巢中心距不重疊、中心與第一圈落在圖框內、點選重新置中、來源鏈一致、卡內回饋、不同題計數、逐科解鎖、重玩與跳過、空路由、SRI／manifest／版本。
+node /tmp/neuron6-integrity.cjs
+PASS 16科2,502題與原始src/qb逐位元相同、改一byte雜湊拒絕、data與law/_pend.js不變、JS語法、無外部CDN與字型。
+jsdom不具實際字型排版：文字以每字13px的保守容量驗證，首屏以固定圖框與CSS規則檢查；不宣稱已完成實機觸控／截圖驗收。
+
+部署：僅同步 /tmp/lua_deploy 並 commit/push italymanoec/law-universe-app；不操作 italymanoec/law-universe。

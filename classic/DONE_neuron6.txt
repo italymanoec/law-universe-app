@@ -1,0 +1,4068 @@
+neuron-6 完成清單（2026-10-23）
+- index.html、essay.html 共用 pwa/paper.css：米白紙底、深灰字、系統字、圓角卡片、留白、藍／橘／綠／紫分類標籤。
+- 首頁停用星空、裝飾球殼／環、放射發光；保留既有題庫與互動。
+- 讀圖三步驟卡可收合，localStorage 記住狀態；圖例置頂常駐。
+- 預設民法總則；首次選取有法條連結的代表題，從資料組出「這題考什麼 → 用到哪些法條」。
+- 詳細欄放在圖下方，不遮住節點；保留點選、鄰居高亮、拖曳、縮放及手機直向填滿。
+- 淡灰連線、加深高亮、白色標籤描邊；所有可見標籤距節點 <=24px、互不重疊。
+- 更新 CSS／mindmap SRI、hash-manifest、manifest 淺色啟動畫面、SW v72-neuron-6 與 PRECACHE。
+- 新增 tools/check-neuron6.cjs；390x1000、1280x900 jsdom 驗證首次示例、收合記憶、三科、逐節點選取、縮放、全網路。
+- check-essay.cjs：7 routes、實資料載入、錯誤資料拒收、離線還原、反向連結通過。
+- 真實 Chrome 截圖未取得：本環境 Chrome 啟動 SIGABRT／EPERM；jsdom 使用明列的字框估算與容器尺寸，非實機排版證明。
+PASS: all data/, qb/, law/ files SHA-384 unchanged; embedded SUBJ curriculum and question code byte-identical to previous deployment.
+WCAG AA palette ratios (normal text >=4.5):
+#2b2b2b / #faf7f0: 13.23:1 PASS
+#595952 / #faf7f0: 6.60:1 PASS
+#245f91 / #dcebf7: 5.53:1 PASS
+#8b490d / #fbe9d5: 5.80:1 PASS
+#256445 / #e4f1e8: 6.04:1 PASS
+#69468f / #eee4f6: 5.94:1 PASS
+
+neuron-6 jsdom verification
+Distances: screen pixels from node center to nearest label text rectangle; conservative 14px CJK / 8px ASCII metrics (jsdom has no SVG getBBox).
+{
+  "viewport": [
+    390,
+    1000
+  ],
+  "results": [
+    {
+      "name": "first-open",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        0.935142,
+        0.966594
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "民法總則",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        0.935142,
+        0.966594
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 22
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 22
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 18
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 22
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 22
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 22
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 18
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 22
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 22
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 22
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 22
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 22
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 22
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 22
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "表見代理之成立",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 22
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 18
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 22
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "丙再讓與 A 債權予惡意之丁：無權處分",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 22
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "是否屬日常生活所必需",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 22
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 22
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "第 184 條第 1 項前段之保護客體",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 22
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 22
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "表見代理之成立",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        3.869334,
+        3.999472
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "zoom",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 52,
+      "coverage": [
+        4.836667,
+        4.99934
+      ],
+      "distances": [
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "物權",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 59,
+      "coverage": [
+        0.934812,
+        0.966424
+      ],
+      "distances": [
+        {
+          "node": "違章建築讓與與拆屋還地之被告 109",
+          "distance": 22
+        },
+        {
+          "node": "拆屋還地＋相當於租金之不當得利",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 18
+        }
+      ]
+    },
+    {
+      "name": "刑法總則",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 88,
+      "coverage": [
+        0.934924,
+        0.966481
+      ],
+      "distances": [
+        {
+          "node": "竊盜既遂時點 107",
+          "distance": 20
+        },
+        {
+          "node": "不作為犯（危險前行為）",
+          "distance": 22
+        },
+        {
+          "node": "故意與過失之界線",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第13條",
+          "distance": 18
+        },
+        {
+          "node": "中華民國刑法 · 刑法第15條",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第25條",
+          "distance": 22
+        },
+        {
+          "node": "中華民國刑法 · 刑法第27條",
+          "distance": 22
+        },
+        {
+          "node": "中華民國刑法 · 刑法第294條",
+          "distance": 18
+        },
+        {
+          "node": "中華民國刑法 · 刑法第320條",
+          "distance": 22
+        },
+        {
+          "node": "竊盜既遂時點",
+          "distance": 18
+        },
+        {
+          "node": "違規停車與危險前行為",
+          "distance": 20
+        },
+        {
+          "node": "不作為殺人或遺棄之故意",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "overview",
+      "stage": [
+        376,
+        730
+      ],
+      "nodes": 196,
+      "coverage": [
+        0.935512,
+        0.966784
+      ],
+      "distances": []
+    }
+  ]
+}
+{
+  "viewport": [
+    1280,
+    900
+  ],
+  "results": [
+    {
+      "name": "first-open",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        0.501344,
+        0.961886
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 22
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 18
+        }
+      ]
+    },
+    {
+      "name": "民法總則",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        0.501344,
+        0.961886
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 22
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 18
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 20
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則",
+          "distance": 20
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 22
+        },
+        {
+          "node": "是否屬日常生活所必需",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 20
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效",
+          "distance": 22
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "第 184 條第 1 項前段之保護客體",
+          "distance": 18
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 20
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 22
+        },
+        {
+          "node": "是否屬日常生活所必需",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 22
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 22
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人之法律行為",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 20
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 20
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 20
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "受詐欺：撤銷＋侵權",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "第 184 條第 1 項前段之保護客體",
+          "distance": 18
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "侵權時效完成後轉不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效",
+          "distance": 22
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 22
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "消滅時效：期間＋起算",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 20
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽＋無權處分",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 20
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 22
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "無權代理／表見代理＋塗銷登記",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "通謀虛偽讓與債權之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 22
+        },
+        {
+          "node": "丙再讓與 A 債權予惡意之丁：無權處分",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第87條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第118條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "善意之戊受讓 A 債權：善意第三人保護",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "通謀虛偽讓與債權之效力 105",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第294條",
+          "distance": 20
+        },
+        {
+          "node": "17 歲之戊所為債權買賣與債權讓與之效力",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第79條",
+          "distance": 20
+        },
+        {
+          "node": "限制行為能力人自為法律行為之原則",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第84條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第85條",
+          "distance": 20
+        },
+        {
+          "node": "打工所得是否屬法定代理人允許處分之財產",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "限制行為能力人自為法律行為之原則 106",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第77條",
+          "distance": 20
+        },
+        {
+          "node": "是否屬日常生活所必需",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第225條",
+          "distance": 20
+        },
+        {
+          "node": "代償請求權之時效期間",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "出名人擅自出售借名登記土地與代償請求權 108",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "時效起算點：請求權可行使時",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第128條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "侵權行為損害賠償請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "時效完成後依不當得利返還所受利益",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第185條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 22
+        },
+        {
+          "node": "不當得利返還義務是否連帶",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "侵權行為損害賠償請求權之時效 113",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第125條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第197條",
+          "distance": 20
+        },
+        {
+          "node": "不當得利返還請求權之時效",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "第 184 條第 1 項前段之保護客體",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為 114",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第92條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第93條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第184條",
+          "distance": 20
+        },
+        {
+          "node": "被詐欺之救濟：撤銷意思表示與侵權行為",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第103條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第169條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "表見代理之成立",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.149186,
+        2.204843
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "zoom",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 52,
+      "coverage": [
+        1.436482,
+        2.756054
+      ],
+      "distances": [
+        {
+          "node": "盜用印章偽造委任書設定抵押權：無權代理 114",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第170條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 20
+        },
+        {
+          "node": "抵押權設定登記之塗銷",
+          "distance": 20
+        }
+      ]
+    },
+    {
+      "name": "物權",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 59,
+      "coverage": [
+        0.385733,
+        0.961868
+      ],
+      "distances": [
+        {
+          "node": "違章建築讓與與拆屋還地之被告 109",
+          "distance": 20
+        },
+        {
+          "node": "拆屋還地＋相當於租金之不當得利",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第179條",
+          "distance": 20
+        },
+        {
+          "node": "民法 · 民法第425條之1",
+          "distance": 22
+        },
+        {
+          "node": "民法 · 民法第758條",
+          "distance": 18
+        },
+        {
+          "node": "民法 · 民法第767條",
+          "distance": 22
+        },
+        {
+          "node": "土地與房屋原同屬甲、先後讓與不同人：推定租賃",
+          "distance": 18
+        }
+      ]
+    },
+    {
+      "name": "刑法總則",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 88,
+      "coverage": [
+        0.478727,
+        0.961716
+      ],
+      "distances": [
+        {
+          "node": "竊盜既遂時點 107",
+          "distance": 20
+        },
+        {
+          "node": "不作為犯（危險前行為）",
+          "distance": 20
+        },
+        {
+          "node": "故意與過失之界線",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第13條",
+          "distance": 22
+        },
+        {
+          "node": "中華民國刑法 · 刑法第14條",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第15條",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第25條",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第27條",
+          "distance": 20
+        },
+        {
+          "node": "中華民國刑法 · 刑法第294條",
+          "distance": 22
+        },
+        {
+          "node": "中華民國刑法 · 刑法第320條",
+          "distance": 20
+        },
+        {
+          "node": "竊盜既遂時點",
+          "distance": 22
+        },
+        {
+          "node": "違規停車與危險前行為",
+          "distance": 20
+        },
+        {
+          "node": "不作為殺人或遺棄之故意",
+          "distance": 22
+        }
+      ]
+    },
+    {
+      "name": "overview",
+      "stage": [
+        1266,
+        648
+      ],
+      "nodes": 196,
+      "coverage": [
+        0.473517,
+        0.962312
+      ],
+      "distances": []
+    }
+  ]
+}
+PASS: mobile both-axis coverage >=80%, all mobile visible labels <=24px in default/selected/zoom states; desktop nonoverlap and adjacent labels; SRI/manifest/data/no CDN.
+
+PASS: 2,502 questions / 16 subject files byte-identical to original src/qb; altered-byte digest rejection; inline JS syntax and no external CDN/fonts.
+部署同步保留既有 data/DONE_data.txt（本機與既有部署的說明紀錄原本不同），不發布該筆無關差異。
+
+Deployment: 4ab22b02146b0f87ee113cca7c10a490cfcff19c pushed to italymanoec/law-universe-app main.
+GitHub Pages run 39921947686: completed / success.
+https://italymanoec.github.io/law-universe-app/index.html
+https://italymanoec.github.io/law-universe-app/essay.html#mindmap
+All seven live assets HTTP 200 and byte-for-byte match local app (index, essay, paper CSS, mindmap JS, SW, hash-manifest, manifest).
+Independent graph check: 196 nodes / 646 edges; real-data relationships, deduplication, detail, selection, second layer, filter, pan/pinch PASS; consoleErrors=[].
+Only italymanoec/law-universe-app accessed for git/Pages operations; no token printed.
