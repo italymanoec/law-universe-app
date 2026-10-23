@@ -11,3 +11,12 @@ Layout: retained paper palette and permanent legend, reduced-motion-aware fade, 
 Integrity: 2,502 questions / 16 subject files byte-identical to original source; altered-byte SHA-384 rejected; every protected data/ and law/ file unchanged; seven essay routes, reverse links, invalid-data refusal and offline restore passed. No CDN/fonts added. SRI and all hash-manifest entries verified; SW v73-neuron-7 includes vendor/journey.js in PRECACHE.
 Validation commands: NODE_PATH=/tmp/neuron7-tools/node_modules node tools/check-neuron7.cjs; same NODE_PATH node tools/check-neuron7-openworld.cjs; node tools/check-essay.cjs; node /tmp/neuron6-integrity.cjs.
 Only italymanoec/law-universe-app is used for repository/deployment operations. Existing deployment data/DONE_data.txt retained (preexisting unrelated documentation difference).
+
+Deployment evidence:
+- Code commit 99411703e253c30d098fd28635e5886743785492 pushed to italymanoec/law-universe-app main.
+- GitHub Pages run 39922733821: completed / success.
+- All 9 live assets HTTP 200 and byte-identical to local app: index, essay, paper CSS, journey JS, mindmap JS, SW, hash-manifest, manifest and essay data.
+- Canonical essay.html, sw.js and vendor/journey.js URLs also match without cache-busting query.
+- Downloaded live assets re-ran the same five-stage jsdom checks at 390x1000 and 1280x900 successfully, with no runtime errors.
+- Online: https://italymanoec.github.io/law-universe-app/essay.html#mindmap
+- No token printed; no git or Pages operations targeted italymanoec/law-universe.
