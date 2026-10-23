@@ -1,0 +1,22 @@
+神經元網路第二版 v70-neuron-2 — 2026-10-23
+
+變更：
+- 預設民法總則，真資料顯示 52/196 節點；從題目／法條／組合包進入時只掛載該中心與直接鄰居。
+- 顯示全網路仍載入 196 節點，預設僅圓點和連線。
+- 題目與組合包預設短標籤 9 字加省略符；爭點／法條在選取鄰域或倍率 >=1.6 時顯示。
+- 標籤使用螢幕座標獨立圖層，多方向搜尋空間，實際 SVG getBBox 加保守字寬避讓；空間不足則隱藏低優先標籤，保證不互相覆蓋。選取標籤不截短、分行。
+- 初始散布半徑 32→110、排斥係數 1400→22000、連線自然長度 95→210。
+- 點選節點置中，直接鄰居亮起，其餘透明度 0.025；保留拖曳、縮放、鍵盤操作。
+- <=600px 控制列一列、縮小頁首，圖區 73vh（最小70vh），詳細資料為可關閉底部抽屜。
+- 更新本地 JS 的 SRI、SHA-384 manifest、SW v70-neuron-2；PRECACHE 新增 data/DONE_data.txt 並保持包含 essay.html、vendor/mindmap.js、hash-manifest.json、資料檔。
+
+驗證：
+NODE_PATH=/tmp/neuron-qa/node_modules node tools/check-neuron2.cjs
+PASS 1000 與378圖區寬度（桌機／390手機去除padding）：真資料196，預設52、逐一52個選取鄰域，零顯示標籤碰撞、科目切換、全網路無標籤、無console error。
+PASS JS語法、SRI、所有manifest雜湊。
+資料檔 SHA384 未改：c00d93d5bffff37a8d52de59017543a69fd4a5a98fa58e93a63e8165ce15348397d0b1633fbafb8e5d0d4cf81c177975
+未改任何題目／答案或essay_packs.json；未引用外部CDN。
+
+截圖限制：已使用 Playwright 嘗試本機 Chrome headless 1280x900 / 390x844；Chrome 啟動遭環境 SIGABRT，未取得截圖，不能宣稱已做像素畫面人工驗收。可重跑 tools/check-neuron2-browser.cjs（先以8765提供app）。
+
+部署目標只允許 italymanoec/law-universe-app；後續部署結果附記。
