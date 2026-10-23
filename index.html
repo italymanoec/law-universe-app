@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="icons/favicon-32.png"><title>{{APP_NAME}}｜律師司法官考試</title>
+<link rel="icon" href="icons/favicon-32.png"><title>LEXO｜律師司法官考試</title>
 <script src="vendor/app-config.js" integrity="sha384-SympQqkTmG6duJ79BFxg6sgK7jOQsWr6+TA0hgmHdbHkDY41lgWRXZRI8wdtHySZ" crossorigin="anonymous"></script>
 <style>[hidden]:not([hidden=until-found i]){display:none!important}img{max-width:100%}html,body{background:#fff}</style>
 <style>
@@ -390,20 +390,20 @@ body.nrOn{overflow:hidden}
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="{{APP_NAME}}">
+<meta name="apple-mobile-web-app-title" content="LEXO">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="stylesheet" href="pwa/pwa.css" integrity="sha384-BqX6DS3supm2D2z5gwtBKpBUMrewgi/SgQw4P7InDnlUhIqfFYIO50hNSL0XZpvX" crossorigin="anonymous">
-<link rel="stylesheet" href="pwa/paper.css" integrity="sha384-tE5skZHanRe5uvY2WQPGtedgwaVX2arc6q4jUOSfmCUrYZoguMeh+zcta3F5l9vl" crossorigin="anonymous">
+<link rel="stylesheet" href="pwa/paper.css" integrity="sha384-HVpp0rjuvnzHoExIf2pUiHupdlIVOOFiUEReLuOHbH0Z1xSB9S9ojSRsrXGVWezB" crossorigin="anonymous">
 <script src="pwa/pwa-boot.js" integrity="sha384-huYSbHZ5LvrXiHHPVZNQNkTN/B2QKmKzzIYwaPVu9lWOUXqYFWQ9Xwo9Ln7Vlt99" crossorigin="anonymous"></script>
 </head>
 <body>
-<canvas id="stage" aria-label="{{APP_NAME}}，可拖曳旋轉、點選節點或行星"></canvas>
+<canvas id="stage" aria-label="LEXO，可拖曳旋轉、點選節點或行星"></canvas>
 <div id="labels"></div>
 <div class="scan"></div><div class="vignette"></div><div class="topfade"></div>
 
 <div class="hud">
-  <div class="brand"><h1 id="subjName">{{APP_NAME}}</h1><span id="subjSub"></span><span id="syncDot" class="syncDot" hidden></span></div>
+  <div class="brand"><h1 id="subjName">LEXO</h1><span id="subjSub"></span><span id="syncDot" class="syncDot" hidden></span></div>
   <a class="neuron-start" href="essay.html#mindmap"><strong>從一個考點，建立整片記憶。</strong><span>開始五關蜂巢新手教學 →</span></a>
   <div id="staleW" class="staleW" hidden></div>
   <div id="discW" class="discW" role="note" hidden><span>本站為個人備考整理，題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</span><button type="button" class="btn" id="discOk">知道了</button></div>
@@ -422,11 +422,11 @@ body.nrOn{overflow:hidden}
 <aside class="panel" id="panel" aria-live="polite"></aside>
 
 <div class="foot">
-  拖曳旋轉・滾輪或雙指縮放・點節點看考點・「切換科目」看全部行星<br>
+  從上方蜂巢教學開始探索考點。<br>
   今日已刷 <b id="todayN">0</b> 題　同步：<span id="syncS">本機</span><br>
   已熟記 <b id="mCount">0</b> / <span id="mTotal">0</span>
   <div class="meter"><div id="mBar"></div></div>
-  <a class="classic-link" href="classic/">舊版</a><div class="discl">本站為個人備考整理，題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</div>
+  <a class="classic-link" href="classic/">舊版</a>
 </div>
 
 <script src="vendor/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>

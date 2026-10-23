@@ -54,3 +54,13 @@ body:has(>.hud){height:auto;min-height:100dvh;overflow-y:auto}.hud{position:rela
 *,*::before,*::after{background-image:none!important}body:has(>.hud) [class^="cbt"],.nread,.nrtop,.nrfoot,.nrbody{font-family:inherit}.cbt,.cbt-top,.cbt-wel ol,.cbt-qlist,.cbt-warn,.cbt-q,.cbt-a,.cbt-tool,.cbt-modal,.cbt-mbox,.cbt-rq,.cbt-mine pre,.nread,.nrtop,.nrfoot,.discW,.staleW,.econ,.eblk,.elab{background:#fff!important;color:#111;border-color:#ccc!important;border-radius:3px}.cbt-paper textarea{box-sizing:border-box;width:100%;max-width:100%;border-color:#111;background:#fff;font-size:18px!important}.cbt-tool{gap:6px}.cbtk{height:auto;min-height:44px;min-width:44px}.cbtb.pri{background:#111!important;color:#fff!important}.cbt-r1>b,.nrtop b{display:block;flex:1 1 100%;font-weight:750}.nrtop{flex-wrap:wrap}.nrtw{overflow:visible}.nrtw table{width:100%;table-layout:fixed;min-width:0}.nrtw td{overflow-wrap:anywhere}.cbt-top .cbt-tm{margin-left:0}.cbt-nav{margin-left:0;max-width:100%}.nrbtn{min-height:44px}.discW{align-items:start;flex-wrap:wrap}.discW span{flex:1 1 100%}.discW .btn{padding:10px 14px}.chip,.essTog,.opt,.lb,.modal,.nrbtn{border-radius:3px!important}.panel strong,.panel .pend b,.nrbody .lawnote b{font-weight:750}.panel .pend b{display:block}.panel .pend b+br{display:none}
 /* Keep all five steps and the feedback action within the mobile first screen. */
 @media(max-width:600px){body.learning #mm-tutorial{padding:10px;font-size:14px}body.learning #mm-tutorial p{font-size:14px;line-height:1.4;margin:4px 0}body.learning #mm-tutorial h3{font-size:21px;line-height:1.2;margin:4px 0}body.learning #mm-tutorial progress{display:block;height:8px;margin:4px 0}body.learning #mm-tutorial #mm-feedback{font-size:13px;line-height:1.4;margin:4px 0}body.learning #mm-tutorial button{font-size:14px;min-height:44px;padding:10px 14px}}
+
+/* musk-2: reserve navigation space and contain all two-ring cells. */
+.hive-navigation{position:relative;inset:auto;width:100%;padding:4px;min-height:64px}
+.mm-stage{display:flex;flex-direction:column}
+.mm-stage svg{flex:1;min-height:0}
+body:not(.learning) .mm-stage{height:600px}
+.hive-navigation span,.hive-navigation button{font-size:12px}
+body:has(>.hud)>canvas#stage,body:has(>.hud) #labels{display:none!important}
+body:has(>.hud) .foot{margin-top:32px}
+@media(max-width:600px){body:not(.learning) .mm-stage{height:460px}.hive-navigation span{white-space:normal;line-height:1.4}.hive-navigation{min-height:72px}}

@@ -1,9 +1,9 @@
 // All required files, including Three.js and every subject, install atomically.
-const VERSION = 'v77-lexo-1';
+const VERSION = 'v78-musk-2';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
 // neuron-8: viewport tutorial, source-linked example, readable unlocked exploration.
-const PRECACHE = ["DONE_hive2.txt", "DONE_hive1.txt", "DONE_neuron8.txt", "vendor/journey.js", "pwa/paper.css", "essay.html", "vendor/mindmap.js", "hash-manifest.json", "data/essay_packs.json", "data/DONE_data.txt", "index.html", "manifest.json", "law/_pend.js", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "pwa/pwa-boot.js", "pwa/pwa.css", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "vendor/THREE-LICENSE.txt", "vendor/three.min.js", "vendor/app-config.js", "DONE_musk1.txt", "DONE_lexo.txt"];
+const PRECACHE = ["DONE_hive2.txt", "DONE_hive1.txt", "DONE_neuron8.txt", "vendor/journey.js", "pwa/paper.css", "essay.html", "vendor/mindmap.js", "hash-manifest.json", "data/essay_packs.json", "data/DONE_data.txt", "index.html", "manifest.json", "law/_pend.js", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "pwa/pwa-boot.js", "pwa/pwa.css", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "vendor/THREE-LICENSE.txt", "vendor/three.min.js", "vendor/app-config.js", "DONE_musk1.txt", "DONE_lexo.txt", "DONE_musk2.txt"];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CORE);
