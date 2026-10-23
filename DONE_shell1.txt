@@ -54,3 +54,15 @@ WALK_REPORT_4 還沒修完的問題怎麼處理
 
 檢查做不到的部分
 jsdom 沒有排版引擎，也沒有真的字型，所以「沒有溢出／按鈕在畫面內／格子沒被切」是用 CSS 數值、JS 算出來的格子座標和保守字寬估算出來的，不是螢幕截圖。沒有在真的手機上用手指點過。
+
+部署
+只動 /tmp/lua_deploy → italymanoec/law-universe-app/main；沒有碰 italymanoec/law-universe。
+新版：https://italymanoec.github.io/law-universe-app/
+舊版：https://italymanoec.github.io/law-universe-app/classic/
+- 程式提交 5e1a3ea（Rebuild LEXO as a tabbed phone-style app with step-by-step screens），已 push 到 origin main。
+- GitHub Pages workflow 39956635079：completed success。
+- HTTP 讀回驗證（UTC 2026-10-23 12:53:44）：新版首頁、/classic/ 首頁都是 HTTP 200，和部署檔逐 byte 相同；部署 hash-manifest 列的 64 個檔加上 manifest 本身，共 65 個檔的 SHA-384 全部和部署檔相同；線上首頁已經載入 vendor/lexo.js（新版）。
+- 部署端 data/DONE_data.txt 和 data/SOURCES.md 保留部署倉庫原本的版本（之前就和本機不同），部署的 hash-manifest 是照部署實際檔案算的。
+- 舊檔不刪除：本機和部署端的舊檔都搬到 ~/law-universe-essay/app_retired_20261023_shell1/，部署倉庫用 git add -A 記錄移除。
+- classic、qb、law、data 在提交裡沒有任何差異；沒有開視窗或瀏覽器，沒有印出 token。
+- 本報告和它的 manifest 另外補一個提交。
