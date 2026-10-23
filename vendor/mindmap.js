@@ -27,7 +27,7 @@ function mount(host,graph,onSelect){
    const measured=typeof n.text.getBBox==='function'?n.text.getBBox():null;
    const bw=Math.max(measured?.width||0,...lines.map(l=>Array.from(l).reduce((v,c)=>v+(/[ -~]/.test(c)?8:14),0)))+10,bh=Math.max(measured?.height||0,lines.length*17)+8;
    const nx=n.x*scale+x,ny=py(n)*scale+y;
-   let box=null;for(let r=0;r<1&&!box;r++){const gap=16+r*12;for(const [dx,dy] of [[gap,-bh/2],[-bw-gap,-bh/2],[-bw/2,-bh-gap],[-bw/2,gap]]){const b={x:nx+dx,y:ny+dy,w:bw,h:bh};if(b.x<4||b.y<4||b.x+b.w>w-4||b.y+b.h>h-4)continue;if(!occupied.some(a=>b.x<a.x+a.w+5&&b.x+b.w+5>a.x&&b.y<a.y+a.h+5&&b.y+b.h+5>a.y)){box=b;break;}}}
+   let box=graph.tutorial?{x:Math.max(4,Math.min(w-bw-4,nx-bw/2)),y:ny-bh-16>=4?ny-bh-16:ny+16,w:bw,h:bh}:null;for(let r=0;r<1&&!box;r++){const gap=16+r*12;for(const [dx,dy] of [[gap,-bh/2],[-bw-gap,-bh/2],[-bw/2,-bh-gap],[-bw/2,gap]]){const b={x:nx+dx,y:ny+dy,w:bw,h:bh};if(b.x<4||b.y<4||b.x+b.w>w-4||b.y+b.h>h-4)continue;if(!occupied.some(a=>b.x<a.x+a.w+5&&b.x+b.w+5>a.x&&b.y<a.y+a.h+5&&b.y+b.h+5>a.y)){box=b;break;}}}
    if(box){occupied.push(box);n.text.setAttribute('transform',`translate(${box.x+4} ${box.y+15})`);n.text.style.display='';}
   });
  }
