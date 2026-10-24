@@ -1,9 +1,9 @@
 // App assets and all subject banks install atomically.
-const VERSION = 'v82-countdown';
+const VERSION = 'v83-civil';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
 // shell-1: tabbed app shell; no 3D globe, hive tutorial or old styles.
-const PRECACHE = ["index.html", "essay.html", "manifest.json", "vendor/app-config.js", "vendor/countdown-data.js", "vendor/lexo.js", "pwa/lexo.css", "data/essay_packs.json", "data/DONE_data.txt", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "DONE_shell1.txt", "DONE_polish1.txt"];
+const PRECACHE = ["index.html", "essay.html", "manifest.json", "vendor/app-config.js", "vendor/countdown-data.js", "vendor/lexo.js", "pwa/lexo.css", "data/essay_packs.json", "data/DONE_data.txt", "essay-civil.html", "data/essay_civil_v2.json", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "DONE_shell1.txt", "DONE_polish1.txt"];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CORE);
