@@ -235,6 +235,7 @@
       return `<a class="card big" href="#/essay/${enc(c)}"><strong>${esc(c)}</strong><span class="meta">${qs.length} 題${n ? `・看過 ${n} 題` : ''}</span></a>`;
     }).join('');
     html += `<a class="card big" href="essay-civil.html"><strong>民法：債總・債各・親屬繼承</strong><span class="meta">新增 5 題・3 組常考法條組合</span></a>`;
+    html += `<a class="card big" href="practice/index.html"><strong>申論練習：105–114 年五科全部考題</strong><span class="meta">276 題・讀題、看懂、照抄、記住</span></a>`;
     const target = last && essay.q[last] ? last : essay.order[0].id;
     return {title: '申論題', html, primary: {label: last && essay.q[last] ? '繼續上次的題目' : '從第一題開始', href: '#/q/' + enc(target)}};
   }
