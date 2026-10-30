@@ -2017,8 +2017,9 @@ window.addEventListener('resize', syncHud);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncHud);
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function startSession(ids){ if(!ids) ids=buildDaily(); mode='q'; session={queue:ids.slice(),i:0,picked:null,ok:0,wrong:[]}; if(ids.length) showQ(0); else { sel=null; related=new Set(); lightEdges(); renderPanel(); } }
+const NOQN={t:'未歸考點',color:'#9fb3ff',a:'',id:''};   // 2026-10-31 題庫完整對帳：沒掛星點的題（新補 105 年題等）用中性色，不壞
 function showQ(i){ session.i=i; session.picked=null; session.shown=false; panel.scrollTop=0; if(i>=session.queue.length){ renderPanel(); return; }
-  const q=QB_BY[session.queue[i]], n=nodes[q.node]; sel=n; related=new Set([...neighborsOf(n), ...(q.rel||[]).map(id=>nodes[id]).filter(Boolean)]); flyTo(n); lightEdges(); renderPanel(); }
+  const q=QB_BY[session.queue[i]], n=nodes[q.node]||null; sel=n; related=new Set([...(n?neighborsOf(n):[]), ...(q.rel||[]).map(id=>nodes[id]).filter(Boolean)]); if(n) flyTo(n); lightEdges(); renderPanel(); }   // 2026-10-31 題庫完整對帳：題目沒掛星點（node 空）時照常出題，不飛鏡頭
 function answerQ(k){ const s=session; if(!s||s.picked!==null) return; const q=QB_BY[s.queue[s.i]]; s.picked=k; const ok=(q.acc||[q.a]).indexOf(k)>=0; if(ok) s.ok++; else s.wrong.push(q.id); record(q,ok); const keep=panel.scrollTop; renderPanel(); panel.scrollTop=keep;
   const nx=panel.querySelector('#nx'); if(nx) nx.focus({preventScroll:true});
   const v=panel.querySelector('.verdict'); if(v){ const pr=panel.getBoundingClientRect(), vr=v.getBoundingClientRect(); if(vr.top>pr.bottom-170) panel.scrollTo({top:panel.scrollTop+(vr.top-pr.top)-Math.round(pr.height*0.3),behavior:'smooth'}); } }
@@ -2416,8 +2417,8 @@ function renderQ(){
     h+='<div class="pg">'+S.name+'・今日刷題</div><div class="pt">今天的題目都刷完了</div><p class="pk">答錯的題隔天回來，答對的依 1、3、7、14、30 天拉長間隔。本科題庫 '+QB.length+' 題，已刷過 '+QB.filter(q=>store.srs[q.id]).length+' 題，還有 '+left+' 題新題。</p><div class="acts">'+(left?'<button class="btn" id="more">再多刷 '+newPerDay()+' 題新題</button>':'')+(wrongList().length?'<button class="btn" id="wb">錯題本（'+wrongList().length+'）</button>':'')+'<button class="btn" id="free">全部題目隨機再練一輪</button></div>';
   } else if(s.i>=s.queue.length){ panel.style.setProperty('--gc','#5fe6ff');
     h+='<div class="pg">本輪結束</div><div class="pt">'+(isEss()?'寫得出來 ':'答對 ')+s.ok+' / '+s.queue.length+'</div><p class="pk">'+(s.wrong.length?(isEss()?'還不熟的 ':'答錯的 ')+s.wrong.length+' 題已排到明天再出現。':'全對，這些題的下次出現時間已經往後拉。')+'</p><div class="acts">'+(s.wrong.length?'<button class="btn" id="again">現在再刷一次錯的</button>':'')+(QB.some(q=>!store.srs[q.id])?'<button class="btn" id="more">再多刷 '+newPerDay()+' 題新題</button>':'')+(wrongList().length?'<button class="btn" id="wb">錯題本（'+wrongList().length+'）</button>':'')+'<button class="btn" id="done">回到星球</button></div>';
-  } else if(!QB_BY[s.queue[s.i]].o){ const q=QB_BY[s.queue[s.i]], n=nodes[q.node]; panel.style.setProperty('--gc',n.color); h+=essayHtml(s,q,n);
-  } else { const q=QB_BY[s.queue[s.i]], n=nodes[q.node]; panel.style.setProperty('--gc',n.color);
+  } else if(!QB_BY[s.queue[s.i]].o){ const q=QB_BY[s.queue[s.i]], n=nodes[q.node]||NOQN; panel.style.setProperty('--gc',n.color); h+=essayHtml(s,q,n);
+  } else { const q=QB_BY[s.queue[s.i]], n=nodes[q.node]||NOQN; panel.style.setProperty('--gc',n.color);
     h+='<div class="pg">'+q.y+' 年律師一試　第 '+q.n+' 題</div><div class="meta">本輪 '+(s.i+1)+' / '+s.queue.length+'　・　'+n.t+((store.srs[q.id]&&store.srs[q.id].w)?'　・　答錯過 '+store.srs[q.id].w+' 次':'')+'</div><div class="qq">'+esc(q.q)+'</div><div class="opts">';
     const accs=q.acc||[q.a]; q.o.forEach((t,k)=>{ let c='opt'; if(s.picked!==null){ if(accs.indexOf(k)>=0) c+=' ok'; else if(k===s.picked) c+=' bad'; } h+='<button class="'+c+'" data-k="'+k+'"'+(s.picked!==null?' disabled':'')+'><b>('+'ABCD'[k]+')</b><span>'+esc(t)+'</span></button>'; });
     h+='</div>';
