@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>法學記憶宇宙｜律師司法官考試</title>
-<style>[hidden]:not([hidden=until-found i]){display:none!important}img{max-width:100%}html,body{background:#020914}</style>
+<style>[hidden]:not([hidden=until-found i]){display:none!important}img{max-width:100%}html,body{background:#161b46}</style>
 <style>
 :root{
   color-scheme:dark;
-  --space:#020914; --deep:#061a2e; --holo:#5fe6ff; --holo-dim:rgba(95,230,255,.18);
-  --ink:#d9f6ff; --muted:#7fa9bd; --panel:rgba(6,26,46,.78); --line:rgba(95,230,255,.35);
+  --space:#161b46; --deep:#383785; --holo:#7feaff; --holo-dim:rgba(127,234,255,.2);
+  --ink:#f3f7ff; --muted:#b8c8e8; --panel:rgba(38,42,100,.80); --line:rgba(150,225,255,.48);
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --space:#020914; --deep:#061a2e; --panel:rgba(6,26,46,.78); }
+  :root:not([data-theme="light"]){ --space:#161b46; --deep:#383785; --panel:rgba(38,42,100,.80); }
 }
-:root[data-theme="dark"]{ --space:#020914; --deep:#061a2e; --panel:rgba(6,26,46,.78); }
+:root[data-theme="dark"]{ --space:#161b46; --deep:#383785; --panel:rgba(38,42,100,.80); }
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 55%,var(--deep) 0%,var(--space) 70%);color:var(--ink);
+body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 82% 8%,rgba(168,120,255,.28),transparent 55%),radial-gradient(ellipse at 8% 96%,rgba(255,150,120,.16),transparent 50%),radial-gradient(ellipse at 50% 50%,var(--deep) 0%,#262a68 45%,var(--space) 100%);color:var(--ink);
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 #stage{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #stage.dragging{cursor:grabbing}
@@ -23,21 +23,21 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .lb{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;letter-spacing:.02em;
   text-shadow:0 0 6px currentColor,0 0 2px #000;will-change:transform,opacity;transition:color .2s}
 .lb.hub{font-size:16px;font-weight:700;letter-spacing:.08em}
-.lb.core{font-size:15px;font-weight:700;color:#fff;writing-mode:horizontal-tb;word-break:keep-all;line-height:1.35;padding:3px 10px 4px;background:rgba(2,9,20,.82);border:1px solid rgba(255,255,255,.32);border-radius:3px;text-shadow:0 0 8px rgba(95,230,255,.55)}
+.lb.core{font-size:15px;font-weight:700;color:#fff;writing-mode:horizontal-tb;word-break:keep-all;line-height:1.35;padding:3px 10px 4px;background:rgba(28,32,78,.82);border:1px solid rgba(255,255,255,.32);border-radius:3px;text-shadow:0 0 8px rgba(95,230,255,.55)}
 .lb.core::before{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:9px;background:linear-gradient(to top,rgba(255,255,255,.55),rgba(255,255,255,0))}
 @media (max-width:760px){.lb.core{font-size:14px}}
 .lb.hot{font-weight:700;font-size:13.5px}
 .lb .ok{font-family:"Chakra Petch",sans-serif;margin-left:3px;font-size:10px;opacity:.85}
 .scan{position:fixed;inset:0;pointer-events:none;
   background:repeating-linear-gradient(0deg,rgba(95,230,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
-.vignette{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 160px 40px rgba(0,0,0,.75)}
+.vignette{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 24px rgba(10,10,44,.42)}
 .hud{position:fixed;left:18px;top:calc(14px + env(safe-area-inset-top,0px));z-index:5;max-width:min(560px,calc(100vw - 36px))}
 .brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
 .brand h1{margin:0;font-size:22px;letter-spacing:.18em;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 0 14px rgba(95,230,255,.7)}
 .brand span{color:var(--holo);font-size:12px;letter-spacing:.08em}
 .bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
 .search{position:relative}
-.search input{width:190px;background:rgba(2,9,20,.6);border:1px solid var(--line);color:var(--ink);
+.search input{width:190px;background:rgba(28,32,78,.6);border:1px solid var(--line);color:var(--ink);
   padding:7px 10px 7px 28px;border-radius:2px;font:inherit;font-size:13px;outline:none;
   clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
 .search input:focus{border-color:var(--holo);box-shadow:0 0 12px var(--holo-dim)}
@@ -48,12 +48,12 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .btn:hover,.btn:focus-visible{background:rgba(95,230,255,.2);border-color:var(--holo);outline:none}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 9px 4px 7px;border:1px solid rgba(255,255,255,.12);
-  background:rgba(2,9,20,.55);color:var(--ink);cursor:pointer;font-family:inherit}
+  background:rgba(28,32,78,.55);color:var(--ink);cursor:pointer;font-family:inherit}
 .chip i{width:8px;height:8px;border-radius:50%;box-shadow:0 0 8px currentColor;background:currentColor}
 .chip b{font-family:"Chakra Petch",sans-serif;font-weight:400;color:var(--muted);font-size:11px}
 .chip.off{opacity:.35}
 .essTog{display:flex;align-items:center;font-size:12px;padding:4px 10px;border:1px solid #ffd166;background:rgba(255,209,102,.10);color:#ffd166;cursor:pointer;font-family:inherit;flex:none}
-.essTog.on{background:#ffd166;color:#061a2e;font-weight:600}
+.essTog.on{background:#ffd166;color:#383785;font-weight:600}
 .essTog:focus-visible{outline:1px solid var(--holo)}
 .chip:focus-visible{outline:1px solid var(--holo)}
 .panel{position:fixed;right:18px;top:calc(18px + env(safe-area-inset-top,0px));width:min(380px,calc(100vw - 36px));
@@ -70,7 +70,7 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .ph{font-size:12px;color:var(--muted);margin:16px 0 6px;letter-spacing:.08em}
 .links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
 .links button{all:unset;cursor:pointer;display:flex;gap:8px;align-items:baseline;width:100%;font-size:13.5px;padding:5px 8px;
-  border:1px solid rgba(255,255,255,.07);background:rgba(2,9,20,.35)}
+  border:1px solid rgba(255,255,255,.07);background:rgba(28,32,78,.35)}
 .links button:hover,.links button:focus-visible{border-color:var(--line);background:rgba(95,230,255,.1)}
 .links i{width:7px;height:7px;border-radius:50%;flex:none;transform:translateY(-1px);box-shadow:0 0 6px currentColor;background:currentColor}
 .links em{font-style:normal;color:var(--muted);font-size:12px;margin-left:auto;text-align:right}
@@ -81,7 +81,7 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .qq{font-size:15.5px;line-height:1.85;color:#fff;margin:10px 0 2px}
 .meta{font-family:"Chakra Petch","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:12px;color:var(--muted);margin-top:4px}
 .opts{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.opt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:8px;width:100%;padding:9px 11px;border:1px solid rgba(255,255,255,.1);background:rgba(2,9,20,.4);font-size:14px;line-height:1.65;color:var(--ink)}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:8px;width:100%;padding:9px 11px;border:1px solid rgba(255,255,255,.1);background:rgba(28,32,78,.4);font-size:14px;line-height:1.65;color:var(--ink)}
 .opt b{font-family:"Chakra Petch",sans-serif;color:var(--holo);font-weight:600;flex:none}
 .opt:hover,.opt:focus-visible{border-color:var(--line);background:rgba(95,230,255,.1)}
 .opt.ok{border-color:#4dffb2;background:rgba(77,255,178,.13)}
@@ -99,12 +99,12 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .hit .qh{all:unset;cursor:pointer;color:var(--holo);border-bottom:1px dotted var(--holo);margin-left:4px}
 .sbox.has .search input{padding-right:84px}
 body.uni #bWrong{display:none!important}
-.panel .acts.stick{position:sticky;bottom:-16px;margin:14px -18px -16px;padding:10px 18px 14px;background:#061a2e;border-top:1px solid rgba(95,230,255,.18);box-shadow:0 -10px 14px rgba(6,26,46,.9);z-index:2}
+.panel .acts.stick{position:sticky;bottom:-16px;margin:14px -18px -16px;padding:10px 18px 14px;background:#262a66;border-top:1px solid rgba(150,225,255,.25);box-shadow:0 -10px 14px rgba(38,42,102,.9);z-index:2}
 .panel .acts.stick .btn{flex:1;font-size:15px;padding:11px 12px;text-align:center}
 #bWrong{display:none}
 #bWrong.has{display:inline-block}
 .topfade{position:fixed;left:0;right:0;top:0;height:var(--hudB,0px);z-index:4;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(2,9,20,.92) 0%,rgba(2,9,20,.82) 72%,rgba(2,9,20,0) 100%)}
+  background:linear-gradient(to bottom,rgba(28,32,78,.92) 0%,rgba(28,32,78,.82) 72%,rgba(28,32,78,0) 100%)}
 @media (max-width:760px){
   .hud{left:12px;right:12px;max-width:none}
   .brand h1{font-size:18px}
@@ -357,7 +357,7 @@ body.cbtOn{overflow:hidden}
 .nrp{cursor:pointer;font:inherit;font-size:12.5px;background:none}
 .nrp:hover{background:rgba(169,139,255,.18)}
 body.nrOn{overflow:hidden}
-.nread{position:fixed;inset:0;z-index:60;background:rgba(2,9,20,.72);display:flex;align-items:stretch;justify-content:center;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px))}
+.nread{position:fixed;inset:0;z-index:60;background:rgba(28,32,78,.72);display:flex;align-items:stretch;justify-content:center;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px))}
 .nread[hidden]{display:none}
 .nrbox{color-scheme:light;background:#fbfaf6;color:#1d2733;width:min(760px,100%);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;font-family:"PingFang TC","Noto Sans TC",sans-serif}
 .nrtop{display:flex;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid #ddd6c8;background:#f1ece0;font-size:14px}
@@ -384,7 +384,7 @@ body.nrOn{overflow:hidden}
   if(["civil","criminal","constitution","administrative","civpro","crimpro","company","insurance","bills","securities","enforcement","pil","pvt","ethics","tax","english"].indexOf(k)>=0){ const p=document.createElement('link'); p.rel='preload'; p.as='script'; p.href='qb/'+k+'.js'; document.head.appendChild(p); } })();
 </script>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#020914">
+<meta name="theme-color" content="#161b46">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1497,6 +1497,12 @@ qb:[]};
 
 const R = 2.2;
 const PALETTE=['#4fd8ff','#4dffb2','#c6ff4a','#ffbe3d','#ff6fd0','#a98bff','#ff8a6b'];
+// 2026-10-30 配色：偏暗的科目／章節色提亮、略增彩度（夜空改亮後暗紫、暗藍會糊掉）
+function vivid(hex){ const m=/^#?([0-9a-f]{6})$/i.exec(hex||''); if(!m) return hex; const n=parseInt(m[1],16); let r=(n>>16&255)/255,g=(n>>8&255)/255,b=(n&255)/255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn; let h=0,l=(mx+mn)/2,sat=d?d/(1-Math.abs(2*l-1)):0;
+  if(d) h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4; h*=60; if(l>=0.62||sat<0.05) return hex; l=0.64; sat=Math.min(1,sat*1.05);
+  const c=(1-Math.abs(2*l-1))*sat,x=c*(1-Math.abs(h/60%2-1)),o=l-c/2; const [a,e,f]=h<60?[c,x,0]:h<120?[x,c,0]:h<180?[0,c,x]:h<240?[0,x,c]:h<300?[x,0,c]:[c,0,x];
+  return '#'+[a,e,f].map(v=>Math.round((v+o)*255).toString(16).padStart(2,'0')).join(''); }
 SUBJ.civil = (function(){ const groups={}; Object.keys(CIVIL_G).forEach(k=>{ if(k!=='core') groups[k]=CIVIL_G[k]; });
   const c=CIVIL_N[0]; return {name:'民法',color:'#4fd8ff',paper:'一試 綜合法學(二)・100分',core:{t:c[2],a:c[3],k:c[4],m:c[5]||''},groups,nodes:CIVIL_N.slice(1),links:CIVIL_L,qb:CIVIL_QB}; })();
 /*LAWCONST-BEGIN*/const LAWMETA=[{"id":"B0000001","n":"民法","s":"民法","ab":["民法","民"],"d":"2026-08-17","first":"1","last":"1225","cnt":1439},{"id":"B0000002","n":"民法總則施行法","s":"民總施","ab":["民總施","民法總則施行法"],"d":"2021-01-13","first":"1","last":"19","cnt":22},{"id":"C0000001","n":"中華民國刑法","s":"刑法","ab":["刑法","刑"],"d":"2026-07-22","first":"1","last":"363","cnt":422},{"id":"A0000001","n":"中華民國憲法","s":"憲法","ab":["憲法","憲"],"d":"1947-01-01","first":"1","last":"175","cnt":175},{"id":"A0000002","n":"中華民國憲法增修條文","s":"增修條文","ab":["增修條文","增修","憲增"],"d":"2005-06-10","first":"1","last":"12","cnt":12},{"id":"A0030159","n":"憲法訴訟法","s":"憲訴法","ab":["憲法訴訟法","憲訴法","憲訴"],"d":"2025-01-23","first":"1","last":"95","cnt":95},{"id":"A0030055","n":"行政程序法","s":"行程法","ab":["行政程序法","行程法","行程"],"d":"2021-01-20","first":"1","last":"175","cnt":176},{"id":"A0030154","n":"行政訴訟法","s":"行訴法","ab":["行政訴訟法","行訴法","行訴"],"d":"2022-06-22","first":"1","last":"308","cnt":390},{"id":"A0030020","n":"訴願法","s":"訴願法","ab":["訴願法","訴願"],"d":"2012-06-27","first":"1","last":"101","cnt":101},{"id":"A0030210","n":"行政罰法","s":"行政罰法","ab":["行政罰法","行罰法","行罰"],"d":"2022-06-15","first":"1","last":"46","cnt":46},{"id":"A0030023","n":"行政執行法","s":"行執法","ab":["行政執行法","行執法","行執"],"d":"2010-02-03","first":"1","last":"44","cnt":45},{"id":"I0020004","n":"國家賠償法","s":"國賠法","ab":["國家賠償法","國賠法","國賠"],"d":"2019-12-18","first":"1","last":"17","cnt":17},{"id":"A0040003","n":"地方制度法","s":"地制法","ab":["地方制度法","地制法","地制"],"d":"2025-12-03","first":"1","last":"88","cnt":107},{"id":"I0020026","n":"政府資訊公開法","s":"政資法","ab":["政府資訊公開法","政資法","政資"],"d":"2005-12-28","first":"1","last":"24","cnt":24},{"id":"A0030133","n":"中央法規標準法","s":"中標法","ab":["中央法規標準法","中標法","中標"],"d":"2004-05-19","first":"1","last":"26","cnt":26},{"id":"A0030155","n":"公務員懲戒法","s":"公懲法","ab":["公務員懲戒法","公懲法","公懲"],"d":"2020-06-10","first":"1","last":"103","cnt":103},{"id":"S0120001","n":"公務人員保障法","s":"保障法","ab":["公務人員保障法","保障法"],"d":"2025-07-09","first":"1","last":"104","cnt":111},{"id":"B0010001","n":"民事訴訟法","s":"民訴法","ab":["民事訴訟法","民訴法","民訴"],"d":"2023-11-29","first":"1","last":"640","cnt":800},{"id":"B0010048","n":"家事事件法","s":"家事法","ab":["家事事件法","家事法","家事"],"d":"2023-06-21","first":"1","last":"200","cnt":200},{"id":"C0010001","n":"刑事訴訟法","s":"刑訴法","ab":["刑事訴訟法","刑訴法","刑訴"],"d":"2026-05-13","first":"1","last":"512","cnt":712},{"id":"J0080001","n":"公司法","s":"公司法","ab":["公司法","公司"],"d":"2025-12-26","first":"1","last":"449","cnt":534},{"id":"J0080041","n":"企業併購法","s":"企併法","ab":["企業併購法","企併法","企併"],"d":"2022-06-15","first":"1","last":"54","cnt":56},{"id":"G0390002","n":"保險法","s":"保險法","ab":["保險法","保險","保"],"d":"2025-06-18","first":"1","last":"178","cnt":266},{"id":"G0380028","n":"票據法","s":"票據法","ab":["票據法","票據","票"],"d":"1987-06-29","first":"1","last":"146","cnt":147},{"id":"G0400001","n":"證券交易法","s":"證交法","ab":["證券交易法","證交法","證交"],"d":"2024-08-07","first":"1","last":"183","cnt":229},{"id":"B0010004","n":"強制執行法","s":"強執法","ab":["強制執行法","強執法","強執"],"d":"2019-05-29","first":"1","last":"142","cnt":185},{"id":"E0020021","n":"條約締結法","s":"條約法","ab":["條約締結法","條約法"],"d":"2015-07-01","first":"1","last":"20","cnt":20},{"id":"B0000007","n":"涉外民事法律適用法","s":"涉民法","ab":["涉外民事法律適用法","涉民法","涉外"],"d":"2010-05-26","first":"1","last":"63","cnt":63},{"id":"I0020006","n":"律師法","s":"律師法","ab":["律師法","律師"],"d":"2025-05-28","first":"1","last":"146","cnt":147},{"id":"A0030243","n":"法官法","s":"法官法","ab":["法官法","法官"],"d":"2023-12-15","first":"1","last":"103","cnt":120},{"id":"G0340001","n":"稅捐稽徵法","s":"稅稽法","ab":["稅捐稽徵法","稅稽法","稽徵法","稅稽","稽徵","稅捐稽徵"],"d":"2021-12-17","first":"1","last":"51","cnt":74},{"id":"G0340003","n":"所得稅法","s":"所得稅法","ab":["所得稅法","所得稅","所稅","所得"],"d":"2026-09-11","first":"1","last":"126","cnt":198},{"id":"G0340080","n":"加值型及非加值型營業稅法","s":"營業稅法","ab":["營業稅法","營業稅","營稅"],"d":"2025-05-28","first":"1","last":"60","cnt":80},{"id":"G0340072","n":"遺產及贈與稅法","s":"遺贈稅法","ab":["遺產及贈與稅法","遺贈稅法","遺贈","遺贈稅"],"d":"2026-09-11","first":"1","last":"59","cnt":73},{"id":"G0340096","n":"土地稅法","s":"土地稅法","ab":["土地稅法","土稅法","土稅","土地稅"],"d":"2025-01-24","first":"1","last":"59","cnt":75},{"id":"G0340142","n":"納稅者權利保護法","s":"納保法","ab":["納稅者權利保護法","納保法","納保"],"d":"2025-05-28","first":"1","last":"23","cnt":23},{"id":"G0320015","n":"財政收支劃分法","s":"財劃法","ab":["財政收支劃分法","財劃法","財劃"],"d":"2025-12-03","first":"1","last":"39","cnt":44},{"id":"D0060001","n":"土地法","s":"土地法","ab":["土地法"],"d":"2024-08-07","first":"1","last":"247","cnt":262}];
@@ -1543,14 +1549,14 @@ function glowTex(){ const c=document.createElement('canvas'); c.width=c.height=1
   g.fillStyle=r; g.fillRect(0,0,128,128); return new THREE.CanvasTexture(c); }
 const TEX = glowTex();
 function glow(color,size){ const s=new THREE.Sprite(new THREE.SpriteMaterial({map:TEX,color:new THREE.Color(color),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); s.scale.setScalar(size); return s; }
-const shell = new THREE.Mesh(new THREE.SphereGeometry(R*0.985,40,26), new THREE.MeshBasicMaterial({color:0x5fe6ff,wireframe:true,transparent:true,opacity:0.05,blending:THREE.AdditiveBlending,depthWrite:false}));
+const shell = new THREE.Mesh(new THREE.SphereGeometry(R*0.985,40,26), new THREE.MeshBasicMaterial({color:0x8fe6ff,wireframe:true,transparent:true,opacity:0.09,blending:THREE.AdditiveBlending,depthWrite:false}));
 world.add(shell);
 const inner = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2,1), new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.35,blending:THREE.AdditiveBlending}));
 world.add(inner);
 function ring(r,tube,op,rx,ry){ const m=new THREE.Mesh(new THREE.TorusGeometry(r,tube,6,220), new THREE.MeshBasicMaterial({color:0x5fe6ff,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false})); m.rotation.set(rx,ry,0); scene.add(m); return m; }
 const rings=[ring(R*1.32,0.004,0.35,Math.PI/2.15,0), ring(R*1.42,0.002,0.2,Math.PI/2.4,0.5), ring(R*1.25,0.003,0.18,1.1,-0.7)];
 (function(){ const n=900,p=new Float32Array(n*3); for(let i=0;i<n;i++){ const v=new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar(12+Math.random()*20); p.set([v.x,v.y,v.z],i*3); }
-  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(p,3)); scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0x9fdcff,size:0.05,transparent:true,opacity:0.6}))); })();
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(p,3)); scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xfff0d8,size:0.06,transparent:true,opacity:0.9}))); })();
 
 function dirOf(lat,lon){ const a=lat*Math.PI/180,b=lon*Math.PI/180; return new THREE.Vector3(Math.cos(a)*Math.sin(b),Math.sin(a),Math.cos(a)*Math.cos(b)); }
 function fibDirs(n){ const out=[], inc=Math.PI*(3-Math.sqrt(5)); for(let i=0;i<n;i++){ const y=1-(i+0.5)/n*2, r=Math.sqrt(1-y*y), ph=i*inc+0.6; out.push(new THREE.Vector3(Math.sin(ph)*r, y*0.85, Math.cos(ph)*r).normalize()); } return out; }
@@ -1667,15 +1673,15 @@ function addEdge(A,B,label,type){
     if(A.type==='core'||B.type==='core') p=A.pos.clone().lerp(B.pos,t);
     else { const ang=A.dir.angleTo(B.dir); p=slerpV(A.dir,B.dir,t); const lift=type==='x'?1+0.2*Math.sin(Math.PI*t)*(0.35+ang/Math.PI):1.02; p.multiplyScalar(R*lift*(type==='h'?1.01:1)); }
     pts.push(p); }
-  const base=type==='x'?0.22:type==='c'?0.28:0.12;
-  const col=type==='x'?new THREE.Color(0x5fe6ff):new THREE.Color(G[type==='c'?B.g:A.g].c);
+  const base=type==='x'?0.36:type==='c'?0.45:0.22;
+  const col=type==='x'?new THREE.Color(0xa6ecff):new THREE.Color(G[type==='c'?B.g:A.g].c);
   const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({color:col,transparent:true,opacity:base,blending:THREE.AdditiveBlending,depthWrite:false}));
   world.add(line); const e={a:A,b:B,label,type,line,base,pts}; edges.push(e); A.edges.push(e); B.edges.push(e);
 }
 function buildSubject(key){
   clearSubject(); SK=key; S=SUBJ[key]; G={};
   const gkeys=Object.keys(S.groups);
-  gkeys.forEach((k,i)=>{ G[k]=Object.assign({},S.groups[k]); if(!G[k].c) G[k].c=PALETTE[i%PALETTE.length]; });
+  gkeys.forEach((k,i)=>{ G[k]=Object.assign({},S.groups[k]); if(!G[k].c) G[k].c=PALETTE[i%PALETTE.length]; G[k].c=vivid(G[k].c); });
   G.core={n:S.core.t,c:'#ffffff'};
   addNode({id:'core',g:'core',type:'core',t:S.core.t,a:S.core.a,k:S.core.k,m:S.core.m||'',pos:new THREE.Vector3(0,0,0),dir:new THREE.Vector3(0,0,1)});
   const dirs = gkeys.every(k=>G[k].lat!==undefined) ? gkeys.map(k=>dirOf(G[k].lat,G[k].lon)) : fibDirs(gkeys.length);
@@ -2400,8 +2406,8 @@ function lightEdges(){
 const uni=new THREE.Group(); scene.add(uni); uni.visible=false;
 const sun=glow('#ffffff',1.0); uni.add(sun);
 const UK=ORDER.filter(k=>SUBJ[k]);
-const uniItems=UK.map((k,i)=>{ const S2=SUBJ[k]; const s=glow(S2.color,0.34+Math.min(0.36,S2.nodes.length/200)); uni.add(s);
-  const el=document.createElement('div'); el.className='lb uni'; el.style.color=S2.color; el.style.opacity=0; labelsEl.appendChild(el); return {k,s,el,base:i/UK.length*Math.PI*2,sz:s.scale.x}; });
+const uniItems=UK.map((k,i)=>{ const S2=SUBJ[k]; const s=glow(vivid(S2.color),0.34+Math.min(0.36,S2.nodes.length/200)); uni.add(s);
+  const el=document.createElement('div'); el.className='lb uni'; el.style.color=vivid(S2.color); el.style.opacity=0; labelsEl.appendChild(el); return {k,s,el,base:i/UK.length*Math.PI*2,sz:s.scale.x}; });
 let uniMode=false, uniT=0, uniHover=null;
 function uniLabel(it){ const S2=SUBJ[it.k], qn=S2._qbOK?(S2.qb||[]).length:(QN[it.k]||0), due=(qn&&S2._qbOK)?dueList(S2.qb).length:0;
   const done=S2.nodes.filter(r=>mastered.has(r[0])||autoOK(it.k,r[0])).length;
@@ -2481,14 +2487,14 @@ function frame(now){
   const thr=zoom>6.9?0.72:zoom>5.6?0.45:0.15;
   list.forEach(o=>{ const el=o.el; if(!isVis(o)){ if(o._op!==0){ el.style.opacity=0; o._op=0; } return; }
     const s=screenOf(o), hot=o===sel||o===hover||related.has(o)||matches.has(o); let op;
-    if(o.type==='core') op=(sel&&sel!==o)?0.2:1; else if(o.type==='hub') op=s.f>-0.1?0.95:0.3; else op=hot?(s.f>-0.3?1:0.35):clamp((s.f-thr)/0.25,0,1)*0.85;
+    if(o.type==='core') op=(sel&&sel!==o)?0.2:1; else if(o.type==='hub') op=s.f>-0.1?0.95:0.3; else op=hot?(s.f>-0.3?1:0.35):clamp((s.f-thr)/0.25,0,1)*0.95;
     if(sel&&!hot&&o.type==='leaf') op*=0.35;
     if(o.type!=='core') op*=clamp((s.y-22-hudB)/24,0,1);
     if(op<0.01){ if(o._op!==0){ el.style.opacity=0; o._op=0; } }
     else { const tr='translate('+s.x.toFixed(1)+'px,'+s.y.toFixed(1)+'px) translate(-50%,'+(o.type==='core'?coreDy()+'px':'-150%')+')'; if(o._tr!==tr){ el.style.transform=tr; o._tr=tr; }
       const os=op.toFixed(2); if(o._op!==os){ el.style.opacity=os; o._op=os; } el.classList.toggle('hot',hot&&o.type==='leaf'); }
     if(o.type!=='core') o.sprite.scale.setScalar(o.size*(hot?1.7:1)*(isM(o.id)?1.15:1));
-    o.sprite.material.opacity=(o.type==='core'?1:0.3+0.7*Math.max(0,s.f))*(sel&&!hot&&o.type==='leaf'?0.4:1); });
+    o.sprite.material.opacity=(o.type==='core'?1:0.45+0.55*Math.max(0,s.f))*(sel&&!hot&&o.type==='leaf'?0.4:1); });
   renderer.render(scene,camera);
 }
 buildSubject(SUBJ[store.last]?store.last:'civil');
