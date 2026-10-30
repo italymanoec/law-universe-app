@@ -433,6 +433,80 @@ body.nrOn{overflow:hidden}
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="stylesheet" href="pwa/pwa.css">
+<style>
+/* 2026-10-30 19:55 轉動與手機：上方分層、科目總覽分類、手機版面 */
+.hud .bar{margin-top:7px}
+.hud .bar.r1{margin-top:10px}
+.rl{flex:none;width:32px;font-size:11.5px;color:var(--muted);letter-spacing:.12em}
+.slot{display:contents}
+.prog{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.prog b{color:var(--holo);font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:13.5px}
+.chips{margin-top:7px}
+.chips{position:relative;padding-left:40px}
+.chips::before{content:"章節";position:absolute;left:0;top:7px;font-size:11.5px;color:var(--muted);letter-spacing:.12em}
+#bChap{display:none}
+.brand #pwaStatus{margin:0;font-size:11px;line-height:1.4;align-self:center;color:#a9d7e6;opacity:.85}
+.brand #pwaStatus.ok{font-size:0;padding:1px 7px;border-radius:9px;border:1px solid rgba(127,234,255,.3)}
+.brand #pwaStatus.ok::before{content:"✓ 離線可用";font-size:11px}
+body.uni .uniBtn::after{content:none}
+body.uni .r2>:not(a):not(.rl), body.uni .r3, body.uni .foot, body.uni #essSlot{display:none}
+body.uni #labels .lb.uni,body.uni #bChap{display:none}
+#uniGrid{position:fixed;left:0;right:0;top:var(--hudB,120px);bottom:0;z-index:4;overflow:auto;padding:4px 18px 28px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#uniGrid[hidden]{display:none}
+.uhead{max-width:1180px;margin:0 auto 16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:12px 16px;border-radius:12px;background:rgba(28,32,78,.74);border:1px solid rgba(160,190,255,.3)}
+.uhead b{font-size:17px;color:#fff;letter-spacing:.06em}
+.uhead .ut{font-size:14px;color:var(--ink)}
+.uhead .ut em{font-style:normal;color:var(--holo);font-weight:700}
+.uhead>.ubar{flex:1 1 180px}
+.uhead small{flex-basis:100%;font-size:12.5px;color:var(--muted)}
+.ubar{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.ubar i{display:block;height:100%;background:var(--holo);box-shadow:0 0 8px var(--holo)}
+.ucats{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:start}
+.ucat h3{margin:0 0 8px;font-size:15px;letter-spacing:.24em;color:#e6ecff;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(160,190,255,.32)}
+.ucat h3 small{font-weight:400;letter-spacing:0;color:var(--muted);margin-left:8px;font-size:12px}
+.ucards{display:flex;flex-direction:column;gap:8px}
+.ucard{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:10px;row-gap:2px;align-items:center;min-height:68px;padding:9px 12px;border-radius:12px;
+  background:rgba(28,32,78,.7);border:1px solid rgba(160,190,255,.22);transition:background .15s,border-color .15s}
+.ucard:hover,.ucard:focus-visible{border-color:var(--c);background:rgba(58,64,140,.78)}
+.ucard.cur{border:2px solid var(--c);padding:8px 11px}
+.ucard .orb{grid-row:1/4;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 36% 34%,#fff 0,var(--c) 48%);box-shadow:0 0 14px var(--c)}
+.ucard>.un,.ucard>.us,.ucard>.ubar{grid-column:2}
+.ucard .un{font-size:17px;font-weight:700;color:var(--c);line-height:1.3;text-shadow:0 0 6px rgba(0,0,0,.7)}
+.ucard .un em{font-style:normal;font-size:11px;font-weight:600;color:#14163a;background:var(--c);border-radius:8px;padding:0 6px;margin-left:6px;vertical-align:2px;text-shadow:none}
+.ucard .us{font-size:12.5px;color:var(--ink);line-height:1.45}
+.ucard .us .du{color:#ffd166}
+.ucard .ubar{margin-top:3px;height:4px}
+.ucard .ubar i{background:var(--c);box-shadow:none}
+@media (min-width:761px) and (max-width:1100px){.ucats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+  .rl,.chips::before{display:none}
+  .hud .bar{margin-top:6px;gap:6px}
+  .hud .bar.r1{margin-top:8px}
+  .bar.r1 .uniBtn{flex:none;padding:8px 12px}
+  .bar.r1 .sbox{order:0;flex:1 1 0;min-width:0}
+  .bar.r2,.bar.r3{flex-wrap:wrap}
+  .bar.r2 .btn,.bar.r2 .essTog{flex:1 1 auto;min-height:44px;font-size:14.5px;padding:8px 10px;justify-content:center;text-align:center}
+  .bar.r3 .btn{flex:0 0 auto;min-height:44px;font-size:15px;padding:8px 14px}
+  .prog{flex:1 1 auto;text-align:right;font-size:12.5px}
+  #bChap{display:inline-block;flex:0 0 auto}
+  .chips{display:none;margin-top:6px;padding-left:0}
+  body.chipsOn .chips{display:flex}
+  body.pOpen .chips{display:none}
+  .lb{font-size:13px}.lb.hub{font-size:15px}
+  #uniGrid{padding:2px 10px 24px}
+  .uhead{padding:10px 12px;margin-bottom:12px;gap:4px 12px}
+  .uhead b{font-size:15.5px}.uhead .ut{font-size:13px}
+  .ucats{grid-template-columns:1fr;gap:12px}
+  .ucat h3{font-size:14px;margin-bottom:6px}
+  .ucards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ucard{min-height:62px;padding:8px 10px;grid-template-columns:22px minmax(0,1fr);column-gap:8px}
+  .ucard.cur{padding:7px 9px}
+  .ucard .orb{width:20px;height:20px}
+  .ucard .un{font-size:16px}
+  .ucard .us{font-size:12px}
+  .panel:not(.wide),body.so .panel:not(.wide){max-height:46%}
+}
+</style>
 <script src="pwa/pwa-boot.js"></script>
 </head>
 <body>
@@ -444,17 +518,24 @@ body.nrOn{overflow:hidden}
   <div class="brand"><h1 id="subjName">民法記憶星球</h1><span id="subjSub"></span><span id="syncDot" class="syncDot" hidden></span></div>
   <div id="staleW" class="staleW" hidden></div>
   <div id="discW" class="discW" role="note" hidden><span>本站為個人備考整理，題目出自考選部公告試題；解析僅供參考，不構成法律意見，請以考選部公告答案與現行法規為準。</span><button type="button" class="btn" id="discOk">知道了</button></div>
-  <div class="bar">
-    <a class="btn" href="essay.html" style="text-decoration:none">申論法條組合包</a>
+  <div class="bar r1"><span class="rl">科目</span>
     <button class="btn uniBtn" id="bUni">切換科目</button>
     <span class="sbox"><label class="search"><input id="q" type="search" placeholder="條號或關鍵字" autocomplete="off"></label><span class="hit" id="hit"></span></span>
+  </div>
+  <div class="bar r2" id="modeRow"><span class="rl">模式</span><span class="slot" id="essSlot"></span>
+    <button class="btn" id="bCore">解題順序</button>
+    <a class="btn" href="essay.html" style="text-decoration:none">申論法條組合包</a>
+    <button class="btn" id="bL2" hidden>我的筆記</button>
+    <button class="btn" id="bChap" aria-expanded="false">章節 ▾</button>
+  </div>
+  <div class="bar r3"><span class="rl">今日</span>
     <button class="btn" id="bQuiz">今日刷題 <span id="dueN"></span></button>
     <button class="btn" id="bWrong">錯題 <span id="wrongN"></span></button>
-    <button class="btn" id="bL2" hidden>我的筆記</button>
-    <button class="btn" id="bCore">解題順序</button>
+    <span class="prog" id="hudProg"></span>
   </div>
   <div class="chips" id="chips"></div>
 </div>
+<div id="uniGrid" hidden></div>
 
 <aside class="panel" id="panel" aria-live="polite"></aside>
 
@@ -1562,7 +1643,7 @@ function loadQB(k){ const S2=SUBJ[k]; if(!S2||S2._qbOK) return Promise.resolve()
       if(H!==QH[k]||A.length!==QN[k]){ delete qbWait[k]; sc.remove(); qbStale=true; console.warn('qb/'+k+'.js 版本不符',H,QH[k]); ng(new Error('stale')); return; }
       S2.qb=A; S2._qbOK=true; delete S2._nq; delete S2._cite; if(qbErr===k) qbErr=null; ok(); };
     sc.onerror=()=>{ delete qbWait[k]; sc.remove(); ng(new Error('load')); }; document.head.appendChild(sc); }); }
-function refreshUni(){ if(uniMode) uniItems.forEach(it=>it.el.innerHTML=uniLabel(it)); }
+function refreshUni(){ if(uniMode) renderUni(); }
 function qbReady(k){ if(k!==SK){ refreshUni(); return; }
   setQB(); refreshMastery(); refreshStats(); updateHud(); refreshUni();
   if(uniMode) return;
@@ -1646,8 +1727,10 @@ function refreshStats(){
   const el=document.getElementById('dueN'); if(el){ const n=QB.length?buildDaily().length:0; el.textContent=n?'（'+n+'）':''; }
   const tn=document.getElementById('todayN'); if(tn) tn.textContent=(store.log[todayStr()]||{}).n||0;
   const wn=document.getElementById('wrongN'), wb=document.getElementById('bWrong'); if(wn&&wb){ const n=QB.length?wrongList().length:0; wn.textContent=n?n:''; wb.classList.toggle('has',n>0); }
-  l2Bar();
+  l2Bar(); hudProg();
 }
+function hudProg(){ const el=document.getElementById('hudProg'); if(!el||!leaves) return; const c=leaves.filter(o=>isM(o.id)).length;
+  el.innerHTML='已刷 <b>'+((store.log[todayStr()]||{}).n||0)+'</b> 題・熟記 <b>'+c+'</b>/'+leaves.length; }
 let docRef=null, saving=false, pendingSave=false, saveTimer=null;
 function setSync(t){ const el=document.getElementById('syncS'); if(el) el.textContent=t;
   const dot=document.getElementById('syncDot'); if(!dot) return;
@@ -1680,7 +1763,7 @@ function mergeRemote(r){
 function progOf(x){ return canon({srs:(x&&x.srs)||{},mk:mkOf(x),log:(x&&x.log)||{}}); }
 function writeBack(r){ if(docRef&&r&&typeof r==='object'&&progOf(store)!==progOf(r)){ dirty=true; queueRemote(); } }
 function applyRemote(r){ if(!r||typeof r!=='object') return; const before=canon(store); store=mergeRemote(r); mastered=new Set(store.mastered); if(canon(store)===before) return;
-  saveLocal(); refreshMastery(); refreshStats(); if(uniMode) uniItems.forEach(it=>it.el.innerHTML=uniLabel(it)); else if(mode==='node' && sel) renderPanel(); }
+  saveLocal(); refreshMastery(); refreshStats(); if(uniMode) renderUni(); else if(mode==='node' && sel) renderPanel(); }
 async function initSync(){
   try{
     if(!window.claude || !window.claude.use){ syncLocalOnly(); return; }
@@ -1750,7 +1833,7 @@ function buildSubject(key){
   leaves=list.filter(o=>o.type==='leaf');
   ['h','x','q'].forEach(k=>{ const el=document.getElementById('leg'+k.toUpperCase()); if(el) el.style.display=edges.some(e=>e.k===k)?'':'none'; });
   setQB();
-  world.quaternion.identity(); world.rotateY(-0.35); targetQ=null; zoomT=6.4;
+  world.quaternion.identity(); world.rotateY(-0.35); targetQ=null; zoomT=baseZ();
   store.last=key; saveLocal();
   qEl.value=''; hitEl.textContent='';
   buildChips(); applyVis(); refreshMastery(); refreshStats(); updateHud(); lightEdges(); closePanel();
@@ -1764,7 +1847,7 @@ function setQB(){ const A=(S.qb||[]); essN=A.filter(q=>!q.o).length; essBoth=ess
   const GO={}; Object.keys(S.groups).forEach((k,i)=>GO[k]=i);
   QB.sort((x,y)=>((GO[nodes[x.node]?nodes[x.node].g:'']||0)-(GO[nodes[y.node]?nodes[y.node].g:'']||0)) || (y.y-x.y) || (x.n-y.n)); syncEss(); }
 function syncEss(){ let b=document.getElementById('essTog'); if(!essBoth){ if(b) b.remove(); return; }
-  if(!b){ b=document.createElement('button'); b.id='essTog'; b.className='essTog'; b.onclick=toggleEss; } if(chips.firstChild!==b) chips.insertBefore(b,chips.firstChild);
+  if(!b){ b=document.createElement('button'); b.id='essTog'; b.className='essTog'; b.onclick=toggleEss; } const es=document.getElementById('essSlot'); if(b.parentNode!==es) es.appendChild(b);
   b.classList.toggle('on',essOn); b.textContent=essOn?'二試申論 '+essN+' 題・點此回一試選擇題':'二試申論 '+essN+' 題'; b.setAttribute('aria-pressed',essOn?'true':'false'); }
 function toggleEss(){ essOn=!essOn; try{ localStorage.setItem('lawEss',essOn?'1':'0'); }catch(e){} closePanel(); setQB(); refreshMastery(); refreshStats(); updateHud(); }
 function buildChips(){ chips.innerHTML='';
@@ -1778,7 +1861,7 @@ function refreshMastery(){
   autoM=new Set(); leaves.forEach(o=>{ if(autoOK(SK,o.id)) autoM.add(o.id); });
   let c=0; leaves.forEach(o=>{ const m=isM(o.id); if(m) c++; o.el.querySelector('.ok').textContent=m?'✓':''; });
   document.getElementById('mCount').textContent=c; document.getElementById('mTotal').textContent=leaves.length;
-  document.getElementById('mBar').style.width=(leaves.length?c/leaves.length*100:0)+'%';
+  document.getElementById('mBar').style.width=(leaves.length?c/leaves.length*100:0)+'%'; hudProg();
   document.querySelectorAll('.chip').forEach(ch=>{ const g=ch.dataset.g; const arr=leaves.filter(o=>o.g===g); ch.querySelector('b').textContent=arr.filter(o=>isM(o.id)).length+'/'+arr.length; });
 }
 function updateHud(){
@@ -1786,6 +1869,7 @@ function updateHud(){
   document.getElementById('subjName').textContent = uniMode ? '法學記憶宇宙' : S.name+'記憶星球';
   document.getElementById('subjSub').textContent = uniMode ? '律師・司法官考試全科' : S.paper+'・'+(!S._qbOK?(qbErr===SK?(qbStale?'題庫版本不符，請重新整理頁面':'題庫載入失敗，會自動重試（或點今日刷題）'):QN[SK]+' 題（載入中）'):QB.length?QB.length+(isEss()?' 題二試申論':' 題真題'):'題庫建置中');
   document.title = (uniMode?'法學記憶宇宙':S.name+'記憶星球')+'｜律師司法官考試';
+  document.getElementById('bUni').textContent = uniMode ? '← 返回'+S.name.replace(/（.*/,'') : '切換科目';
   if(typeof syncHud==='function') syncHud();
 }
 
@@ -2303,6 +2387,10 @@ document.getElementById('bQuiz').onclick=()=>{ if(uniMode) return; if(!S._qbOK){
 document.getElementById('bWrong').onclick=()=>{ if(uniMode) return; const w=wrongList(); if(w.length) startSession(w.map(q=>q.id)); };
 document.getElementById('bCore').onclick=()=>{ if(!uniMode) select(nodes.core); };
 document.getElementById('bUni').onclick=()=>{ uniMode?exitUni(SK):enterUni(); };
+document.getElementById('bChap').onclick=e=>{ const on=document.body.classList.toggle('chipsOn'); e.currentTarget.setAttribute('aria-expanded',on?'true':'false'); e.currentTarget.textContent=on?'章節 ▴':'章節 ▾'; syncHud(); };
+(function(){ const hud=document.querySelector('.hud'), br=hud.querySelector('.brand');
+  const fix=()=>{ const el=document.getElementById('pwaStatus'); if(!el) return; if(el.parentNode!==br) br.appendChild(el); el.classList.toggle('ok',/已備妥/.test(el.textContent)); el.title=el.textContent; syncHud(); };
+  new MutationObserver(fix).observe(hud,{childList:true,subtree:true,characterData:true}); fix(); })();
 
 const qEl=document.getElementById('q'), hitEl=document.getElementById('hit');
 let qHits=[];
@@ -2508,8 +2596,23 @@ function uniLabel(it){ const S2=SUBJ[it.k], qn=S2._qbOK?(S2.qb||[]).length:(QN[i
   const done=S2.nodes.filter(r=>mastered.has(r[0])||autoOK(it.k,r[0])).length;
   if(camera.aspect<1) return esc(S2.name)+'<span class="sub">'+(qn?qn+' 題'+(due?'・到期 '+due:''):'建置中')+'</span>';
   return esc(S2.name)+'<span class="sub">'+(qn?qn+' 題'+(due?'・到期 '+due:''):'真題建置中')+'・熟記 '+done+'/'+S2.nodes.length+'</span>'; }
-function enterUni(){ prefetchQB(); closePanel(); uniMode=true; world.visible=false; uni.visible=true; zoomT=6.4; last=performance.now(); uniItems.forEach(it=>it.el.innerHTML=uniLabel(it)); list.forEach(o=>{ o.el.style.opacity=0; o._op=0; }); updateHud(); }
-function exitUni(k){ uniMode=false; uni.visible=false; world.visible=true; uniItems.forEach(it=>it.el.style.opacity=0); if(k && k!==SK) buildSubject(k); updateHud(); }
+const UCAT=[['公法',['constitution','administrative','pil','tax']],['民事',['civil','civpro','enforcement','pvt']],['刑事',['criminal','crimpro']],['商事',['company','insurance','bills','securities']],['其他',['ethics','english']]];
+const uniGrid=document.getElementById('uniGrid');
+function uniStat(k){ const S2=SUBJ[k], qn=S2._qbOK?(S2.qb||[]).length:(QN[k]||0), due=(qn&&S2._qbOK)?dueList(S2.qb).length:0;
+  return {qn,due,done:S2.nodes.filter(r=>mastered.has(r[0])||autoOK(k,r[0])).length,n:S2.nodes.length}; }
+function renderUni(){ const cats=UCAT.map(([n,ks])=>[n,ks.filter(k=>SUBJ[k])]); ORDER.filter(k=>SUBJ[k]&&!UCAT.some(c=>c[1].indexOf(k)>=0)).forEach(k=>cats[cats.length-1][1].push(k));
+  const T={qn:0,due:0,done:0,n:0}; let h='';
+  cats.forEach(([cn,ks])=>{ if(!ks.length) return; h+='<section class="ucat"><h3>'+cn+'<small>'+ks.length+' 科</small></h3><div class="ucards">';
+    ks.forEach(k=>{ const S2=SUBJ[k], st=uniStat(k), pc=st.n?Math.round(st.done/st.n*100):0; for(const x in T) T[x]+=st[x];
+      h+='<button type="button" class="ucard'+(k===SK?' cur':'')+'" data-k="'+k+'" style="--c:'+vivid(S2.color)+'"><i class="orb"></i><span class="un">'+esc(S2.name)+(k===SK?'<em>目前</em>':'')+'</span>'
+        +'<span class="us">'+(st.qn?st.qn+' 題'+(st.due?'・<span class="du">到期 '+st.due+'</span>':''):'真題建置中')+'・熟記 '+st.done+'/'+st.n+'</span><span class="ubar"><i style="width:'+pc+'%"></i></span></button>'; });
+    h+='</div></section>'; });
+  const pc=T.n?Math.round(T.done/T.n*100):0, top=uniGrid.scrollTop;
+  uniGrid.innerHTML='<div class="uhead"><b>全科總進度</b><span class="ut">熟記 <em>'+T.done+'</em> / '+T.n+' 個考點（'+pc+'%）・真題 '+T.qn+' 題'+(T.due?'・今日到期 <em>'+T.due+'</em> 題':'')+'</span><span class="ubar"><i style="width:'+pc+'%"></i></span>'
+    +'<small>依「公法 → 民事 → 刑事 → 商事 → 其他」排列；點一科進入它的記憶星球，左上「返回」回原科目。</small></div><div class="ucats">'+h+'</div>';
+  uniGrid.scrollTop=top; uniGrid.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>exitUni(b.dataset.k)); }
+function enterUni(){ prefetchQB(); closePanel(); uniMode=true; world.visible=false; uni.visible=false; zoomT=6.4; last=performance.now(); list.forEach(o=>{ o.el.style.opacity=0; o._op=0; }); updateHud(); renderUni(); uniGrid.hidden=false; uniGrid.scrollTop=0; }
+function exitUni(k){ uniMode=false; uni.visible=false; world.visible=true; uniGrid.hidden=true; uniItems.forEach(it=>it.el.style.opacity=0); if(k && k!==SK) buildSubject(k); updateHud(); }
 function uniPos(it){ const halfH=Math.tan(22.5*Math.PI/180)*camera.position.z, halfW=halfH*camera.aspect;
   const port=camera.aspect<1; const rx=port?halfW*0.6:Math.min(3.4,halfW*0.8), ry=port?halfH*0.66:Math.min(1.9,halfH*0.62);
   const cy=port?-halfH*0.07:0, ex=port?4:2;
@@ -2536,26 +2639,29 @@ function screenOf(o){ const w=o.pos.clone().applyQuaternion(world.quaternion); c
 function pick(x,y){
   if(!uniMode && y<hudB) return null;
   if(uniMode){ let best=null,bd=1e9; uniItems.forEach(it=>{ const p=project(it.s.position); const d=Math.hypot(p.x-x,p.y-y); if(d<42&&d<bd){ bd=d; best=it; } }); return best; }
-  let best=null,bd=1e9; list.forEach(o=>{ if(!isVis(o)) return; const s=screenOf(o); if(s.f<-0.1) return; const d=Math.hypot(s.x-x,s.y-y), lim=o.type==='leaf'?22:30, sc=d-s.f*6; if(d<lim&&sc<bd){ bd=sc; best=o; } });
+  let best=null,bd=1e9,bdr=1e9; list.forEach(o=>{ if(!isVis(o)) return; const s=screenOf(o); if(s.f<-0.1) return; const d=Math.hypot(s.x-x,s.y-y), lim=o.type==='leaf'?(lastTouch?34:28):40, sc=d-s.f*6; if(d<lim&&sc<bd){ bd=sc; bdr=d; best=o; } });
+  if(!(best&&bdr<12)){ for(const o of list){ if(o.type==='core'||!isVis(o)||!(+o.el.style.opacity>0.5)) continue; const r=o.el.getBoundingClientRect(); if(x>=r.left-4&&x<=r.right+4&&y>=r.top-4&&y<=r.bottom+4){ best=o; break; } } }
   if(nodes.core){ const r=nodes.core.el.getBoundingClientRect(); if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom&&(!best||+nodes.core.el.style.opacity>=0.5)) best=nodes.core; }
   return best; }
-canvas.addEventListener('pointerdown',e=>{ last=performance.now(); if(document.activeElement===qEl) qEl.blur(); canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+let lastTouch=false;
+canvas.addEventListener('pointerdown',e=>{ last=performance.now(); lastTouch=e.pointerType!=='mouse'; if(document.activeElement===qEl) qEl.blur(); canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(ptrs.size===1){ moved=0; vel={x:0,y:0}; } if(ptrs.size===2){ const a=[...ptrs.values()]; pinchD=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); moved+=99; } canvas.classList.add('dragging'); });
 canvas.addEventListener('pointermove',e=>{
   if(!ptrs.has(e.pointerId)){ const h=pick(e.clientX,e.clientY); if(uniMode){ uniHover=h; canvas.style.cursor=h?'pointer':''; } else if(h!==hover){ hover=h; canvas.style.cursor=h?'pointer':''; } return; }
   const p=ptrs.get(e.pointerId), dx=e.clientX-p.x, dy=e.clientY-p.y; ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(ptrs.size===1){ moved+=Math.abs(dx)+Math.abs(dy); if(uniMode){ uniT+=dx*0.006; } else { targetQ=null; rotateBy(dx,dy); vel={x:dx,y:dy}; } }
-  else if(ptrs.size===2){ const a=[...ptrs.values()], d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); if(pinchD&&!uniMode) zoomT=clamp(zoomT*pinchD/d,3.3,10); pinchD=d; }
+  else if(ptrs.size===2){ const a=[...ptrs.values()], d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); if(pinchD&&!uniMode) zoomT=clamp(zoomT*pinchD/d,3.3,Math.max(10,baseZ())); pinchD=d; }
   last=performance.now(); });
 function up(e){ if(!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId);
-  if(ptrs.size===0){ canvas.classList.remove('dragging'); if(moved<6){ const o=pick(e.clientX,e.clientY); if(o){ if(uniMode) exitUni(o.k); else select(o); } else if(!uniMode && sel && mode==='node'){ closePanel(); blankT=performance.now(); } } } pinchD=0; }
+  if(ptrs.size===0){ canvas.classList.remove('dragging'); if(moved<(lastTouch?12:6)){ const o=pick(e.clientX,e.clientY); if(o){ if(uniMode) exitUni(o.k); else select(o); blankT=performance.now(); } else if(!uniMode && sel && mode==='node'){ closePanel(); blankT=performance.now(); zoomT=baseZ(); } } } pinchD=0; }
 let blankT=0; document.addEventListener('click',e=>{ if(performance.now()-blankT<450 && e.target!==canvas){ e.stopPropagation(); e.preventDefault(); } },true);
 canvas.addEventListener('pointerup',up); canvas.addEventListener('pointercancel',up);
-canvas.addEventListener('wheel',e=>{ e.preventDefault(); if(!uniMode) zoomT=clamp(zoomT*(1+e.deltaY*0.0012),3.3,10); last=performance.now(); },{passive:false});
+canvas.addEventListener('wheel',e=>{ e.preventDefault(); if(!uniMode) zoomT=clamp(zoomT*(1+e.deltaY*0.0012),3.3,Math.max(10,baseZ())); last=performance.now(); },{passive:false});
 
-function camT(po,mb){ if(!po) return {x:0,y:0}; const r=panel.getBoundingClientRect(), W=window.innerWidth, H=window.innerHeight, k=Math.tan(22.5*Math.PI/180)*Math.max(0.5,zoom-R)/(H/2);
+function camT(po,mb){ if(!po){ if(!(mb&&camera.aspect<1&&!uniMode)) return {x:0,y:0}; const H=window.innerHeight, k=Math.tan(22.5*Math.PI/180)*zoom/(H/2); return {x:0,y:-clamp((H/2-(hudB+H-56)/2)*k,-3,0)}; } const r=panel.getBoundingClientRect(), W=window.innerWidth, H=window.innerHeight, k=Math.tan(22.5*Math.PI/180)*Math.max(0.5,zoom-R)/(H/2);
   if(!mb) return {x:clamp((W/2-Math.max(160,r.left)/2)*k,0,3),y:0};
   const top=Math.max(hudB+60,r.top), cy=(hudB+(relBan.classList.contains('on')?relBan.offsetHeight+6:0)+top)/2; return {x:0,y:-clamp((H/2-cy)*k,0,3)}; }
+function baseZ(){ return MOB()&&camera.aspect<1?clamp(R/(Math.tan(22.5*Math.PI/180)*camera.aspect*0.92),6.4,12.5):6.4; }
 const MOBQ=window.matchMedia('(max-width:760px),(max-width:1100px) and (orientation:portrait)'); const MOB=()=>MOBQ.matches;
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function frame(now){
@@ -2564,26 +2670,18 @@ function frame(now){
   { const po=panel.classList.contains('show'), mb=MOB(); const ct=camT(po,mb), camOK=Math.abs(ct.x-camera.position.x)<1e-3&&Math.abs(ct.y-camera.position.y)<1e-3;
     const still=!uniMode&&!targetQ&&ptrs.size===0&&Math.abs(vel.x)+Math.abs(vel.y)<=0.05&&Math.abs(zoomT-zoom)<1e-3&&camOK&&(sel||reduce||now-last>30000); if(still&&((frame.n=(frame.n||0)+1)%3)) return; }
   if(uniMode&&!uniHover&&ptrs.size===0&&Math.abs(zoomT-zoom)<1e-3&&now-last>30000&&((frame.n=(frame.n||0)+1)%3)) return;
-  if(ptrs.size===0 && (Math.abs(vel.x)+Math.abs(vel.y))>0.05){ rotateBy(vel.x,vel.y); vel.x*=0.93; vel.y*=0.93; }
+  if(ptrs.size===0 && (Math.abs(vel.x)+Math.abs(vel.y))>0.05){ rotateBy(vel.x,vel.y); vel.x*=0.85; vel.y*=0.85; }
   if(targetQ){ world.quaternion.slerp(targetQ,0.07); if(world.quaternion.angleTo(targetQ)<0.002) targetQ=null; }
-  else if(!sel && ptrs.size===0 && now-last>4000 && now-last<30000 && !reduce){ world.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(Y,0.0012)); }
   zoom+=(zoomT-zoom)*0.08; camera.position.z=zoom;
   const pOpen=panel.classList.contains('show'), mob=MOB();
   { const ct=camT(pOpen,mob); camera.position.x+=(ct.x-camera.position.x)*0.08; camera.position.y+=(ct.y-camera.position.y)*0.08; }
-  { const fd=document.body.classList.contains('relF'); rings.forEach(r=>{ if(r.userData.op===undefined) r.userData.op=r.material.opacity; r.material.opacity=r.userData.op*(fd?0.2:1); }); shell.material.opacity=fd?0.012:0.035; }
+  { const fd=document.body.classList.contains('relF'); rings.forEach(r=>{ if(r.userData.op===undefined) r.userData.op=r.material.opacity; r.material.opacity=r.userData.op*(fd?0.2:uniMode?0.25:1); }); shell.material.opacity=fd?0.012:0.035; }
   if(!reduce){ inner.rotation.y+=0.01; inner.rotation.x+=0.004; rings[0].rotation.z+=0.0015; rings[1].rotation.z-=0.001; rings[2].rotation.z+=0.0008; }
   const t=now*0.001;
-  if(uniMode){
-    if(!uniHover && ptrs.size===0 && !reduce && now-last<30000) uniT+=0.0016;
-    sun.scale.setScalar(1.0+Math.sin(t*1.6)*0.06);
-    uniItems.forEach(it=>{ const p=uniPos(it); it.s.position.copy(p); const hot=it===uniHover; it.s.scale.setScalar(it.sz*(hot?1.35:1)*(1+Math.sin(t*2+it.base)*0.04));
-      const sp=project(p); const depth=camera.aspect<1?0.92:0.55+0.45*((p.z+0.9)/1.8); it.el.style.opacity=hot?1:depth; it.el.classList.toggle('hot',hot);
-      it.el.style.transform='translate('+sp.x.toFixed(1)+'px,'+sp.y.toFixed(1)+'px) translate(-50%,28%)'; });
-    renderer.render(scene,camera); return;
-  }
+  if(uniMode){ if((frame.u=(frame.u||0)+1)%3===0) renderer.render(scene,camera); return; }
   nodes.core.sprite.scale.setScalar(0.42+Math.sin(t*2)*0.03);
   pulses.forEach(p=>{ if(!p.e) return; p.t+=p.sp; if(p.t>1) p.t-=1; const pts=p.e.pts, f=p.t*(pts.length-1), i=Math.floor(f); p.s.position.copy(pts[i]).lerp(pts[Math.min(i+1,pts.length-1)],f-i); });
-  const thr=zoom>6.9?0.72:zoom>5.6?0.45:0.15, dq=[];
+  const zb=baseZ(), thr=zoom>zb+0.5?0.5:zoom>zb-0.8?0.12:-0.1, dq=[], lq=[];
   list.forEach(o=>{ const el=o.el; if(!isVis(o)){ if(o._op!==0){ el.style.opacity=0; o._op=0; } return; }
     const s=screenOf(o), hot=o===sel||o===hover||related.has(o)||matches.has(o); let op;
     if(o.type==='core') op=(sel&&sel!==o)?(related.has(o)?1:0.08):1; else if(o.type==='hub') op=s.f>-0.1?0.95:0.3; else op=hot?(s.f>-0.3?1:0.35):clamp((s.f-thr)/0.25,0,1)*0.95;
@@ -2593,7 +2691,8 @@ function frame(now){
     else if(sel&&o.type!=='core'&&(o===sel||related.has(o))){ dq.push({o,x:s.x,y:s.y,f:o===sel?9:s.f});
       const os=op.toFixed(2); if(o._op!==os){ el.style.opacity=os; o._op=os; } el.classList.toggle('hot',hot&&o.type==='leaf'); el.classList.toggle('selx',o===sel&&mode==='node'); }
     else { const tr='translate('+s.x.toFixed(1)+'px,'+s.y.toFixed(1)+'px) translate(-50%,'+(o.type==='core'?coreDy()+'px':'-150%')+')'; if(o._tr!==tr){ el.style.transform=tr; o._tr=tr; }
-      const os=op.toFixed(2); if(o._op!==os){ el.style.opacity=os; o._op=os; } el.classList.toggle('hot',hot&&o.type==='leaf'); el.classList.toggle('selx',!!sel&&o===sel&&mode==='node'); }
+      const os=op.toFixed(2); if(o._op!==os){ el.style.opacity=os; o._op=os; } el.classList.toggle('hot',hot&&o.type==='leaf'); el.classList.toggle('selx',!!sel&&o===sel&&mode==='node');
+      if(!sel&&o.type!=='core'&&op>=0.3) lq.push({o,x:s.x,y:s.y,p:(hot?3:0)+(o.type==='hub'?2:0)+s.f}); }
     const rf=!sel?(hot?1.7:1):o===sel?(o.type==='leaf'?3.4:1.9):related.has(o)?(o.type==='leaf'?2.5:1.5):hot?1.7:1;
     if(o.type!=='core') o.sprite.scale.setScalar(o.size*rf*(isM(o.id)?1.15:1));
     o.sprite.material.opacity=sel&&(o===sel||related.has(o))?Math.max(0.75,0.45+0.55*Math.max(0,s.f)):(o.type==='core'?1:0.45+0.55*Math.max(0,s.f))*(sel&&!hot&&o.type!=='core'?0.05:1); });
@@ -2607,6 +2706,11 @@ function frame(now){
       const w=d.o._w, h=d.o._h, xm=Math.max(6,aR-w), ym=Math.max(aT,aB-h), x0=clamp(d.x-w/2,6,xm), y0=clamp(d.y-1.5*h,aT,ym); let X0=x0, Y0=y0;
       let ok=d.f>=9; if(!ok) for(const sx of [0,-0.6,0.6]){ const xx=clamp(x0+sx*w,6,xm); for(const c of [0,-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8]){ const t=y0+c*(h+3); if(t<aT||t>ym) continue; if(!hit(xx,t,w,h)){ X0=xx; Y0=t; ok=true; break; } } if(ok) break; }
       if(ok) bx.push([X0,Y0,X0+w,Y0+h]); else if(+el.style.opacity>0.12){ el.style.opacity='0.12'; d.o._op='0.12'; } const tr='translate('+(X0+w/2).toFixed(1)+'px,'+(Y0+1.5*h).toFixed(1)+'px) translate(-50%,-150%)'; if(d.o._tr!==tr){ el.style.transform=tr; d.o._tr=tr; } }); }
+  if(lq.length){ const pl=[], VW=window.innerWidth; if(nodes.core&&+nodes.core.el.style.opacity>0.3){ const c=nodes.core.el.getBoundingClientRect(); pl.push([c.left,c.top,c.right,c.bottom]); }
+    lq.sort((a,b)=>b.p-a.p).forEach(d=>{ const el=d.o.el; if(d.o._wk!==el.className+el.textContent){ d.o._w=el.offsetWidth; d.o._h=el.offsetHeight; d.o._wk=el.className+el.textContent; }
+      const l=clamp(d.x-d.o._w/2,4,Math.max(4,VW-4-d.o._w)), t=d.y-1.5*d.o._h, r=l+d.o._w, b=t+d.o._h;
+      if(pl.some(q=>l<q[2]+3&&r>q[0]-3&&t<q[3]+1&&b>q[1]-1)){ if(d.o._op!=='0.06'){ el.style.opacity='0.06'; d.o._op='0.06'; } }
+      else { pl.push([l,t,r,b]); if(Math.abs(l-(d.x-d.o._w/2))>0.5){ const tr='translate('+(l+d.o._w/2).toFixed(1)+'px,'+d.y.toFixed(1)+'px) translate(-50%,-150%)'; if(d.o._tr!==tr){ el.style.transform=tr; d.o._tr=tr; } } } }); }
   if(selRing) selRing.scale.setScalar(selRing.userData.sz*(1+0.12*Math.sin(t*3.2)));
   renderer.render(scene,camera);
 }
