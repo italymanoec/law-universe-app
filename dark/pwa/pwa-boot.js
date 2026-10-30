@@ -1,6 +1,7 @@
 // Original answer records remain in localStorage, using the v68 keys.
 (function () {
   'use strict';
+  var lawuHadCtl = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;   // 2026-10-30 題庫換新自動更新
   function status(text) {
     var el = document.getElementById('pwaStatus');
     if (!el) {
@@ -46,7 +47,7 @@
       navigator.serviceWorker.ready.then(ready);
     }).catch(function () { status('離線題庫準備失敗，請以 HTTPS 或 localhost 開啟'); });
     navigator.serviceWorker.addEventListener('controllerchange', function () {
-      if (document.getElementById('lawuUpd')) location.reload();
+      if (lawuHadCtl || document.getElementById('lawuUpd')) location.reload();
     });
   });
 })();
