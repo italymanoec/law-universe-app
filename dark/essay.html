@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant-TW"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#071726"><title>申論法條組合包｜法學宇宙</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"PingFang TC",sans-serif;background:#07111e;color:#e3edf5}*{box-sizing:border-box}body{margin:0}a{color:#8fe2ef;text-decoration:none}button,input,select{font:inherit}button,a.card{cursor:pointer}header{background:#102436;border-bottom:1px solid #294153;padding:calc(16px + env(safe-area-inset-top)) 18px 14px}header>div,main{max-width:800px;margin:auto}h1{font-size:23px;margin:18px 0 8px}h2{font-size:20px}h3{font-size:17px;color:#b9eef4}p,li{line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}.muted,small{color:#a6b8c9}.status{font-size:13px;color:#ffd38d;line-height:1.6;margin-top:10px}nav{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}nav a,button,.pill{border:1px solid #35566c;border-radius:10px;padding:11px 14px;background:#102b3d;color:#dff8ff;display:inline-block}nav a[aria-current=page]{background:#a9edf0;color:#102436}main{padding:18px 16px calc(32px + env(safe-area-inset-bottom))}.card,section{display:block;background:#102031;border:1px solid #2b4357;border-radius:14px;padding:17px;margin:12px 0;color:inherit}.card:hover{border-color:#86d9e5}.card strong{display:block;font-size:18px;margin:7px 0}.card span{color:#a6b8c9;font-size:14px}.flow{color:#9de0e9;font-size:14px;line-height:1.7}.links{display:flex;flex-wrap:wrap;gap:8px}.links a{border:1px solid #396075;border-radius:8px;padding:10px}input{width:100%;padding:14px;background:#0b1b2b;color:#fff;border:1px solid #496578;border-radius:10px;margin:10px 0}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #ffd38d;outline-offset:3px}.back{display:inline-block;margin:8px 0}.empty{padding:24px;color:#a6b8c9}h2:focus{outline:none}@media(max-width:400px){nav a{padding:11px 10px;font-size:14px}h1{font-size:22px}}
+.mm-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.mm-controls select{min-width:0;max-width:100%;padding:12px;background:#102b3d;color:white;border-radius:8px}.mm-stage{height:65vh;min-height:400px;border:1px solid #496578;border-radius:12px;overflow:hidden;touch-action:none;background:#091725}.mm-stage svg{display:block;user-select:none}.mm-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:17px}.mm-legend span{padding:8px;border-radius:6px}.mm-stage [role=button]:focus rect{stroke:#ffd38d;stroke-width:4}
+</style>
+<header><div><a href="index.html">← 法學宇宙首頁</a><h1>申論法條組合包</h1><div class="muted">從題目抓爭點，把法條串成解題路徑。</div><div id="status" class="status" role="status"></div><nav aria-label="模組導覽"><a href="#questions">題目列表</a><a href="#packs">組合包</a><a href="#reverse">條號反查</a><a href="#mindmap">心智圖</a></nav></div></header><main id="main"></main>
+<script src="vendor/mindmap.js" integrity="sha384-RcfVpmNLmvI3X3sf6RnpdBCdITNhMbkFIXDbzM7wCSMr7uczPX/0lwbVRl3wg3qT" crossorigin="anonymous"></script>
+<script>
+'use strict';
+const DEMO={questions:[{id:'demo-q1',title:'一物二賣的請求權分析（示範）',subject:'民法',content:'【介面示範，非正式考題】甲將物品出售給乙，嗣後又交付給丙。乙可以如何主張權利？',issues:[{title:'契約義務與不履行',description:'先辨識契約義務，再依給付障礙與可歸責性分析。',articleIds:['demo-a1','demo-a2']}],packIds:['demo-p1']}],packs:[{id:'demo-p1',title:'買賣與給付障礙（示範）',description:'練習從契約義務連結損害賠償。',articleIds:['demo-a1','demo-a2'],questionIds:['demo-q1']}],articles:[{id:'demo-a1',law:'民法',number:'348',title:'出賣人義務',text:'【示範摘要，非條文全文】出賣人負有交付標的物及移轉所有權等義務。',requirements:['辨識契約當事人','確認約定的給付內容'],practice:['示範欄位：正式實務見解待資料完成後載入。'],issues:['債權契約與物權變動的區分'],relatedArticleIds:['demo-a2']},{id:'demo-a2',law:'民法',number:'226',title:'給付不能',text:'【示範摘要，非條文全文】因可歸責於債務人之事由致給付不能時，涉及損害賠償。',requirements:['給付不能','可歸責事由','損害及因果關係'],practice:[],issues:['給付不能與其他給付障礙的區別'],relatedArticleIds:['demo-a1']}]};
+const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])), arr=v=>v==null?[]:Array.isArray(v)?v:[v];
+const pick=(o,...keys)=>keys.map(k=>o[k]).find(v=>v!=null), refs=(o,type)=>arr(pick(o,type+'Ids',type.replace(/[A-Z]/g,c=>'_'+c.toLowerCase())+'_ids',type+'s',type.replace(/[A-Z]/g,c=>'_'+c.toLowerCase())+'s')).map(v=>String(typeof v==='object'?v.id:v));
+function normalize(raw){if(!raw||!['questions','packs','articles'].every(k=>Array.isArray(raw[k])))throw Error('需要 questions、packs、articles 三個陣列');const d={};for(const k of ['questions','packs','articles']){d[k]=raw[k].map((v,i)=>({...v,id:String(v.id??k+'-'+i)}));if(new Set(d[k].map(v=>v.id)).size!==d[k].length)throw Error('資料 ID 重複');}return d;}
+let data=DEMO,source='示範資料｜正式資料尚未完成',search='';
+try{const saved=JSON.parse(localStorage.getItem('lawu-essay-data'));if(saved){data=normalize(saved);source='真實資料｜使用已儲存的離線副本';}}catch(e){}
+const title=o=>pick(o,'title','name','label')||o.id;
+const label=a=>[pick(a,'law','lawName','law_name'),pick(a,'number','articleNumber','article_number','articleNo')?`第 ${pick(a,'number','articleNumber','article_number','articleNo')} 條`:'',title(a)].filter(Boolean).join(' · ');
+function link(kind,id,text){return `<a href="#${kind}/${encodeURIComponent(id)}">${esc(text)}</a>`;}
+function articleLinks(ids){return `<div class="links">${ids.length?ids.map(id=>{const a=data.articles.find(a=>a.id===id);return link('article',id,a?label(a):id+'（資料未提供）');}).join(''):'<span class="muted">尚無關聯條文</span>'}</div>`;}
+function issueArticles(q){return [...new Set([...refs(q,'article'),...arr(q.issues).flatMap(i=>typeof i==='object'?refs(i,'article'):[])])];}
+function questionArticles(q){return [...new Set([...issueArticles(q),...data.packs.filter(p=>refs(q,'pack').includes(p.id)||refs(p,'question').includes(q.id)).flatMap(p=>refs(p,'article'))])];}
+function usedQuestions(a){return data.questions.filter(q=>questionArticles(q).includes(a.id)||refs(a,'question').includes(q.id));}
+function usedPacks(a){return data.packs.filter(p=>refs(p,'article').includes(a.id)||refs(a,'pack').includes(p.id));}
+function text(v){if(v==null||arr(v).length===0)return '<p class="muted">尚未提供</p>';return arr(v).map(x=>`<p>${esc(typeof x==='object'?Object.entries(x).map(([k,v])=>`${k}：${typeof v==='object'?JSON.stringify(v):v}`).join('\n'):x)}</p>`).join('');}
+function cards(items,kind){return items.length?items.map(o=>`<a class="card" href="#${kind}/${encodeURIComponent(o.id)}"><span>${esc(o.subject||o.category||'申論練習')}</span><strong>${esc(kind==='article'?label(o):title(o))}</strong><span>${esc(o.description||o.summary||'查看內容與關聯')}</span></a>`).join(''):'<p class="empty">目前沒有符合的資料。</p>';}
+function block(heading,body){return `<section><h3>${heading}</h3>${body}</section>`;}
+let mapView=null;
+function render(){mapView?.destroy();mapView=null;const [page='questions',encoded='']=location.hash.slice(1).split('/');let id;try{id=decodeURIComponent(encoded);}catch(e){id='';}let html='';for(const a of document.querySelectorAll('nav a'))a.setAttribute('aria-current',a.hash==='#'+page?'page':'false');
+if(page==='mindmap'){renderMindmap(id);$('#status').textContent=source;return;}
+if(page==='questions'){html=`<h2 tabindex="-1">題目列表</h2><p class="flow">題目 → 爭點 → 法條 → 關聯法條</p><label for="search">搜尋題目、科目與內容</label><input id="search" type="search" value="${esc(search)}" placeholder="輸入關鍵字"><div id="results">${cards(data.questions.filter(q=>JSON.stringify(q).toLowerCase().includes(search.toLowerCase())),'question')}</div>`;}
+else if(page==='packs'){html='<h2 tabindex="-1">組合包列表</h2>'+cards(data.packs,'pack');}
+else if(page==='reverse'){html=`<h2 tabindex="-1">條號反查</h2><p class="muted">選一條法條，查看哪些題目與組合包使用它。</p><label for="search">搜尋法規、條號或關鍵字</label><input id="search" type="search" value="${esc(search)}" placeholder="例如：民法、348"><div id="results">${reverseResults()}</div>`;}
+else {const collection={question:'questions',pack:'packs',article:'articles'}[page],o=collection&&data[collection].find(x=>x.id===id);if(!o)html='<h2 tabindex="-1">找不到這筆資料</h2><a href="#questions">返回題目列表</a>';else if(page==='question'){html=`<a class="back" href="#questions">← 題目列表</a><h2 tabindex="-1">${esc(title(o))}</h2><p class="flow">① 題目 → ② 爭點 → ③ 法條 → ④ 關聯法條</p>${block('① 題目',text(pick(o,'content','question','text','body')))}${block('② 爭點',arr(o.issues).map((i,n)=>`<h3>${n+1}. ${esc(typeof i==='string'?i:pick(i,'title','name','issue')||'爭點')}</h3>${typeof i==='object'?text(pick(i,'description','analysis','content'))+articleLinks(refs(i,'article')):''}`).join('')||text(null))}${block('③ 適用法條',articleLinks(questionArticles(o)))}${block('④ 關聯法條',articleLinks([...new Set(data.articles.filter(a=>questionArticles(o).includes(a.id)).flatMap(a=>refs(a,'relatedArticle')))]))}`;}
+else if(page==='pack'){const qs=data.questions.filter(q=>refs(o,'question').includes(q.id)||refs(q,'pack').includes(o.id));html=`<a class="back" href="#packs">← 組合包列表</a><h2 tabindex="-1">${esc(title(o))}</h2>${text(o.description)}${block('組合法條',articleLinks(refs(o,'article')))}${block('練習題目',cards(qs,'question'))}`;}
+else{html=`<a class="back" href="#reverse">← 條號反查</a><h2 tabindex="-1">${esc(label(o))}</h2>${block('條文',text(pick(o,'text','content','fullText','full_text')))}${block('要件',text(pick(o,'requirements','elements')))}${block('實務見解',text(pick(o,'practice','opinions','cases','judicialOpinions')))}${block('常考爭點',text(pick(o,'issues','commonIssues','common_issues')))}${block('關聯條文',articleLinks(refs(o,'relatedArticle')))}${block('反查：哪些題目用到這一條',cards(usedQuestions(o),'question'))}${block('反查：哪些組合包用到這一條',cards(usedPacks(o),'pack'))}`;}}
+if(['question','pack','article'].includes(page)&&id)html+=`<p>${link('mindmap',page+':'+id,'以此為中心開啟心智圖')}</p>`;$('#main').innerHTML=html;$('#status').textContent=source;const input=$('#search');if(input)input.oninput=()=>{search=input.value;$('#results').innerHTML=page==='reverse'?reverseResults():cards(data.questions.filter(q=>JSON.stringify(q).toLowerCase().includes(search.toLowerCase())),'question');};}
+function reverseResults(){return data.articles.filter(a=>JSON.stringify(a).toLowerCase().includes(search.toLowerCase())).map(a=>`<a class="card" href="#article/${encodeURIComponent(a.id)}"><strong>${esc(label(a))}</strong><span>${usedQuestions(a).length} 題目 · ${usedPacks(a).length} 組合包</span></a>`).join('')||'<p class="empty">找不到符合的法條。</p>';}
+window.addEventListener('hashchange',()=>{search='';render();window.scrollTo(0,0);$('#main h2')?.focus();});
+
+let mapTrail=[],mapCurrent='',mapArticleDetail=false;
+function mapGraph(root){
+ const nodes=[],edges=[],seen=new Map();
+ const add=(kind,id,depth,parent,obj)=>{const key=kind+':'+id;if(seen.has(key)){if(parent&&parent!==key)edges.push([parent,key]);return null;}if(!obj)return null;const n={key,kind,id,depth,obj,label:({question:'題目',issue:'爭點',article:'法條',pack:'組合包'}[kind])+'｜'+(kind==='article'?label(obj):title(obj))};seen.set(key,n);nodes.push(n);if(parent)edges.push([parent,key]);return n;};
+ const find=(kind,id)=>data[{question:'questions',pack:'packs',article:'articles'}[kind]]?.find(o=>o.id===id);
+ const issue=(q,i,index)=>({id:q.id+':'+index,title:typeof i==='string'?i:pick(i,'title','name','issue')||'爭點',articleIds:typeof i==='object'?refs(i,'article'):[]});
+ const issues=q=>arr(q.issues).map((i,index)=>issue(q,i,index));
+ let [kind,...rest]=root.split(':'),id=rest.join(':'),obj=find(kind,id);
+ if(kind==='issue')obj=data.questions.flatMap(issues).find(i=>i.id===id);
+ if(!obj)return {nodes,edges};
+ const center=add(kind,id,0,null,obj),queue=[center];
+ while(queue.length){const n=queue.shift();if(n.depth>=5)continue;const children=[];const push=(k,o)=>{if(o)children.push([k,o]);};
+ if(n.kind==='question'){issues(n.obj).forEach(o=>push('issue',o));questionArticles(n.obj).filter(id=>!issues(n.obj).some(i=>i.articleIds.includes(id))).forEach(id=>push('article',find('article',id)));}
+ if(n.kind==='issue')refs(n.obj,'article').forEach(id=>push('article',find('article',id)));
+ if(n.kind==='pack'){data.questions.filter(q=>refs(n.obj,'question').includes(q.id)||refs(q,'pack').includes(n.id)).forEach(q=>push('question',q));refs(n.obj,'article').forEach(id=>push('article',find('article',id)));}
+ if(n.kind==='article'){refs(n.obj,'relatedArticle').forEach(id=>push('article',find('article',id)));usedQuestions(n.obj).forEach(q=>push('question',q));usedPacks(n.obj).forEach(p=>push('pack',p));}
+ children.forEach(([k,o])=>{const next=add(k,o.id,n.depth+1,n.key,o);if(next)queue.push(next);});
+ }
+ return {nodes,edges};
+}
+function showMapArticle(a){
+ const dialog=document.createElement('dialog');dialog.style.cssText='background:#102031;color:#e3edf5;border:1px solid #7392aa;border-radius:14px;max-width:700px;width:calc(100% - 24px);max-height:85vh;overflow:auto';
+ dialog.innerHTML=`<button autofocus>關閉條文詳情，回到心智圖</button><h2>${esc(label(a))}</h2>${block('條文',text(pick(a,'text','content','fullText','full_text')))}${block('要件',text(pick(a,'requirements','elements')))}${block('實務見解',text(pick(a,'practice','opinions','cases','judicialOpinions')))}${block('常考爭點',text(pick(a,'issues','commonIssues','common_issues')))}<p>${link('article',a.id,'開啟完整法條詳細頁')}</p>`;
+ document.body.append(dialog);dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('close',()=>dialog.remove());dialog.querySelector('a').onclick=()=>dialog.close();dialog.showModal();
+}
+function renderMindmap(requested){
+ const choices=[...data.questions.map(o=>['question',o]),...data.packs.map(o=>['pack',o]),...data.articles.map(o=>['article',o])];
+ const root=requested||choices.map(([k,o])=>k+':'+o.id)[0]||'';
+ if(root!==mapCurrent){if(mapCurrent)mapTrail.push(mapCurrent);mapCurrent=root;}
+ const graph=mapGraph(root),center=graph.nodes[0];
+ $('#main').innerHTML=`<h2 tabindex="-1">心智圖</h2><p>點節點重新展開；拖曳移動、雙指縮放。條號設為中心後，可開啟條文詳細頁。</p><div class="mm-legend"><span style="background:#164c74">題目</span><span style="background:#66451a">爭點</span><span style="background:#24543e">法條</span><span style="background:#553d78">組合包</span></div><div class="mm-controls"><label for="mm-root">切換中心</label><select id="mm-root">${choices.map(([k,o])=>`<option value="${esc(k+':'+o.id)}" ${root===k+':'+o.id?'selected':''}>${esc(({question:'題目',pack:'組合包',article:'法條'}[k])+'｜'+(k==='article'?label(o):title(o)))}</option>`).join('')}${center?.kind==='issue'?`<option selected value="${esc(root)}">${esc(center.label)}</option>`:''}</select></div><div class="mm-controls"><button id="mm-back" ${mapTrail.length?'':'disabled'}>← 返回上一中心</button><button id="mm-in" aria-label="放大">＋</button><button id="mm-out" aria-label="縮小">－</button><button id="mm-fit">顯示全圖</button><button id="mm-reset">原始大小</button></div><p aria-live="polite">${esc(center?.label||'找不到這個中心，請從選單重新選擇')} · ${graph.nodes.length} 個節點</p>${center?.kind==='article'?`<p>${link('article',center.id,'查看 '+label(center.obj)+' 詳細頁')}</p>`:''}<div class="mm-stage" id="mm-stage"></div>`;
+ $('#mm-root').onchange=e=>{location.hash='mindmap/'+encodeURIComponent(e.target.value);};
+ $('#mm-back').onclick=()=>{const previous=mapTrail.pop();if(previous){mapCurrent=previous;location.hash='mindmap/'+encodeURIComponent(previous);}};
+ if(!window.LawMindmap){$('#mm-stage').textContent='心智圖元件載入失敗，請重新整理。';return;}
+ mapView=window.LawMindmap.mount($('#mm-stage'),graph,n=>{if(n.kind==='article'){mapArticleDetail=true;if(n.key===mapCurrent){showMapArticle(n.obj);mapArticleDetail=false;return;}}location.hash='mindmap/'+encodeURIComponent(n.key);});
+ if(mapArticleDetail&&center?.kind==='article'){showMapArticle(center.obj);mapArticleDetail=false;}
+ $('#mm-in').onclick=()=>mapView.zoom(1.25);$('#mm-out').onclick=()=>mapView.zoom(.8);$('#mm-fit').onclick=()=>mapView.fit();$('#mm-reset').onclick=()=>mapView.reset();
+}
+
+let loading=false;
+async function refresh(){if(loading)return;loading=true;try{for(const base of ['data/','../data/']){try{const response=await fetch(base+'essay_packs.json',{cache:'no-store'});if(!response.ok)throw Error('資料檔無法讀取');const next=normalize(await response.json());if(!next.questions.length&&!next.packs.length&&!next.articles.length)continue;let stored=true;try{localStorage.setItem('lawu-essay-data',JSON.stringify(next));}catch(e){stored=false;}const changed=JSON.stringify(data)!==JSON.stringify(next);data=next;source=stored?'真實資料｜已儲存，可離線閱讀':'真實資料｜儲存空間不足，本次可閱讀';if(changed)render();return;}catch(e){if(data!==DEMO)source='真實資料｜目前使用離線副本';else if(navigator.onLine!==false)source='示範資料｜等待正式資料，或資料格式尚待確認';}}}finally{loading=false;$('#status').textContent=source;}}
+render();refresh();setInterval(refresh,15000);window.addEventListener('online',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{source+='｜離線快取註冊失敗';$('#status').textContent=source;});
+</script></html>

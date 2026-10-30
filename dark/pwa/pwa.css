@@ -1,0 +1,59 @@
+/* 法學記憶宇宙 PWA：手機直式加大字級與點擊區（只覆寫外觀，不動題目內容） */
+button,.btn,.chip,.opt,.links button,input{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+html,body{overscroll-behavior:none}
+
+.lawu-upd{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;
+  background:#5fe6ff;color:#061a2e;border:0;font:inherit;font-size:16px;font-weight:700;padding:12px 20px;border-radius:24px;
+  box-shadow:0 4px 20px rgba(0,0,0,.5)}
+
+@media (max-width:760px){
+  .brand h1{font-size:20px}
+  .brand span{font-size:12.5px}
+  /* 上方按鈕列：搜尋框獨佔一行，按鈕平均分配 */
+  .bar{flex-wrap:wrap;gap:8px}
+  .bar .sbox{order:-1;flex:1 1 100%}
+  .bar .btn{flex:1 1 0;font-size:15px;min-height:44px;padding:8px 6px;text-align:center;white-space:nowrap}
+  .search input{font-size:16px;min-height:44px;padding-top:9px;padding-bottom:9px}
+  .search::before{top:10px;font-size:17px}
+  .hit{font-size:13px}
+  .chip{font-size:14px;min-height:38px;padding:6px 12px 6px 10px}
+  .chip b{font-size:12.5px}
+  .essTog{font-size:14px;min-height:38px;padding:6px 12px}
+
+  /* 面板：直式時多給一點高度 */
+  .panel{max-height:66%;padding:20px 16px 18px}
+  body.so .panel{max-height:66%}
+  .x{font-size:30px;line-height:1;padding:8px 12px;right:2px;top:2px;min-width:44px;min-height:44px}
+  .pg{font-size:13.5px}
+  .pt{font-size:23px}
+  .pa{font-size:15.5px}
+  .pk{font-size:17px;line-height:1.85}
+  .pm{font-size:15.5px}
+  .ph{font-size:13.5px}
+  .meta{font-size:13.5px}
+
+  /* 題目與選項 */
+  .quizbox{font-size:16.5px}
+  .qq{font-size:18px;line-height:1.85}
+  .opts{gap:10px}
+  .opt{font-size:17px;line-height:1.7;padding:13px 14px;min-height:52px}
+  .opt b{font-size:17px}
+  .verdict{font-size:18px}
+  .acts{gap:10px}
+  .acts .btn{font-size:16px;min-height:46px;padding:10px 14px}
+  .panel .acts.stick .btn{font-size:17px;min-height:50px}
+  .links{gap:8px}
+  .links button{font-size:16px;padding:11px 10px;min-height:44px;box-sizing:border-box}
+  .links em{font-size:13.5px}
+  .lawtxt{font-size:17.5px}
+  .lawnav .btn{min-height:44px}
+}
+#pwaStatus{font-size:12px;line-height:1.5;margin-top:6px;color:#a9d7e6}
+@media(max-width:760px){
+  .chip,.essTog{min-height:44px}
+  .cbtb,.cbtk{min-height:44px;min-width:44px;font-size:16px}
+  .cbt-paper textarea{--fz:18px;--lh:33.3px;max-width:100%;font-size:18px}
+  .cbt-cmp{grid-template-columns:1fr}
+  .panel{overflow-wrap:anywhere}
+  .panel .pg,.panel .pt{padding-right:38px}
+}
