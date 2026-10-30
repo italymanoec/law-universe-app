@@ -1,5 +1,5 @@
 // All required files, including Three.js and every subject, install atomically.
-const VERSION = 'db-47587c302f';
+const VERSION = 'db-0a61259281';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
 const PRECACHE = ["data/essay_packs.json", "data/DONE_data.txt", "vendor/mindmap.js", "essay.html", "index.html", "manifest.json", "law/_pend.js", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "pwa/pwa-boot.js", "pwa/pwa.css", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "vendor/THREE-LICENSE.txt", "vendor/three.min.js"];
@@ -32,6 +32,11 @@ self.addEventListener('fetch', event => {
     if (path === 'data/essay_packs.json' || path === 'data/DONE_data.txt') {
       try { const response = await fetch(event.request); if(response.ok) { await cache.put(event.request, response.clone()); return response; } return hit || response; }
       catch(error) { if(hit) return hit; throw error; }
+    }
+    // 2026-10-30 整夜優化：法條原文檔有網路先拿最新並存快取，離線時用打開過的那份
+    if (/^law\/(?!_pend)[A-Z]\d+\.js$/.test(path)) {
+      try { const response = await fetch(event.request); if (response.ok) { await cache.put(event.request, response.clone()); return response; } return hit || response; }
+      catch (error) { if (hit) return hit; throw error; }
     }
     return hit || fetch(event.request);
   })());

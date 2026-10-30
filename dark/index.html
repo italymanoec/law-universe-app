@@ -524,7 +524,7 @@ body.uni #labels .lb.uni,body.uni #bChap{display:none}
   </div>
   <div class="bar r2" id="modeRow"><span class="rl">模式</span><span class="slot" id="essSlot"></span>
     <button class="btn" id="bCore">解題順序</button>
-    <a class="btn" href="essay.html" style="text-decoration:none">申論法條組合包</a>
+    <a class="btn" href="essay.html#packs" style="text-decoration:none">申論法條組合包</a>
     <button class="btn" id="bL2" hidden>我的筆記</button>
     <button class="btn" id="bChap" aria-expanded="false">章節 ▾</button>
   </div>
@@ -1867,7 +1867,7 @@ function refreshMastery(){
 function updateHud(){
   document.body.classList.toggle('uni', uniMode);
   document.getElementById('subjName').textContent = uniMode ? '法學記憶宇宙' : S.name+'記憶星球';
-  document.getElementById('subjSub').textContent = uniMode ? '律師・司法官考試全科' : S.paper+'・'+(!S._qbOK?(qbErr===SK?(qbStale?'題庫版本不符，請重新整理頁面':'題庫載入失敗，會自動重試（或點今日刷題）'):QN[SK]+' 題（載入中）'):QB.length?QB.length+(isEss()?' 題二試申論':' 題真題'):'題庫建置中');
+  document.getElementById('subjSub').textContent = uniMode ? '律師・司法官考試全科' : (isEss()?'第二試申論':S.paper)+'・'+(!S._qbOK?(qbErr===SK?(qbStale?'題庫版本不符，請重新整理頁面':'題庫載入失敗，會自動重試（或點今日刷題）'):QN[SK]+' 題（載入中）'):QB.length?QB.length+(isEss()?' 題二試申論':' 題真題'):'題庫建置中');
   document.title = (uniMode?'法學記憶宇宙':S.name+'記憶星球')+'｜律師司法官考試';
   document.getElementById('bUni').textContent = uniMode ? '← 返回'+S.name.replace(/（.*/,'') : '切換科目';
   if(typeof syncHud==='function') syncHud();
@@ -2396,16 +2396,16 @@ const qEl=document.getElementById('q'), hitEl=document.getElementById('hit');
 let qHits=[];
 function qText(x){ return x.q+(x.o?x.o.join(''):'')+x.ex+(x.pts?x.pts.join(''):''); }
 let lawHit=null, lawT=null;
-qEl.addEventListener('input',()=>{ const raw=qEl.value.trim(), q=raw.replace(/^第|條$/g,''); matches=new Set(); qHits=[];
+qEl.addEventListener('input',()=>{ const raw=qEl.value.trim(), q=raw.replace(/\s+/g,'').replace(/^第|條$/g,''); matches=new Set(); qHits=[];
   const art=raw?parseArt(raw):null; lawHit=(art&&art.pc)?art:null; let h='';
   if(lawHit){ const rc=lookupCites(lawHit.pc,lawHit.no); rc.nodes.forEach(o=>matches.add(o)); qHits=rc.qs; h='<button class="qh" type="button" data-law="1">'+esc(LAWM[lawHit.pc].s)+'§'+lawHit.no+'</button>'; }
-  else { if(q) list.forEach(o=>{ if((o.t+o.a+o.k).includes(q)) matches.add(o); });
-    if(q.length>=2) qHits=QB.filter(x=>qText(x).includes(q));
-    if(art&&art.need) h='加法名，如 民184'; else if(q) h=matches.size+' 點'+(qHits.length?'<button class="qh" type="button">'+qHits.length+' 題</button>':''); }
+  else { if(q) list.forEach(o=>{ if((o.t+o.a+o.k).replace(/\s+/g,'').includes(q)) matches.add(o); });
+    if(q.length>=2) qHits=QB.filter(x=>qText(x).replace(/\s+/g,'').includes(q));
+    if(art&&art.need) h=(SUBJ_LAWS[SK]||[]).length?'加法名，如 民184':(matches.size?matches.size+' 點・':'')+'本科沒有收法典條文，請打關鍵字'; else if(q) h=matches.size+' 點'+(qHits.length?'<button class="qh" type="button">'+qHits.length+' 題</button>':''); }
   hitEl.parentNode.classList.toggle('has',!!raw); hitEl.innerHTML=h;
   clearTimeout(lawT); if(lawHit){ const L=lawHit; lawT=setTimeout(()=>openLaw(L.pc,L.no),320); } else if(raw && mode==='law') closePanel(); });
 hitEl.addEventListener('click',e=>{ const b=e.target.closest('.qh'); if(!b) return; if(b.dataset.law && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); } else if(qHits.length){ qEl.blur(); startSession(qHits.map(x=>x.id)); } });
-qEl.addEventListener('keydown',e=>{ if(e.key==='Enter' && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); return; } if(e.key==='Enter'){ const qq=qEl.value.trim().replace(/^第|條$/g,''); const rk=o=>o.t.includes(qq)?0:o.a.includes(qq)?1:2;
+qEl.addEventListener('keydown',e=>{ if(e.key==='Enter' && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); return; } if(e.key==='Enter'){ const qq=qEl.value.trim().replace(/\s+/g,'').replace(/^第|條$/g,''); const rk=o=>o.t.includes(qq)?0:o.a.includes(qq)?1:2;
   const arr=[...matches].sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))); if(arr.length){ const i=arr.indexOf(sel); select(arr[(i+1)%arr.length]); } } });
 
 const LAWM={}; LAWMETA.forEach(m=>{ LAWM[m.id]=m; });
@@ -2424,7 +2424,11 @@ function citeLaw(txt,m,def,st){ const pre=m[1]||''; let hit=null, v;
   if(st.first){ st.tdef=hit; st.first=false; }
   st.last=v; st.lastEnd=m.index+m[0].length; return v; }
 function lawOf(pre,def){ if(!pre) return def; for(let i=Math.max(0,pre.length-16);i<pre.length;i++){ const suf=pre.slice(i); if(ALIAS[suf]) return ALIAS[suf]; } return LAWISH.test(pre)?null:def; }
+// 2026-10-30 整夜優化：國字條號轉數字（第一百八十四條 → 第184條、之一 → 之1）
+function zh2n(z){ const D={零:0,〇:0,一:1,二:2,兩:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9}; let n=0,cur=0;
+  for(const c of z){ if(c in D) cur=D[c]; else { const u={十:10,百:100,千:1000}[c]; n+=(cur||1)*u; cur=0; } } return n+cur; }
 function parseArt(raw){
+  raw=raw.replace(/第([零〇一二兩三四五六七八九十百千]+)條/g,(m,z)=>'第'+zh2n(z)+'條').replace(/條之([一二三四五六七八九十]+)/g,(m,z)=>'條之'+zh2n(z));
   let t=raw.replace(/\s+/g,'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248)).replace(/[－—–]/g,'-').replace(/^[§＃#]/,'');
   if(ALIAS[t]) return {lawOnly:true};
   const m=t.match(/^(.*?)第?§?(\d+)條?(?:(?:之|-)(\d+))?條?((?:第?[0-9一二三四五六七八九十IVXⅠ-Ⅻ]+[項款目])|[IVXⅠ-Ⅻ]+)*$/);

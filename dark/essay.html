@@ -26,7 +26,7 @@ function text(v){if(v==null||arr(v).length===0)return '<p class="muted">尚未�
 function cards(items,kind){return items.length?items.map(o=>`<a class="card" href="#${kind}/${encodeURIComponent(o.id)}"><span>${esc(o.subject||o.category||'申論練習')}</span><strong>${esc(kind==='article'?label(o):title(o))}</strong><span>${esc(o.description||o.summary||'查看內容與關聯')}</span></a>`).join(''):'<p class="empty">目前沒有符合的資料。</p>';}
 function block(heading,body){return `<section><h3>${heading}</h3>${body}</section>`;}
 let mapView=null;
-function render(){mapView?.destroy();mapView=null;const [page='questions',encoded='']=location.hash.slice(1).split('/');let id;try{id=decodeURIComponent(encoded);}catch(e){id='';}let html='';for(const a of document.querySelectorAll('nav a'))a.setAttribute('aria-current',a.hash==='#'+page?'page':'false');
+function render(){mapView?.destroy();mapView=null;const [page='questions',encoded='']=(location.hash.slice(1)||'packs').split('/');let id;try{id=decodeURIComponent(encoded);}catch(e){id='';}let html='';for(const a of document.querySelectorAll('nav a'))a.setAttribute('aria-current',a.hash==='#'+page?'page':'false');
 if(page==='mindmap'){renderMindmap(id);$('#status').textContent=source;return;}
 if(page==='questions'){html=`<h2 tabindex="-1">題目列表</h2><p class="flow">題目 → 爭點 → 法條 → 關聯法條</p><label for="search">搜尋題目、科目與內容</label><input id="search" type="search" value="${esc(search)}" placeholder="輸入關鍵字"><div id="results">${cards(data.questions.filter(q=>JSON.stringify(q).toLowerCase().includes(search.toLowerCase())),'question')}</div>`;}
 else if(page==='packs'){html='<h2 tabindex="-1">組合包列表</h2>'+cards(data.packs,'pack');}
