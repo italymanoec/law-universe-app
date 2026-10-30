@@ -125,6 +125,7 @@ body.uni #bToc{display:none}
 .opt:hover,.opt:focus-visible{border-color:var(--line);background:rgba(95,230,255,.1)}
 .opt.ok{border-color:#4dffb2;background:rgba(77,255,178,.13)}
 .opt.bad{border-color:#ff7b95;background:rgba(255,123,149,.13)}
+.opt.sel{border-color:var(--holo);background:rgba(95,230,255,.16)}   /* 2026-10-31 複選題：已勾選（未送出） */
 .opt[disabled]{cursor:default}
 .verdict{margin-top:14px;font-weight:700;font-size:15px}
 .verdict.ok{color:#4dffb2}.verdict.bad{color:#ff9aae}
@@ -2018,9 +2019,12 @@ if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncHud);
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function startSession(ids){ if(!ids) ids=buildDaily(); mode='q'; session={queue:ids.slice(),i:0,picked:null,ok:0,wrong:[]}; if(ids.length) showQ(0); else { sel=null; related=new Set(); lightEdges(); renderPanel(); } }
 const NOQN={t:'未歸考點',color:'#9fb3ff',a:'',id:''};   // 2026-10-31 題庫完整對帳：沒掛星點的題（新補 105 年題等）用中性色，不壞
-function showQ(i){ session.i=i; session.picked=null; session.shown=false; panel.scrollTop=0; if(i>=session.queue.length){ renderPanel(); return; }
+function showQ(i){ session.i=i; session.picked=null; session.ms=[]; session.shown=false; panel.scrollTop=0; if(i>=session.queue.length){ renderPanel(); return; }
   const q=QB_BY[session.queue[i]], n=nodes[q.node]||null; sel=n; related=new Set([...(n?neighborsOf(n):[]), ...(q.rel||[]).map(id=>nodes[id]).filter(Boolean)]); if(n) flyTo(n); lightEdges(); renderPanel(); }   // 2026-10-31 題庫完整對帳：題目沒掛星點（node 空）時照常出題，不飛鏡頭
-function answerQ(k){ const s=session; if(!s||s.picked!==null) return; const q=QB_BY[s.queue[s.i]]; s.picked=k; const ok=(q.acc||[q.a]).indexOf(k)>=0; if(ok) s.ok++; else s.wrong.push(q.id); record(q,ok); const keep=panel.scrollTop; renderPanel(); panel.scrollTop=keep;
+const mqOk=(q,p)=>p.length===q.a.length&&q.a.every(i=>p.indexOf(i)>=0);   // 2026-10-31 複選題：全部選對才算對
+function answerQ(k){ const s=session; if(!s||s.picked!==null) return; const q=QB_BY[s.queue[s.i]];
+  if(Array.isArray(q.a)){ if(k===-1){ if(!s.ms.length) return; s.picked=s.ms.slice().sort((x,y)=>x-y); } else { const j=s.ms.indexOf(k); j<0?s.ms.push(k):s.ms.splice(j,1); const keep=panel.scrollTop; renderPanel(); panel.scrollTop=keep; return; } } else s.picked=k;
+  const ok=Array.isArray(q.a)?mqOk(q,s.picked):(q.acc||[q.a]).indexOf(k)>=0; if(ok) s.ok++; else s.wrong.push(q.id); record(q,ok); const keep=panel.scrollTop; renderPanel(); panel.scrollTop=keep;
   const nx=panel.querySelector('#nx'); if(nx) nx.focus({preventScroll:true});
   const v=panel.querySelector('.verdict'); if(v){ const pr=panel.getBoundingClientRect(), vr=v.getBoundingClientRect(); if(vr.top>pr.bottom-170) panel.scrollTo({top:panel.scrollTop+(vr.top-pr.top)-Math.round(pr.height*0.3),behavior:'smooth'}); } }
 function rateQ(ok){ const s=session; if(!s||s.picked!==null) return; const q=QB_BY[s.queue[s.i]]; s.picked=ok; if(ok) s.ok++; else s.wrong.push(q.id); record(q,ok); const keep=panel.scrollTop; renderPanel(); panel.scrollTop=keep; const nx=panel.querySelector('#nx'); if(nx) nx.focus({preventScroll:true}); }
@@ -2419,17 +2423,20 @@ function renderQ(){
     h+='<div class="pg">本輪結束</div><div class="pt">'+(isEss()?'寫得出來 ':'答對 ')+s.ok+' / '+s.queue.length+'</div><p class="pk">'+(s.wrong.length?(isEss()?'還不熟的 ':'答錯的 ')+s.wrong.length+' 題已排到明天再出現。':'全對，這些題的下次出現時間已經往後拉。')+'</p><div class="acts">'+(s.wrong.length?'<button class="btn" id="again">現在再刷一次錯的</button>':'')+(QB.some(q=>!store.srs[q.id])?'<button class="btn" id="more">再多刷 '+newPerDay()+' 題新題</button>':'')+(wrongList().length?'<button class="btn" id="wb">錯題本（'+wrongList().length+'）</button>':'')+'<button class="btn" id="done">回到星球</button></div>';
   } else if(!QB_BY[s.queue[s.i]].o){ const q=QB_BY[s.queue[s.i]], n=nodes[q.node]||NOQN; panel.style.setProperty('--gc',n.color); h+=essayHtml(s,q,n);
   } else { const q=QB_BY[s.queue[s.i]], n=nodes[q.node]||NOQN; panel.style.setProperty('--gc',n.color);
-    h+='<div class="pg">'+q.y+' 年律師一試　第 '+q.n+' 題</div><div class="meta">本輪 '+(s.i+1)+' / '+s.queue.length+'　・　'+n.t+((store.srs[q.id]&&store.srs[q.id].w)?'　・　答錯過 '+store.srs[q.id].w+' 次':'')+'</div><div class="qq">'+esc(q.q)+'</div><div class="opts">';
-    const accs=q.acc||[q.a]; q.o.forEach((t,k)=>{ let c='opt'; if(s.picked!==null){ if(accs.indexOf(k)>=0) c+=' ok'; else if(k===s.picked) c+=' bad'; } h+='<button class="'+c+'" data-k="'+k+'"'+(s.picked!==null?' disabled':'')+'><b>('+'ABCD'[k]+')</b><span>'+esc(t)+'</span></button>'; });
+    const mq=Array.isArray(q.a), LT=a=>a.map(i=>'('+'ABCDE'[i]+')').join(''), pk=mq?(s.picked||s.ms||[]):[s.picked];   // 2026-10-31 複選題
+    h+='<div class="pg">'+q.y+' 年律師一試　第 '+q.n+' 題'+(mq?'　・　複選題':'')+'</div><div class="meta">本輪 '+(s.i+1)+' / '+s.queue.length+'　・　'+n.t+((store.srs[q.id]&&store.srs[q.id].w)?'　・　答錯過 '+store.srs[q.id].w+' 次':'')+'</div>'+(mq?'<div class="meta">複選題：選出所有正確的選項後按「送出答案」，全部選對才算對。</div>':'')+'<div class="qq">'+esc(q.q)+'</div><div class="opts">';
+    const accs=mq?q.a:(q.acc||[q.a]); q.o.forEach((t,k)=>{ let c='opt'; if(s.picked!==null){ if(accs.indexOf(k)>=0) c+=' ok'; else if(pk.indexOf(k)>=0) c+=' bad'; } else if(mq&&pk.indexOf(k)>=0) c+=' sel'; h+='<button class="'+c+'" data-k="'+k+'"'+(s.picked!==null?' disabled':'')+(mq?' aria-pressed="'+(pk.indexOf(k)>=0)+'"':'')+'><b>('+'ABCDE'[k]+')</b><span>'+esc(t)+'</span></button>'; });
     h+='</div>';
-    if(s.picked!==null){ const ok=accs.indexOf(s.picked)>=0, st=store.srs[q.id];
-      h+='<div class="verdict '+(ok?'ok':'bad')+'">'+(ok?'答對':'答錯，正解是 '+accs.map(i=>'('+'ABCD'[i]+')').join('或'))+'</div><p class="pk">'+esc(q.ex)+'</p>'+qnoteHtml(q)+(l2QHtml(q)||noteQHtml(q))+'<div class="meta">下次出現：'+(ok?(st.d-todayNum())+' 天後':'明天')+'</div>';
+    if(mq&&s.picked===null) h+='<div class="acts stick"><button class="btn" id="msub"'+(pk.length?'':' disabled')+'>送出答案（已選 '+pk.length+' 項）</button></div>';
+    if(s.picked!==null){ const ok=mq?mqOk(q,s.picked):accs.indexOf(s.picked)>=0, st=store.srs[q.id];
+      h+='<div class="verdict '+(ok?'ok':'bad')+'">'+(ok?'答對'+(mq?'（'+LT(accs)+'）':''):'答錯，'+(mq?'你選 '+LT(s.picked)+'，正解是 '+LT(accs):'正解是 '+accs.map(i=>'('+'ABCD'[i]+')').join('或')))+'</div><p class="pk">'+esc(q.ex)+'</p>'+qnoteHtml(q)+(l2QHtml(q)||noteQHtml(q))+'<div class="meta">下次出現：'+(ok?(st.d-todayNum())+' 天後':'明天')+'</div>';
       const rel=[q.node].concat(q.rel||[]).filter(id=>nodes[id]);
       h+='<div class="ph">相關節點</div><ul class="links">'+rel.map(id=>{ const t=nodes[id]; return '<li><button data-id="'+id+'"><i style="color:'+t.color+'"></i>'+t.t+'<em>'+t.a+'</em></button></li>'; }).join('')+'</ul>';
       h+='<div class="acts stick"><button class="btn" id="nx">'+(s.i+1<s.queue.length?'下一題':'看本輪結果')+'</button></div>'; } }
   panel.innerHTML=h; panel.classList.add('show'); syncHud();
   panel.querySelector('.x').onclick=closePanel;
   panel.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.k));
+  { const ms=panel.querySelector('#msub'); if(ms) ms.onclick=()=>answerQ(-1); }   // 2026-10-31 複選題送出
   panel.querySelectorAll('.links button').forEach(b=>b.onclick=()=>select(nodes[b.dataset.id]));
   const nx=panel.querySelector('#nx'); if(nx) nx.onclick=()=>showQ(s.i+1);
   const fr=panel.querySelector('#free'); if(fr) fr.onclick=()=>startSession(shuffle(QB.map(q=>q.id)));
