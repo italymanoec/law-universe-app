@@ -51,8 +51,7 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
   .lb.selx{font-size:18px;padding:3px 10px 4px}#relBan{font-size:15.5px;padding:5px 10px 6px}#relBan .lg span{padding:0 6px;margin:0 2px}#relBan .lg{font-size:11.5px;margin-top:3px}
   body.relF .panel:not(.wide){max-height:44%}}
 .lb .ok{font-family:"Chakra Petch",sans-serif;margin-left:3px;font-size:10px;opacity:.85}
-.scan{position:fixed;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,rgba(95,230,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
+.scan{display:none}
 .vignette{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 24px rgba(10,10,44,.42)}
 .hud{position:fixed;left:18px;top:calc(14px + env(safe-area-inset-top,0px));z-index:5;max-width:min(560px,calc(100vw - 36px))}
 .brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
@@ -60,7 +59,7 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .brand span{color:var(--holo);font-size:12px;letter-spacing:.08em}
 .bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
 .search{position:relative}
-.search input{width:190px;background:rgba(28,32,78,.6);border:1px solid var(--line);color:var(--ink);
+.search input{width:300px;background:rgba(28,32,78,.6);border:1px solid var(--line);color:var(--ink);
   padding:7px 10px 7px 28px;border-radius:2px;font:inherit;font-size:13px;outline:none;
   clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
 .search input:focus{border-color:var(--holo);box-shadow:0 0 12px var(--holo-dim)}
@@ -189,6 +188,24 @@ body.uni #bWrong{display:none!important}
 .sres button em{margin-left:auto;font-style:normal;font-size:12px;color:var(--muted);white-space:nowrap}
 .sres i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;box-shadow:0 0 6px currentColor}
 .sres .sq{color:var(--holo);border-top:1px solid var(--line);border-radius:0}
+/* 2026-10-31 超級小法典：搜尋結果分類、快速開始、拇指搜尋鈕 */
+.sres .sgh{font-size:12px;color:var(--holo);letter-spacing:.1em;padding:8px 10px 2px;border-top:1px solid var(--line)}
+.sres .sgh:first-child{border-top:0}
+.sres button span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sres button.lw{flex-wrap:wrap;gap:0 8px;padding:6px 10px;align-content:center}
+.sres button.lw b{font-weight:600;color:#fff;white-space:nowrap}
+.sres button.lw small{flex-basis:100%;font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sres button.lw mark{background:none;color:var(--holo)}
+.sres .sex{display:flex;flex-wrap:wrap;gap:6px;padding:4px 10px 8px}
+.sres .sex button{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:14px;padding:0 12px;min-height:36px;line-height:36px;font-size:14px;color:var(--ink)}
+#qFab{display:none}
+@media (max-width:760px){
+  .sres{max-height:min(62vh,520px)}
+  #edgeLeg{display:none}
+  #qFab{display:flex;align-items:center;justify-content:center;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:6;width:60px;height:60px;border-radius:50%;border:1px solid var(--holo);background:rgba(22,24,58,.94);color:#fff;font:inherit;font-size:16px;font-weight:600;box-shadow:0 0 16px var(--holo-dim),0 4px 18px rgba(0,0,0,.5)}
+  body.pOpen #qFab, body.uni #qFab, body.so #qFab, body.qOn #qFab{display:none}
+}
+body.qOn #contB{display:none}
 .panel .secl summary{cursor:pointer;min-height:40px;line-height:40px;margin:10px 0 0}
 /* 2026-10-30 整夜優化批次9：我的筆記 */
 .panel .myn{display:flex;flex-direction:column;gap:8px}
@@ -229,6 +246,7 @@ body.uni .uniBtn::after{content:"（返回）"}
 .discW{margin-top:6px;font-size:12px;line-height:1.5;color:var(--muted);border-left:2px solid rgba(255,255,255,.3);padding:3px 8px;background:rgba(255,255,255,.06);max-width:560px;display:flex;gap:8px;align-items:center}
 .discW[hidden],#bL2[hidden]{display:none}
 .discW .btn{flex:none;font-size:12px;padding:2px 8px}
+.foot .ftip{display:none}
 .foot .discl{max-width:360px;font-size:11px;opacity:.75;line-height:1.5;margin-top:4px}
 .l2s{color:#ffd166;letter-spacing:-1px}
 .clz{display:inline-block;min-width:2em;border-bottom:2px solid #a98bff;color:#cbb8ff}
@@ -551,7 +569,7 @@ body.uni #labels .lb.uni,body.uni #bChap{display:none}
   <div class="bar r1"><span class="rl">科目</span>
     <button class="btn uniBtn" id="bUni">切換科目</button>
     <button class="btn" id="bToc">目錄</button>
-    <span class="sbox"><label class="search"><input id="q" type="search" placeholder="條號或關鍵字" autocomplete="off"></label><span class="hit" id="hit"></span><div class="sres" id="sres" hidden></div></span>
+    <span class="sbox"><label class="search"><input id="q" type="search" placeholder="查條文、考點、題目：民184、善意取得" autocomplete="off" enterkeyhint="search"></label><span class="hit" id="hit"></span><div class="sres" id="sres" hidden></div></span>
   </div>
   <div class="bar r2" id="modeRow"><span class="rl">模式</span><span class="slot" id="essSlot"></span>
     <button class="btn" id="bCore">解題順序</button>
@@ -569,11 +587,12 @@ body.uni #labels .lb.uni,body.uni #bChap{display:none}
 <div id="uniGrid" hidden></div>
 
 <aside class="panel" id="panel" aria-live="polite"></aside>
+<button type="button" id="qFab" aria-label="查條文或考點">查</button>
 
 <div id="edgeLeg"><span id="legH"><i class="esw"></i>所屬章</span><span id="legX"><i class="esw kx"></i>相關概念</span><span id="legQ"><i class="esw kq"></i>請求權基礎</span><small>點節點才顯示它的連線・點空白處還原</small></div>
 
 <div class="foot">
-  拖曳旋轉・滾輪或雙指縮放・點節點看考點・「切換科目」看全部行星<br>
+  <span class="ftip">拖曳旋轉・滾輪或雙指縮放・點節點看考點・「切換科目」看全部行星<br></span>
   今日已刷 <b id="todayN">0</b> 題　同步：<span id="syncS">本機</span><br>
   已熟記 <b id="mCount">0</b> / <span id="mTotal">0</span>
   <div class="meter"><div id="mBar"></div></div>
@@ -2464,20 +2483,56 @@ qEl.addEventListener('input',()=>{ const raw=qEl.value.trim(), q=raw.replace(/\s
   if(lawHit){ const rc=lookupCites(lawHit.pc,lawHit.no); rc.nodes.forEach(o=>matches.add(o)); qHits=rc.qs; h='<button class="qh" type="button" data-law="1">'+esc(LAWM[lawHit.pc].s)+'§'+lawHit.no+'</button>'; }
   else { if(q) list.forEach(o=>{ if((o.t+o.a+o.k).replace(/\s+/g,'').includes(q)) matches.add(o); });
     if(q.length>=2) qHits=QB.filter(x=>qText(x).replace(/\s+/g,'').includes(q));
-    if(art&&art.need) h=(SUBJ_LAWS[SK]||[]).length?'加法名，如 民184':(matches.size?matches.size+' 點・':'')+'本科沒有收法典條文，請打關鍵字'; else if(q) h=matches.size+' 點'+(qHits.length?'<button class="qh" type="button">'+qHits.length+' 題</button>':''); }
-  hitEl.parentNode.classList.toggle('has',!!raw); hitEl.innerHTML=h; sresPaint(q);
+    if(art&&art.need) h=(SUBJ_LAWS[SK]||[]).length?'加法名，如 民184':(matches.size?matches.size+' 點・':'')+'本科沒有收法典條文，請打關鍵字'; else if(q) h=''; }
+  hitEl.parentNode.classList.toggle('has',!!raw); hitEl.innerHTML=h; sresPaint(q); if(q&&!lawHit) lawPrep();
   clearTimeout(lawT); if(lawHit){ const L=lawHit; lawT=setTimeout(()=>openLaw(L.pc,L.no),320); } else if(raw && mode==='law') closePanel(); });
 const sres=document.getElementById('sres');
-function sresPaint(q){ if(lawHit||!q||!matches.size&&!qHits.length){ sres.hidden=true; sres.innerHTML=''; return; }
-  const rk=o=>o.t.includes(q)?0:o.a.includes(q)?1:2, all=[...matches].filter(o=>o.type!=='core'), arr=all.slice().sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))).slice(0,10);
-  sres.innerHTML=arr.map(o=>'<button type="button" data-id="'+o.id+'"><i style="color:'+o.color+'"></i><span>'+o.t+'</span><em>'+(o.type==='hub'?'章':(G[o.g]?G[o.g].n:''))+'</em></button>').join('')+(all.length>arr.length?'<div class="ph" style="margin:6px 10px">另有 '+(all.length-arr.length)+' 個，請再多打幾個字</div>':'')+
-    (qHits.length?'<button type="button" class="sq" data-qs="1">相關題目 '+qHits.length+' 題 → 刷題</button>':'');
-  sres.hidden=false; }
+// 2026-10-31 超級小法典：結果分「條文／本科考點／其他科考點／題目」，跨科點一下直達（navApply）
+let GIDX=null;
+function gIdx(){ if(GIDX) return GIDX; GIDX=[]; ORDER.forEach(k=>{ const S2=SUBJ[k]; if(!S2) return; (S2.nodes||[]).forEach(r=>{ GIDX.push({k,id:r[0],t:r[2],a:r[3]||'',gn:(S2.groups&&S2.groups[r[1]]||{}).n||'',z:(r[2]+(r[3]||'')).replace(/\s+/g,'')}); }); }); return GIDX; }
+function firstArt(a,k){ const m=new RegExp(CITE.source).exec(a||''); if(!m) return null; const pc=lawOf(m[1],(SUBJ_LAWS[k]||[])[0]); return pc&&LAWM[pc]?{pc,no:m[2]+(m[3]?'-'+m[3]:'')}:null; }
+const lawPre={};
+function lawPrep(){ (SUBJ_LAWS[SK]||[]).forEach(pc=>{ if(lawPre[pc]) return; lawPre[pc]=1; loadLaw(pc).then(()=>{ if(qEl.value.trim()&&!lawHit&&document.activeElement===qEl) sresPaint(qEl.value.trim().replace(/\s+/g,'').replace(/^第|條$/g,'')); },()=>{ lawPre[pc]=0; }); }); }
+const hl=(t,q)=>{ const i=t.indexOf(q); if(i<0) return esc(t.slice(0,40)); const a=Math.max(0,i-12); return (a?'…':'')+esc(t.slice(a,i))+'<mark>'+esc(q)+'</mark>'+esc(t.slice(i+q.length,i+q.length+26)); };
+function sresPaint(q){ if(lawHit||!q){ sres.hidden=true; sres.innerHTML=''; return; }
+  const rk=o=>o.t.includes(q)?0:o.a.includes(q)?1:2, all=[...matches].filter(o=>o.type!=='core'), arr=all.slice().sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))).slice(0,8);
+  const oth=gIdx().filter(x=>x.k!==SK&&x.z.includes(q)).sort((a,b)=>(a.t.includes(q)?0:1)-(b.t.includes(q)?0:1));
+  // 條文：考點名稱對應的條文 → 法典章節名 → 條文內容（本科法典，第一次搜尋時載入）
+  const L=[], seen=new Set(), addL=(pc,no,lab,sub)=>{ const key=pc+'|'+no; if(seen.has(key)||L.length>=6) return; seen.add(key); L.push('<button type="button" class="lw" data-nav="#law/'+pc+'/'+no+'"><b>'+esc(LAWM[pc].s)+' §'+esc(no)+'</b><span>'+lab+'</span>'+(sub?'<small>'+sub+'</small>':'')+'</button>'); };
+  arr.filter(o=>o.type==='leaf'&&o.t.includes(q)).slice(0,3).forEach(o=>{ const f=firstArt(o.a,SK); if(f) addL(f.pc,f.no,esc(o.t),esc(o.a)); });
+  oth.filter(x=>x.t.includes(q)).slice(0,3).forEach(x=>{ const f=firstArt(x.a,x.k); if(f) addL(f.pc,f.no,esc(x.t),esc(SUBJ[x.k].name+'・'+x.a)); });
+  const lws=(SUBJ_LAWS[SK]||[]).map(pc=>window.LAWDATA&&LAWDATA[pc]&&LAWDATA[pc]._ix?[pc,LAWDATA[pc]]:null).filter(Boolean);
+  if(q.length>=2){ lws.forEach(([pc,D])=>{ D.p.forEach((p,pi)=>{ const pz=p.replace(/\s+/g,''); if(!pz.includes(q)) return; const a=D.a.find(x=>x[2]===pi); if(a) addL(pc,a[0],'章節：'+esc(p.split(' › ').pop()),esc(p)); }); });
+    lws.forEach(([pc,D])=>{ for(const a of D.a){ if(L.length>=6) break; const tz=a[1].replace(/\s+/g,''); if(tz.includes(q)) addL(pc,a[0],'',hl(tz,q)); } }); }
+  let h='';
+  if(L.length) h+='<div class="sgh">條文</div>'+L.join('');
+  if(arr.length) h+='<div class="sgh">'+esc(S.name)+'考點</div>'+arr.map(o=>'<button type="button" data-id="'+o.id+'"><i style="color:'+o.color+'"></i><span>'+o.t+'</span><em>'+(o.type==='hub'?'章':(G[o.g]?G[o.g].n:''))+'</em></button>').join('')+(all.length>arr.length?'<div class="ph" style="margin:6px 10px">另有 '+(all.length-arr.length)+' 個，請再多打幾個字</div>':'');
+  if(oth.length) h+='<div class="sgh">其他科考點</div>'+oth.slice(0,6).map(x=>'<button type="button" data-nav="#'+x.k+'/'+encodeURIComponent(x.id)+'"><i style="color:'+SUBJ[x.k].color+'"></i><span>'+esc(x.t)+'</span><em>'+esc(SUBJ[x.k].name)+'</em></button>').join('')+(oth.length>6?'<div class="ph" style="margin:6px 10px">另有 '+(oth.length-6)+' 個</div>':'');
+  if(qHits.length) h+='<div class="sgh">題目（'+esc(S.name)+'）</div>'+qHits.slice(0,3).map(x=>'<button type="button" data-q1="'+x.id+'"><span>'+qSnip(x)+'</span></button>').join('')+'<button type="button" class="sq" data-qs="1">全部 '+qHits.length+' 題 → 刷題</button>';
+  if(!h) h='<div class="ph" style="margin:8px 10px">找不到「'+esc(q)+'」。可以試：條號（民184）、考點名稱、或少打幾個字</div>';
+  sres.innerHTML=h; sres.hidden=false; }
+// 搜尋框空白時：快速開始（繼續讀、最近看過、目錄、範例）
+const RECK='lawu-recent-v1'; let RECENT=[]; try{ RECENT=JSON.parse(localStorage.getItem(RECK)||'[]')||[]; }catch(e){ RECENT=[]; }
+function recentAdd(h,t){ RECENT=[{h,t}].concat(RECENT.filter(r=>r.h!==h)).slice(0,6); try{ localStorage.setItem(RECK,JSON.stringify(RECENT)); }catch(e){} }
+function sresStart(){ const ex=(SUBJ_LAWS[SK]||[]).length?[LAWM[SUBJ_LAWS[SK][0]].s+(SK==='civil'?'184':SK==='criminal'?'271':LAWM[SUBJ_LAWS[SK][0]].first)]:[]; const lv=list.filter(o=>o.type==='leaf'); if(lv[0]) ex.push(lv[0].t); if(lv[5]) ex.push(lv[5].t);
+  let h=''; const rs=RECENT.filter(r=>r&&r.h&&r.t);
+  if(rs.length) h+='<div class="sgh">最近看過</div>'+rs.map(r=>'<button type="button" data-nav="'+esc(r.h)+'"><span>'+esc(r.t)+'</span><em>›</em></button>').join('');
+  h+='<div class="sgh">照章節找</div><button type="button" data-toc="1"><span>'+esc(S.name)+' 目錄（全部考點照書本順序）</span><em>›</em></button>';
+  if(ex.length) h+='<div class="sgh">直接打字就能查，例如</div><div class="sex">'+ex.map(t=>'<button type="button" data-ex="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div>';
+  sres.innerHTML=h; sres.hidden=false; lawPrep(); }
 sres.addEventListener('pointerdown',e=>e.preventDefault());
 sres.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; sres.hidden=true; qEl.blur();
+  if(b.dataset.ex){ qEl.value=b.dataset.ex; qEl.focus(); qEl.dispatchEvent(new Event('input')); return; }
+  if(b.dataset.nav){ const hh=b.dataset.nav; if(navApplyGo) navApplyGo(hh); return; }
+  if(b.dataset.toc){ openToc(); return; }
+  if(b.dataset.q1){ startSession([b.dataset.q1]); return; }
   if(b.dataset.qs){ if(qHits.length) startSession(qHits.map(x=>x.id)); return; } const o=nodes[b.dataset.id]; if(o){ if(hidden.has(o.g)){ hidden.delete(o.g); const c=chips.querySelector('.chip[data-g="'+o.g+'"]'); if(c) c.classList.remove('off'); applyVis(); } select(o); } });
-qEl.addEventListener('blur',()=>setTimeout(()=>{ sres.hidden=true; },200));
-qEl.addEventListener('focus',()=>{ if(sres.innerHTML&&qEl.value.trim()) sres.hidden=false; });
+qEl.addEventListener('blur',()=>setTimeout(()=>{ sres.hidden=true; if(document.activeElement!==qEl) document.body.classList.remove('qOn'); },200));
+qEl.addEventListener('focus',()=>{ document.body.classList.add('qOn'); if(!qEl.value.trim()){ sresStart(); return; } if(sres.innerHTML) sres.hidden=false; });
+qEl.addEventListener('input',()=>{ if(!qEl.value.trim()&&document.activeElement===qEl) sresStart(); });
+let navApplyGo=null;
+document.getElementById('qFab').addEventListener('click',()=>{ qEl.focus(); });
+if(innerWidth<=760) qEl.placeholder='民184、善意取得…';
 hitEl.addEventListener('click',e=>{ const b=e.target.closest('.qh'); if(!b) return; if(b.dataset.law && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); } else if(qHits.length){ qEl.blur(); startSession(qHits.map(x=>x.id)); } });
 qEl.addEventListener('keydown',e=>{ if(e.key==='Enter' && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); return; } if(e.key==='Enter'){ const qq=qEl.value.trim().replace(/\s+/g,'').replace(/^第|條$/g,''); const rk=o=>o.t.includes(qq)?0:o.a.includes(qq)?1:2;
   const arr=[...matches].sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))); if(arr.length){ const i=arr.indexOf(sel); select(arr[(i+1)%arr.length]); } } });
@@ -2820,7 +2875,7 @@ function navApply(h){ const m=h.replace(/^#/,'').split('/').map(navDec);
   else if(!(m[1]&&m[1][0]==='~')&&panel.classList.contains('show')) closePanel(); }
 function navTick(){ if(navApplying||navIgnore) return; const K=navKey(); if(K===navLast) return;
   const prev=navLast; navLast=K; const d=navDepth(), closed=K.indexOf('/')<0&&K!=='#uni';
-  if(/^#(law\/|[a-z]+\/[^~])/.test(K)){ const t=mode==='law'&&lawView?LAWM[lawView.pc].s+'§'+lawView.no:(sel?sel.t:''); if(t){ store.lastRead={h:K,t:t}; saveLocal(); } const cb=document.getElementById('contB'); if(cb) cb.remove(); }
+  if(/^#(law\/|[a-z]+\/[^~])/.test(K)){ const t=mode==='law'&&lawView?LAWM[lawView.pc].s+'§'+lawView.no:(sel?sel.t:''); if(t){ store.lastRead={h:K,t:t}; saveLocal(); recentAdd(K,/^#law/.test(K)?t:S.name+"・"+t); } const cb=document.getElementById('contB'); if(cb) cb.remove(); }
   if(closed){ if(d>0){ navIgnore=1; history.go(-d); setTimeout(()=>{ navIgnore=0; history.replaceState({d:0},'',navBase()+K); },400); } else history.replaceState({d:0},'',navBase()+K); return; }
   history.pushState({d:d+1},'',navBase()+K); }
 addEventListener('popstate',()=>{ if(navIgnore) return; navApplying=true;
@@ -2832,6 +2887,7 @@ else if(store.lastRead&&store.lastRead.h&&store.lastRead.t){ const r=store.lastR
   cb.textContent='繼續讀：'+r.t+' ›'; cb.onclick=()=>{ cb.remove(); const m=r.h.replace(/^#/,'').split('/').map(navDec);
     if(m[0]!=='law'&&SUBJ[m[0]]&&m[0]!==SK) buildSubject(m[0]); else if(m[0]==='law'){ const k=lawOwner(m[1]); if(k&&k!==SK) buildSubject(k); } navApply(r.h); };
   document.body.appendChild(cb); }
+navApplyGo=h=>{ const m=h.replace(/^#/,'').split('/').map(navDec); if(m[0]==='law'){ if(!LAWM[m[1]]||!navNo(m[2])) return; } else if(!SUBJ[m[0]]) return; navApply(h); };
 setInterval(navTick,250);
 requestAnimationFrame(frame); initSync(); fetchPatch();
 (qbWait[SK]||Promise.resolve()).then(()=>{},()=>{}).then(()=>setTimeout(prefetchQB,400));
