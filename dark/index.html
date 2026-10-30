@@ -181,6 +181,17 @@ body.uni #bWrong{display:none!important}
 }
 @media (prefers-reduced-motion:reduce){.panel{transition:none}}
 .lawtxt{margin-top:12px;font-size:15.5px;line-height:1.9;color:#fff}
+/* 2026-10-30 整夜優化批次6：搜尋結果清單、本節條文、桌機說明字級 */
+.sres{position:absolute;right:0;top:calc(100% + 4px);width:min(380px,calc(100vw - 24px));z-index:30;background:rgba(18,20,52,.97);border:1px solid var(--line);border-radius:10px;padding:4px;max-height:min(50vh,380px);overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.5);box-sizing:border-box}
+.sres[hidden]{display:none}
+.sres button{all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;min-height:44px;padding:0 10px;font-size:15px;color:var(--ink);width:100%;box-sizing:border-box;border-radius:8px}
+.sres button:hover,.sres button:focus-visible{background:rgba(95,230,255,.12)}
+.sres button em{margin-left:auto;font-style:normal;font-size:12px;color:var(--muted);white-space:nowrap}
+.sres i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;box-shadow:0 0 6px currentColor}
+.sres .sq{color:var(--holo);border-top:1px solid var(--line);border-radius:0}
+.panel .secl summary{cursor:pointer;min-height:40px;line-height:40px;margin:10px 0 0}
+.panel .secl .mchip.cur{outline:1.5px solid var(--holo)}
+@media (min-width:761px){.panel .pk{font-size:16px;line-height:1.85}}
 .lawtxt p{margin:0 0 8px;display:flex;gap:8px}
 .lawtxt p b{flex:none;min-width:1.3em;font-family:"Chakra Petch",sans-serif;color:var(--holo);font-weight:600}
 .lawtxt .kuan{margin:0 0 6px 2.1em}
@@ -534,7 +545,7 @@ body.uni #labels .lb.uni,body.uni #bChap{display:none}
   <div class="bar r1"><span class="rl">科目</span>
     <button class="btn uniBtn" id="bUni">切換科目</button>
     <button class="btn" id="bToc">目錄</button>
-    <span class="sbox"><label class="search"><input id="q" type="search" placeholder="條號或關鍵字" autocomplete="off"></label><span class="hit" id="hit"></span></span>
+    <span class="sbox"><label class="search"><input id="q" type="search" placeholder="條號或關鍵字" autocomplete="off"></label><span class="hit" id="hit"></span><div class="sres" id="sres" hidden></div></span>
   </div>
   <div class="bar r2" id="modeRow"><span class="rl">模式</span><span class="slot" id="essSlot"></span>
     <button class="btn" id="bCore">解題順序</button>
@@ -2438,8 +2449,19 @@ qEl.addEventListener('input',()=>{ const raw=qEl.value.trim(), q=raw.replace(/\s
   else { if(q) list.forEach(o=>{ if((o.t+o.a+o.k).replace(/\s+/g,'').includes(q)) matches.add(o); });
     if(q.length>=2) qHits=QB.filter(x=>qText(x).replace(/\s+/g,'').includes(q));
     if(art&&art.need) h=(SUBJ_LAWS[SK]||[]).length?'加法名，如 民184':(matches.size?matches.size+' 點・':'')+'本科沒有收法典條文，請打關鍵字'; else if(q) h=matches.size+' 點'+(qHits.length?'<button class="qh" type="button">'+qHits.length+' 題</button>':''); }
-  hitEl.parentNode.classList.toggle('has',!!raw); hitEl.innerHTML=h;
+  hitEl.parentNode.classList.toggle('has',!!raw); hitEl.innerHTML=h; sresPaint(q);
   clearTimeout(lawT); if(lawHit){ const L=lawHit; lawT=setTimeout(()=>openLaw(L.pc,L.no),320); } else if(raw && mode==='law') closePanel(); });
+const sres=document.getElementById('sres');
+function sresPaint(q){ if(lawHit||!q||!matches.size&&!qHits.length){ sres.hidden=true; sres.innerHTML=''; return; }
+  const rk=o=>o.t.includes(q)?0:o.a.includes(q)?1:2, all=[...matches].filter(o=>o.type!=='core'), arr=all.slice().sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))).slice(0,10);
+  sres.innerHTML=arr.map(o=>'<button type="button" data-id="'+o.id+'"><i style="color:'+o.color+'"></i><span>'+o.t+'</span><em>'+(o.type==='hub'?'章':(G[o.g]?G[o.g].n:''))+'</em></button>').join('')+(all.length>arr.length?'<div class="ph" style="margin:6px 10px">另有 '+(all.length-arr.length)+' 個，請再多打幾個字</div>':'')+
+    (qHits.length?'<button type="button" class="sq" data-qs="1">相關題目 '+qHits.length+' 題 → 刷題</button>':'');
+  sres.hidden=false; }
+sres.addEventListener('pointerdown',e=>e.preventDefault());
+sres.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; sres.hidden=true; qEl.blur();
+  if(b.dataset.qs){ if(qHits.length) startSession(qHits.map(x=>x.id)); return; } const o=nodes[b.dataset.id]; if(o){ if(hidden.has(o.g)){ hidden.delete(o.g); const c=chips.querySelector('.chip[data-g="'+o.g+'"]'); if(c) c.classList.remove('off'); applyVis(); } select(o); } });
+qEl.addEventListener('blur',()=>setTimeout(()=>{ sres.hidden=true; },200));
+qEl.addEventListener('focus',()=>{ if(sres.innerHTML&&qEl.value.trim()) sres.hidden=false; });
 hitEl.addEventListener('click',e=>{ const b=e.target.closest('.qh'); if(!b) return; if(b.dataset.law && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); } else if(qHits.length){ qEl.blur(); startSession(qHits.map(x=>x.id)); } });
 qEl.addEventListener('keydown',e=>{ if(e.key==='Enter' && lawHit){ clearTimeout(lawT); qEl.blur(); openLaw(lawHit.pc,lawHit.no); return; } if(e.key==='Enter'){ const qq=qEl.value.trim().replace(/\s+/g,'').replace(/^第|條$/g,''); const rk=o=>o.t.includes(qq)?0:o.a.includes(qq)?1:2;
   const arr=[...matches].sort((a,b)=>(rk(a)-rk(b))||((a.type==='leaf'?0:1)-(b.type==='leaf'?0:1))); if(arr.length){ const i=arr.indexOf(sel); select(arr[(i+1)%arr.length]); } } });
@@ -2566,6 +2588,7 @@ function renderLaw(){ const v=lawView, M=LAWM[v.pc], D=window.LAWDATA&&LAWDATA[v
       h+='<div class="pt">'+(pd?'第 '+v.no+' 條（現行法尚無此條）':'查無第 '+v.no+' 條')+'</div><p class="pk">'+esc(M.n)+'的條號是第 '+esc(M.first)+' 條到第 '+esc(M.last)+' 條。'+(near.length?'同號的條文有：':'')+'</p>'+(near.length?'<div class="acts">'+near.map(n=>'<button class="btn" data-go="'+n+'">§'+n+'</button>').join('')+'</div>':'')+(pd?pendHtml(v.pc,v.no):''); }
     else { const a=D.a[i];
       h+='<div class="pt">第 '+a[0]+' 條</div><div class="pa">'+esc(D.p[a[2]]||'')+'</div><div class="lawtxt">'+fmtArt(a[1])+'</div>'+pendHtml(v.pc,a[0]);
+      { const sec=D.a.filter(x=>x[2]===a[2]); if(sec.length>1&&D.p[a[2]]) h+='<details class="secl"><summary class="ph">本節條文（'+sec.length+'）・照法典順序 ▾</summary><div class="mnet">'+sec.map(x=>'<button class="mchip'+(x[0]===a[0]?' cur':'')+'" data-go="'+x[0]+'">§'+x[0]+'</button>').join('')+'</div></details>'; }
       h+='<div class="lawnav">'+(i>0?'<button class="btn" data-go="'+D.a[i-1][0]+'">‹ 第 '+D.a[i-1][0]+' 條</button>':'')+(i<D.a.length-1?'<button class="btn" data-go="'+D.a[i+1][0]+'">第 '+D.a[i+1][0]+' 條 ›</button>':'')+'</div>';
       const rc=lookupCites(v.pc,a[0]);
       if(rc.nodes.length) h+='<div class="ph">'+esc(S.name)+'星球上引用本條的考點（'+rc.nodes.length+'）</div><ul class="links">'+rc.nodes.map(o=>'<li><button data-id="'+o.id+'"><i style="color:'+o.color+'"></i>'+o.t+'<em>'+o.a+'</em></button></li>').join('')+'</ul>';
