@@ -129,6 +129,10 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .esw.kx{border-top:2px dashed #a6ecff}.esw.kq{border-top:2.5px dotted #ffc861}.esw.kr{border-top:2px dashed #e7b6ff;opacity:.85}
 .ph .esw{margin-right:6px;transform:translateY(-3px)}
 body.pOpen #edgeLeg, body.uni #edgeLeg{display:none}
+/* 2026-10-30 整夜優化：繼續讀（上次讀到的考點／條文）、法條面板回原考點 */
+#contB{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--hudB,64px) + 8px);z-index:5;min-height:44px;max-width:calc(100vw - 24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(22,24,58,.94);box-shadow:0 4px 18px rgba(0,0,0,.45)}
+body.pOpen #contB, body.uni #contB{display:none}
+.panel .lawback{all:unset;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;color:var(--holo);font-size:15px;margin:-6px 0 2px}
 body.so #edgeLeg{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 @media (max-width:760px){#edgeLeg{left:10px;right:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));font-size:11px;padding:5px 8px}#edgeLeg small{display:none}}
 .foot b{font-family:"Chakra Petch",sans-serif;color:var(--holo);font-weight:600;font-size:14px}
@@ -2499,7 +2503,9 @@ async function fetchPatch(){ try{ if(!window.claude||!window.claude.use){ patchS
   staleSync();
   if(mode==='law'&&lawView) renderPanel(); }catch(e){ patchState='none'; if(mode==='law'&&lawView) renderPanel(); } }
 let lawView=null;
+let lawFrom=null;
 async function openLaw(pc,no){ if(lawView&&lawView.pc===pc&&lawView.no===no&&mode==='law'&&panel.classList.contains('show')&&!lawView.err) return;
+  lawFrom=sel&&mode==='node'&&panel.classList.contains('show')?sel:(mode==='law'&&panel.classList.contains('show')?lawFrom:null);
   mode='law'; session=null; concept=null; sel=null; related=new Set(); lawView={pc,no}; lightEdges(); renderPanel(); panel.scrollTop=0;
   try{ await loadLaw(pc); }catch(e){ if(lawView&&lawView.pc===pc) lawView.err=true; }
   if(lawView&&lawView.pc===pc&&lawView.no===no&&mode==='law') renderPanel(); }
@@ -2519,7 +2525,7 @@ function pendHtml0(pc,no){ const L=PEND[pc]||[]; if(!L.length) return '';
 function lawOwner(pc){ for(const k of ORDER){ if((SUBJ_LAWS[k]||[]).indexOf(pc)>=0) return k; } return null; }
 function renderLaw(){ const v=lawView, M=LAWM[v.pc], D=window.LAWDATA&&LAWDATA[v.pc]&&LAWDATA[v.pc]._ix?LAWDATA[v.pc]:null;
   panel.style.setProperty('--gc','#5fe6ff');
-  let h='<button class="x" aria-label="關閉">×</button><div class="pg">'+esc(M.n)+'・條文查詢</div>';
+  let h='<button class="x" aria-label="關閉">×</button>'+(lawFrom&&nodes[lawFrom.id]===lawFrom?'<button class="lawback" id="lback">‹ 回「'+esc(lawFrom.t)+'」</button>':'')+'<div class="pg">'+esc(M.n)+'・條文查詢</div>';
   if(v.err) h+='<div class="pt">第 '+v.no+' 條</div><p class="pk">條文檔沒有載入成功，請確認網路後再試一次。</p><div class="acts"><button class="btn" id="lr">重新載入</button></div>';
   else if(!D) h+='<div class="pt">第 '+v.no+' 條</div><p class="pk">條文載入中…</p>';
   else { const i=D._ix[v.no];
@@ -2546,6 +2552,7 @@ function renderLaw(){ const v=lawView, M=LAWM[v.pc], D=window.LAWDATA&&LAWDATA[v
   panel.querySelectorAll('[data-go],[data-ga]').forEach(b=>b.onclick=()=>{ const no=b.dataset.go||b.dataset.ga; lawView=null; lawHit={pc:v.pc,no}; qEl.value=M.s+no; hitEl.innerHTML='<button class="qh" type="button" data-law="1">'+esc(M.s)+'§'+no+'</button>'; openLaw(v.pc,no); });
   panel.querySelectorAll('.links button').forEach(b=>b.onclick=()=>select(nodes[b.dataset.id]));
   const lr=panel.querySelector('#lr'); if(lr) lr.onclick=()=>{ lawView=null; openLaw(v.pc,v.no); };
+  const lb=panel.querySelector('#lback'); if(lb) lb.onclick=()=>{ const o=lawFrom; lawFrom=null; select(o); };
   const ld=panel.querySelector('#ldrill'); if(ld) ld.onclick=()=>startSession(lookupCites(v.pc,v.no).qs.map(q=>q.id));
   const lo=panel.querySelector('#lown'); if(lo) lo.onclick=()=>{ const pc=v.pc,no=v.no,k=lawOwner(pc); exitUni(null); buildSubject(k); qEl.value=LAWM[pc].s+no; lawView=null; openLaw(pc,no); };
 }
@@ -2718,7 +2725,41 @@ function frame(now){
   if(selRing) selRing.scale.setScalar(selRing.userData.sz*(1+0.12*Math.sin(t*3.2)));
   renderer.render(scene,camera);
 }
-buildSubject(SUBJ[store.last]?store.last:'civil');
+// ---------- 2026-10-30 整夜優化：網址（可書籤／分享）、返回鍵、上次讀到哪 ----------
+const navDec=x=>{ try{ return decodeURIComponent(x); }catch(e){ return x; } };
+const NAV0=location.hash.replace(/^#/,'').split('/').map(navDec);
+const NAVK0=SUBJ[NAV0[0]]?NAV0[0]:(NAV0[0]==='law'&&LAWM[NAV0[1]]?lawOwner(NAV0[1]):null);
+buildSubject(NAVK0||(SUBJ[store.last]?store.last:'civil'));
+let navLast=null, navIgnore=0, navApplying=false;
+const navBase=()=>location.pathname+location.search;
+function navKey(){ if(uniMode) return '#uni'; const open=panel.classList.contains('show');
+  if(open&&mode==='law'&&lawView) return '#law/'+lawView.pc+'/'+encodeURIComponent(lawView.no);
+  if(open&&mode==='node'&&sel) return '#'+SK+'/'+encodeURIComponent(sel.id);
+  if(open) return '#'+SK+'/~'+mode;
+  return '#'+SK; }
+const navDepth=()=>(history.state&&history.state.d)||0;
+function navApply(h){ const m=h.replace(/^#/,'').split('/').map(navDec);
+  if(m[0]==='uni'){ if(!uniMode) enterUni(); return; }
+  if(m[0]==='law'&&LAWM[m[1]]&&m[2]){ if(uniMode) exitUni(null); lawView=null; openLaw(m[1],m[2]); return; }
+  if(!SUBJ[m[0]]) return;
+  if(uniMode) exitUni(m[0]!==SK?m[0]:null); else if(m[0]!==SK) buildSubject(m[0]);
+  if(m[1]&&nodes[m[1]]) select(nodes[m[1]]);
+  else if(!(m[1]&&m[1][0]==='~')&&panel.classList.contains('show')) closePanel(); }
+function navTick(){ if(navApplying||navIgnore) return; const K=navKey(); if(K===navLast) return;
+  const prev=navLast; navLast=K; const d=navDepth(), closed=K.indexOf('/')<0&&K!=='#uni';
+  if(/^#(law\/|[a-z]+\/[^~])/.test(K)){ const t=mode==='law'&&lawView?LAWM[lawView.pc].s+'§'+lawView.no:(sel?sel.t:''); if(t){ store.lastRead={h:K,t:t}; saveLocal(); } const cb=document.getElementById('contB'); if(cb) cb.remove(); }
+  if(closed){ if(d>0){ navIgnore=1; history.go(-d); setTimeout(()=>{ navIgnore=0; history.replaceState({d:0},'',navBase()+K); },400); } else history.replaceState({d:0},'',navBase()+K); return; }
+  history.pushState({d:d+1},'',navBase()+K); }
+addEventListener('popstate',()=>{ if(navIgnore) return; navApplying=true;
+  try{ navApply(location.hash||'#'+SK); }catch(e){} setTimeout(()=>{ navApplying=false; navLast=navKey();
+    if(navLast!==(location.hash||'')) history.replaceState({d:navDepth()},'',navBase()+(navLast.indexOf('/~')>0?location.hash:navLast)); },350); });
+history.replaceState({d:0},'',navBase()+'#'+SK); navLast='#'+SK;
+if(NAVK0&&(NAV0[1]&&NAV0[0]!=='law'?nodes[NAV0[1]]:NAV0[0]==='law')) setTimeout(()=>{ if(NAV0[0]==='law'){ lawView=null; openLaw(NAV0[1],NAV0[2]||LAWM[NAV0[1]].first); } else select(nodes[NAV0[1]]); },300);
+else if(store.lastRead&&store.lastRead.h&&store.lastRead.t){ const r=store.lastRead, cb=document.createElement('button'); cb.id='contB'; cb.className='btn'; cb.type='button';
+  cb.textContent='繼續讀：'+r.t+' ›'; cb.onclick=()=>{ cb.remove(); const m=r.h.replace(/^#/,'').split('/').map(navDec);
+    if(m[0]!=='law'&&SUBJ[m[0]]&&m[0]!==SK) buildSubject(m[0]); else if(m[0]==='law'){ const k=lawOwner(m[1]); if(k&&k!==SK) buildSubject(k); } navApply(r.h); };
+  document.body.appendChild(cb); }
+setInterval(navTick,250);
 requestAnimationFrame(frame); initSync(); fetchPatch();
 (qbWait[SK]||Promise.resolve()).then(()=>{},()=>{}).then(()=>setTimeout(prefetchQB,400));
 
