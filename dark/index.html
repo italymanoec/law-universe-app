@@ -27,6 +27,11 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .lb.core::before{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:9px;background:linear-gradient(to top,rgba(255,255,255,.55),rgba(255,255,255,0))}
 @media (max-width:760px){.lb.core{font-size:14px}}
 .lb.hot{font-weight:700;font-size:13.5px}
+.lb .rk{display:none;margin-left:6px;padding:1px 7px 2px;border-radius:9px;font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px;
+  text-shadow:none;background:rgba(18,22,58,.88);border:1px solid currentColor;color:#cfe0ff}
+.lb.rel .rk{display:inline-block}
+.rk.kq{color:#ffd27a}.rk.kx{color:#a6ecff}.rk.kr{color:#e7b6ff}.rk.kh{color:#d6e2ff}
+@media (max-width:760px){.lb .rk{font-size:10px;padding:0 5px 1px;margin-left:4px}}
 .lb .ok{font-family:"Chakra Petch",sans-serif;margin-left:3px;font-size:10px;opacity:.85}
 .scan{position:fixed;inset:0;pointer-events:none;
   background:repeating-linear-gradient(0deg,rgba(95,230,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
@@ -74,6 +79,14 @@ body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 
 .links button:hover,.links button:focus-visible{border-color:var(--line);background:rgba(95,230,255,.1)}
 .links i{width:7px;height:7px;border-radius:50%;flex:none;transform:translateY(-1px);box-shadow:0 0 6px currentColor;background:currentColor}
 .links em{font-style:normal;color:var(--muted);font-size:12px;margin-left:auto;text-align:right}
+.relbox{margin:14px 0 4px;padding:10px 12px 12px;border:1px solid rgba(160,190,255,.38);border-radius:10px;background:rgba(40,46,110,.55);box-shadow:0 0 14px rgba(120,150,255,.18)}
+.relbox .relh{font-size:15px;font-weight:700;color:#fff;letter-spacing:.04em}
+.relbox .relh small{font-size:12px;font-weight:400;color:var(--muted);margin-left:6px}
+.relbox .ph{color:#e6ecff;font-size:13px;font-weight:600;margin:12px 0 6px}
+.relbox .ph.kq{color:#ffd27a}.relbox .ph.kx{color:#a6ecff}.relbox .ph.kr{color:#e7b6ff}
+.relbox .links button{box-sizing:border-box;font-size:14.5px;padding:7px 10px;border-left:3px solid #9fd8ff;background:rgba(28,32,78,.6)}
+.relbox .links.kq button{border-left-color:#ffc861}.relbox .links.kx button{border-left-color:#a6ecff}.relbox .links.kr button{border-left-color:#e7b6ff}
+.relbox .links em{color:#dfe7ff;font-size:12.5px}
 .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .x{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
 .quizbox{margin-top:14px;padding:12px;border:1px dashed var(--line);font-size:14px;line-height:1.7;color:var(--ink)}
@@ -1677,6 +1690,7 @@ function clearSubject(){
   list.forEach(o=>{ world.remove(o.sprite); o.sprite.material.dispose(); o.el.remove(); });
   edges.forEach(e=>{ world.remove(e.line); e.line.geometry.dispose(); e.line.material.dispose(); });
   pulses.forEach(p=>{ p.e=null; p.s.visible=false; });
+  sel=null; relMark();
   nodes={}; list=[]; edges=[]; sel=null; hover=null; related=new Set(); matches=new Set(); hidden.clear();
 }
 function addEdge(A,B,label,type){
@@ -1711,7 +1725,7 @@ function buildSubject(key){
       o.dir=p.normalize(); o.pos=p.clone().multiplyScalar(R); addNode(o); }); });
   list.forEach(o=>{ o.color=G[o.g].c; o.size=o.type==='core'?0.42:o.type==='hub'?0.36:0.16;
     o.sprite=glow(o.color,o.size); o.sprite.position.copy(o.pos); world.add(o.sprite);
-    const el=document.createElement('div'); el.className='lb '+o.type; el.style.color=o.color; el.innerHTML=o.t+'<span class="ok"></span>'; el.style.opacity=0; labelsEl.appendChild(el); o.el=el; });
+    const el=document.createElement('div'); el.className='lb '+o.type; el.style.color=o.color; el.innerHTML=o.t+'<span class="ok"></span><span class="rk"></span>'; el.style.opacity=0; labelsEl.appendChild(el); o.el=el; });
   gkeys.forEach(k=>addEdge(nodes.core,nodes[k],'科目主幹','c'));
   list.forEach(o=>{ if(o.type==='leaf') addEdge(o,nodes[o.g],'所屬章','h'); });
   (S.links||[]).forEach(l=>addEdge(nodes[l[0]],nodes[l[1]],l[2],'x'));
@@ -1781,7 +1795,7 @@ function renderPanel(){
   const rels=relOf(o).filter(x=>!links.some(l=>l.t===x.t)).map(x=>({t:x.t,label:'同題共考 '+x.n+' 次',k:'r'}));
   const sibs=o.type==='leaf'?leaves.filter(x=>x.g===o.g&&x!==o&&isVis(x)):[];
   const qs=qsOf(o);
-  let html='<button class="x" aria-label="關閉">×</button><div class="pg">'+S.name+'・'+gname+'</div><div class="pt">'+o.t+'</div><div class="pa">'+o.a+'</div><p class="pk">'+o.k+'</p>'+(o.m?'<div class="pm">記憶口訣：'+o.m+'</div>':'')+nodeTimeHtml(o,qs)+noteNodeHtml(o,qs)+flowHtml(o);
+  let html='<button class="x" aria-label="關閉">×</button><div class="pg">'+S.name+'・'+gname+'</div><div class="pt">'+o.t+'</div><div class="pa">'+o.a+'</div><p class="pk">'+o.k+'</p>'+(o.m?'<div class="pm">記憶口訣：'+o.m+'</div>':'')+'<!--REL-->'+nodeTimeHtml(o,qs)+noteNodeHtml(o,qs)+flowHtml(o);
   if(qs.length){ const done=qs.filter(q=>store.srs[q.id]).length, bad=qs.filter(q=>store.srs[q.id]&&store.srs[q.id].w>0).length; html+='<div class="ph">'+(isEss()?'歷屆二試申論 ':'歷屆一試真題 ')+qs.length+' 題，已刷 '+done+' 題'+(bad?'，答錯過 '+bad+' 題':'')+'</div>'; }
   const ai=o.type==='leaf'?autoInfo(SK,o.id):{n:0};
   if(ai.n) html+='<div class="meta">熟練度：主考題 '+ai.st+'/'+ai.n+' 題已穩定（連續答對兩次以上）'+(autoM.has(o.id)?'　・　已自動算熟記':'；達八成自動算熟記')+'</div>';
@@ -1789,10 +1803,12 @@ function renderPanel(){
     if(kw.length) html+='<div class="ph">關鍵字</div><div class="mnet">'+kw.map(x=>'<button class="mchip" data-kw="'+x.id+'">'+esc(x.t)+'</button>').join('')+'</div>';
     if(ta.length) html+='<div class="ph">相關條號</div><div class="mnet">'+ta.map(x=>'<button class="mchip law" data-law="'+x.k+'">'+esc(artLabel(x.k))+'<em>'+x.n+'</em></button>').join('')+'</div>';
     if(rq.length) html+='<div class="ph">相關題（'+rq.length+'，申論在前）</div><ul class="links rq">'+rq.slice(0,12).map(q=>'<li><button data-q="'+q.id+'">'+qSnip(q)+'</button></li>').join('')+'</ul>'; }
-  { const LK=[['q','請求權基礎'],['x','相關概念'],['r','題目相關（rel）'],['h','所屬章／主幹']], li=x=>'<li><button data-id="'+x.t.id+'"><i style="color:'+x.t.color+'"></i>'+x.t.t+'<em>'+x.label+'</em></button></li>';
-    const all=links.concat(rels); if(all.length||sibs.length) html+='<div class="ph">相關節點（'+(all.length+sibs.length)+'，點一下跳過去）</div>';
-    LK.forEach(([k,n])=>{ const a=all.filter(x=>x.k===k); if(a.length) html+='<div class="ph"><i class="esw k'+k+'"></i>'+n+'（'+a.length+'）</div><ul class="links">'+a.map(li).join('')+'</ul>'; });
-    if(sibs.length) html+='<div class="ph">同章其他（'+sibs.length+'）</div><div class="mnet">'+sibs.map(x=>'<button class="mchip" data-sib="'+x.id+'">'+esc(x.t)+'</button>').join('')+'</div>'; }
+  { const LK=[['q','請求權基礎'],['x','相關概念'],['r','題目相關（同題共考）'],['h','所屬章／主幹']], li=x=>'<li><button data-id="'+x.t.id+'"><i style="color:'+x.t.color+'"></i>'+x.t.t+'<em>'+x.label+'</em></button></li>';
+    const all=links.concat(rels); let rb='';
+    if(all.length||sibs.length) rb+='<div class="relh">跟誰有關（'+(all.length+sibs.length)+'）<small>點一下跳過去・星圖上已標關係</small></div>';
+    LK.forEach(([k,n])=>{ const a=all.filter(x=>x.k===k); if(a.length) rb+='<div class="ph k'+k+'"><i class="esw k'+k+'"></i>'+n+'（'+a.length+'）</div><ul class="links k'+k+'">'+a.map(li).join('')+'</ul>'; });
+    if(sibs.length) rb+='<div class="ph">同章其他（'+sibs.length+'）</div><div class="mnet">'+sibs.map(x=>'<button class="mchip" data-sib="'+x.id+'">'+esc(x.t)+'</button>').join('')+'</div>';
+    html=html.replace('<!--REL-->',rb?'<div class="relbox">'+rb+'</div>':''); }
   html+='<div class="acts">'+(qs.length?'<button class="btn" id="drill">刷這個點的真題</button>':'')+(o.type==='leaf'&&!(autoM.has(o.id)&&!mastered.has(o.id))?'<button class="btn" id="mk">'+(mastered.has(o.id)?'取消手動熟記':'手動標記熟記')+'</button>':'')+'</div>';
   panel.innerHTML=html; panel.classList.add('show'); syncHud();
   panel.querySelector('.x').onclick=closePanel;
@@ -2420,9 +2436,29 @@ function renderLaw(){ const v=lawView, M=LAWM[v.pc], D=window.LAWDATA&&LAWDATA[v
   const lo=panel.querySelector('#lown'); if(lo) lo.onclick=()=>{ const pc=v.pc,no=v.no,k=lawOwner(pc); exitUni(null); buildSubject(k); qEl.value=LAWM[pc].s+no; lawView=null; openLaw(pc,no); };
 }
 
+const hiG=new THREE.Group(); world.add(hiG); let rkOn=[];
+const RKC={q:0xffc861,x:0xa6ecff,r:0xe7b6ff};
+function relMark(){
+  hiG.children.slice().forEach(m=>{ hiG.remove(m); m.geometry.dispose(); m.material.dispose(); });
+  rkOn.forEach(o=>{ if(o.el){ o.el.classList.remove('rel'); const r=o.el.querySelector('.rk'); if(r){ r.textContent=''; r.className='rk'; } } }); rkOn=[];
+  if(!sel||!nodes[sel.id]) return;
+  const P={q:4,x:3,r:2,h:1}, tag=new Map(), cut=t=>t.length>9?t.slice(0,8)+'…':t;
+  const put=(t,k,txt)=>{ if(!t||t===sel||!isVis(t)) return; const c=tag.get(t); if(!c||P[k]>P[c.k]) tag.set(t,{k,txt}); };
+  const tube=(pts,col,rad,op)=>{ const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),Math.max(8,pts.length*2),rad,6,false),
+    new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false})); hiG.add(m); };
+  edges.forEach(e=>{ if(!e.on||!isVis(e.a)||!isVis(e.b)) return; const t=e.a===sel?e.b:e.a;
+    tube(e.pts, e.k==='h'?new THREE.Color(e.line.material.color):RKC[e.k], e.k==='h'?0.007:0.011, 0.5);
+    if(sel.type==='hub'&&e.type==='h') return;
+    put(t,e.k, e.k==='q'?(e.type==='x'?'請求權・'+cut(e.label):'請求權基礎'):e.k==='x'?cut(e.label):e.type==='c'?'科目主幹':'所屬章'); });
+  if(sel.type==='leaf'||sel.type==='core') relOf(sel).forEach(x=>{ const had=tag.has(x.t); put(x.t,'r','同考'+x.n+'次');
+    if(!had&&sel.dir&&x.t.dir){ const pts=[]; for(let i=0;i<=30;i++){ const t=i/30, ang=sel.dir.angleTo(x.t.dir); pts.push(slerpV(sel.dir,x.t.dir,t).multiplyScalar(R*(1+0.16*Math.sin(Math.PI*t)*(0.35+ang/Math.PI)))); }
+      if(sel.type!=='core') tube(pts,RKC.r,0.008,0.42); } });
+  tag.forEach((v,t)=>{ const r=t.el&&t.el.querySelector('.rk'); if(!r) return; r.textContent=v.txt; r.className='rk k'+v.k; t.el.classList.add('rel'); rkOn.push(t); });
+}
 function lightEdges(){
-  edges.forEach(e=>{ const on=!!sel&&(e.a===sel||e.b===sel), op=sel?(on?(e.type==='h'?0.7:0.95):e.base*0.15):e.base;
+  edges.forEach(e=>{ const on=!!sel&&(e.a===sel||e.b===sel), op=sel?(on?1:e.base*0.06):e.base;
     e.line.material.opacity=op; e.line.visible=op>0.005&&isVis(e.a)&&isVis(e.b); e.on=on; });
+  relMark();
   const act=edges.filter(e=>e.on&&e.type!=='h');
   pulses.forEach((p,i)=>{ const e=act.length?act[i%act.length]:null; p.e=(e&&i<act.length*3)?e:null; p.s.visible=!!p.e; p.t=Math.random(); p.sp=0.006+Math.random()*0.006;
     if(p.e) p.s.material.color.set(p.e.type==='x'?0xffffff:new THREE.Color(p.e.b.color)); });
@@ -2514,13 +2550,13 @@ function frame(now){
   list.forEach(o=>{ const el=o.el; if(!isVis(o)){ if(o._op!==0){ el.style.opacity=0; o._op=0; } return; }
     const s=screenOf(o), hot=o===sel||o===hover||related.has(o)||matches.has(o); let op;
     if(o.type==='core') op=(sel&&sel!==o)?0.2:1; else if(o.type==='hub') op=s.f>-0.1?0.95:0.3; else op=hot?(s.f>-0.3?1:0.35):clamp((s.f-thr)/0.25,0,1)*0.95;
-    const near=!!sel&&sel.type==='leaf'&&o.g===sel.g; if(sel&&!hot&&o.type==='leaf') op*=near?0.55:0.15;
+    const near=!!sel&&sel.type==='leaf'&&o.g===sel.g; if(sel&&!hot&&o.type==='leaf') op*=near?0.4:0.07; if(sel&&!hot&&o.type==='hub') op*=0.35;
     if(o.type!=='core') op*=clamp((s.y-22-hudB)/24,0,1);
     if(op<0.01){ if(o._op!==0){ el.style.opacity=0; o._op=0; } }
     else { const tr='translate('+s.x.toFixed(1)+'px,'+s.y.toFixed(1)+'px) translate(-50%,'+(o.type==='core'?coreDy()+'px':'-150%')+')'; if(o._tr!==tr){ el.style.transform=tr; o._tr=tr; }
       const os=op.toFixed(2); if(o._op!==os){ el.style.opacity=os; o._op=os; } el.classList.toggle('hot',hot&&o.type==='leaf'); }
     if(o.type!=='core') o.sprite.scale.setScalar(o.size*(hot?1.7:1)*(isM(o.id)?1.15:1));
-    o.sprite.material.opacity=(o.type==='core'?1:0.45+0.55*Math.max(0,s.f))*(sel&&!hot&&o.type==='leaf'?(sel.type==='leaf'&&o.g===sel.g?0.6:0.2):1); });
+    o.sprite.material.opacity=(o.type==='core'?1:0.45+0.55*Math.max(0,s.f))*(sel&&!hot&&o.type==='leaf'?(sel.type==='leaf'&&o.g===sel.g?0.45:0.1):1); });
   renderer.render(scene,camera);
 }
 buildSubject(SUBJ[store.last]?store.last:'civil');
