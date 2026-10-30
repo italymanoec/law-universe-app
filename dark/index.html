@@ -190,6 +190,12 @@ body.uni #bWrong{display:none!important}
 .sres i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;box-shadow:0 0 6px currentColor}
 .sres .sq{color:var(--holo);border-top:1px solid var(--line);border-radius:0}
 .panel .secl summary{cursor:pointer;min-height:40px;line-height:40px;margin:10px 0 0}
+/* 2026-10-30 整夜優化批次9：我的筆記 */
+.panel .myn{display:flex;flex-direction:column;gap:8px}
+.panel .myn label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.panel .myn input,.panel .myn textarea{font:inherit;font-size:16px;color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:8px 10px;box-sizing:border-box}
+.panel .myn input{width:9em;min-height:40px}.panel .myn textarea{width:100%;min-height:84px;resize:vertical;line-height:1.6}
+.panel .myn small{font-size:12px;color:var(--muted)}
 .panel .secl .mchip.cur{outline:1.5px solid var(--holo)}
 @media (min-width:761px){.panel .pk{font-size:16px;line-height:1.85}}
 .lawtxt p{margin:0 0 8px;display:flex;gap:8px}
@@ -1911,13 +1917,17 @@ function fitRel(o){ if(!o.dir||o.type==='core') return; const a=[...related].fil
   const half=mb?Math.min(W/2,(Math.max(hudB+120,r.top)-hudB-relBan.offsetHeight)/2):Math.min((r.left||W)/2,(H-hudB)/2);
   zoomT=clamp(R+R*Math.sin(m)*(H/2)/(Math.max(80,half-30)*Math.tan(22.5*Math.PI/180)),5.2,7.5); }
 // 閱讀順序＝書本章節順序（各章依序、章內依條號）
+// 2026-10-30 整夜優化批次9：我的筆記（只存在這支手機的瀏覽器，不上傳）
+const MYN_K='lawu-mynote-v1'; let MYN={}; try{ MYN=JSON.parse(localStorage.getItem(MYN_K)||'{}')||{}; }catch(e){ MYN={}; }
+function mynSave(){ try{ localStorage.setItem(MYN_K,JSON.stringify(MYN)); return true; }catch(e){ return false; } }
+const mynKey=o=>SK+'/'+o.id;
 function rdOrder(){ return Object.keys(S.groups).flatMap(g=>leaves.filter(x=>x.g===g)); }
 function openToc(){ if(uniMode) exitUni(null); mode='toc'; session=null; concept=null; lawView=null; sel=null; related=new Set(); lightEdges(); renderPanel(); panel.scrollTop=0; }
 function renderToc(){ panel.style.setProperty('--gc','#8fe9ff');
-  let h='<button class="x" aria-label="關閉">×</button><div class="pg">'+S.name+'・目錄</div><div class="pt">照章節順序讀</div><p class="pk">依書本章節排列。點考點打開說明，說明最下面可按「下一點」一路讀下去。✓＝已熟記。</p>';
+  let h='<button class="x" aria-label="關閉">×</button><div class="pg">'+S.name+'・目錄</div><div class="pt">照章節順序讀</div><p class="pk">依書本章節排列。點考點打開說明，說明最下面可按「下一點」一路讀下去。✓＝已熟記，✎＝寫了筆記。</p>';
   Object.keys(S.groups).forEach(g=>{ const L=leaves.filter(x=>x.g===g); if(!L.length) return; const m=L.filter(x=>mastered.has(x.id)||autoM.has(x.id)).length;
     h+='<div class="ph tocg"><i class="esw" style="background:'+G[g].c+'"></i>'+G[g].n+(G[g].a?'<small>'+G[g].a+'</small>':'')+'<em>熟記 '+m+'/'+L.length+'</em></div><ul class="links toc">'+
-      L.map(o=>'<li><button data-id="'+o.id+'"><i style="color:'+o.color+'"></i>'+o.t+'<em>'+(mastered.has(o.id)||autoM.has(o.id)?'✓ ':'')+o.a+'</em></button></li>').join('')+'</ul>'; });
+      L.map(o=>'<li><button data-id="'+o.id+'"><i style="color:'+o.color+'"></i>'+o.t+(MYN[mynKey(o)]?' ✎':'')+'<em>'+(mastered.has(o.id)||autoM.has(o.id)?'✓ ':'')+o.a+'</em></button></li>').join('')+'</ul>'; });
   panel.innerHTML=h; panel.classList.add('show'); syncHud(); panel.querySelector('.x').onclick=closePanel;
   panel.querySelectorAll('.links button').forEach(b=>b.onclick=()=>select(nodes[b.dataset.id])); }
 // 考點條號（§12、§184 I…）做成可點連結，點了開條文；沒有法典的科目維持純文字
@@ -1959,11 +1969,17 @@ function renderPanel(){
     html=html.replace('<!--REL-->',rb?'<div class="relbox">'+rb+'</div>':''); }
   { const RO=rdOrder(), ix=RO.indexOf(o), pv=ix>0?RO[ix-1]:null, nx=o.type==='hub'?RO.find(x=>x.g===o.g):o.type==='core'?RO[0]:(ix>=0&&ix<RO.length-1?RO[ix+1]:null);
     if(pv||nx) html+='<div class="rdnav">'+(pv?'<button class="btn" data-rd="'+pv.id+'"><small>‹ 上一點</small>'+pv.t+'</button>':'')+(nx?'<button class="btn" data-rd="'+nx.id+'"><small>下一點 ›'+(o.type==='leaf'&&nx.g!==o.g?'（下一章）':'')+'</small>'+nx.t+'</button>':'')+'</div>'; }
+  if(o.type==='leaf'||o.type==='hub'){ const n=MYN[mynKey(o)]||{};
+    html+='<div class="ph">我的筆記（只存在這支手機）</div><div class="myn"><label>書頁<input id="mynPg" maxlength="30" placeholder="例 p.123" value="'+esc(n.pg||'').replace(/"/g,'&quot;')+'"></label><textarea id="mynT" maxlength="3000" placeholder="讀書時的重點、對照哪本書哪一頁…">'+esc(n.t||'')+'</textarea><small id="mynS">'+(n.ts?'已存（'+new Date(n.ts).toLocaleString('zh-TW',{hour12:false})+'）':'打字就會自動存')+'</small></div>'; }
   html+='<div class="acts">'+(qs.length?'<button class="btn" id="drill">刷這個點的真題</button>':'')+(o.type==='leaf'&&!(autoM.has(o.id)&&!mastered.has(o.id))?'<button class="btn" id="mk">'+(mastered.has(o.id)?'取消手動熟記':'手動標記熟記')+'</button>':'')+'</div>';
   panel.innerHTML=html; panel.classList.add('show'); syncHud();
   panel.querySelector('.x').onclick=closePanel;
   panel.querySelectorAll('.links button').forEach(b=>b.onclick=()=>select(nodes[b.dataset.id]));
   panel.querySelectorAll('[data-rd]').forEach(b=>b.onclick=()=>{ select(nodes[b.dataset.rd]); panel.scrollTop=0; });
+  { const pg=panel.querySelector('#mynPg'), tx=panel.querySelector('#mynT'), sm=panel.querySelector('#mynS'); let tm=null;
+    const sv=()=>{ clearTimeout(tm); tm=setTimeout(()=>{ const k=mynKey(o), t=tx.value.trim(), p=pg.value.trim(); if(t||p) MYN[k]={t:tx.value,pg:p,ts:Date.now()}; else delete MYN[k];
+      sm.textContent=mynSave()?(t||p?'已存（'+new Date().toLocaleString('zh-TW',{hour12:false})+'）':'已清空'):'存不進去（瀏覽器空間不足或私密模式）'; },400); };
+    if(pg&&tx){ pg.addEventListener('input',sv); tx.addEventListener('input',sv); } }
   const bf=panel.querySelector('#bFull'); if(bf) bf.onclick=()=>{ store.readFull=!store.readFull; saveLocal(); renderPanel(); };
   const dr=panel.querySelector('#drill'); if(dr) dr.onclick=()=>startSession(qs.map(q=>q.id));
   panel.querySelectorAll('[data-kw]').forEach(b=>b.onclick=()=>{ const t=nodes[b.dataset.kw]; if(t) select(t); });
