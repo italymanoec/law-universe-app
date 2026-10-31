@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161b46">
+<title>法律初學者唸書流程</title>
+<style>
+:root{
+  color-scheme:dark;
+  --space:#161b46; --deep:#262a68; --holo:#7feaff; --ink:#f3f7ff; --muted:#b8c8e8;
+  --panel:rgba(28,32,78,.88); --line:rgba(150,225,255,.42); --warn:#ffd166; --soft:#9ad7ff;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:88px}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(168,120,255,.28), transparent 46%),
+    radial-gradient(ellipse at 0% 100%, rgba(255,150,120,.14), transparent 42%),
+    linear-gradient(180deg, #2a2e72 0%, var(--space) 42%);
+  line-height:1.65;
+}
+a{color:var(--holo)}
+button,input{font:inherit; color:inherit}
+button{cursor:pointer}
+.skip{position:absolute; left:12px; top:8px; transform:translateY(-140%); background:#fff; color:#161b46; padding:8px 12px; z-index:9}
+.skip:focus{transform:none}
+.wrap{width:min(880px, calc(100% - 28px)); margin:0 auto}
+header{padding:calc(18px + env(safe-area-inset-top)) 0 8px}
+.back{display:inline-flex; align-items:center; min-height:44px; text-decoration:none}
+.brand{margin:6px 0 0; color:var(--holo); letter-spacing:.18em; font-size:13px}
+h1{margin:2px 0 6px; font-size:28px; line-height:1.3; letter-spacing:.04em}
+.lead{margin:0; color:var(--muted)}
+#status{min-height:1.4em; color:var(--muted); font-size:14px}
+.card, .subj, .part, .node, .week, .gapbox{
+  background:var(--panel); border:1px solid var(--line); border-radius:14px;
+}
+.card, .gapbox{padding:14px 16px; margin:12px 0}
+h2{font-size:22px; margin:0 0 8px}
+.gapbox h2 button{background:none; border:0; color:inherit; font:inherit; font-size:22px; font-weight:700; text-align:left; min-height:44px; width:100%; cursor:pointer}
+h3{font-size:18px; margin:14px 0 8px}
+.caveat{color:var(--warn)}
+.method{margin:0 0 8px}
+.method b{color:var(--soft); font-weight:600}
+ol.order{margin:0; padding-left:1.3em}
+ol.order li{margin:8px 0}
+.weeks{display:grid; gap:8px}
+.week{padding:12px 14px}
+.week b{display:block}
+.week span{color:var(--muted); font-size:14px}
+.week button{margin-top:8px; min-height:44px}
+.tools{
+  position:sticky; top:0; z-index:4;
+  margin:0 0 12px; padding:10px 0 12px;
+  background:#1a1f58;
+  box-shadow:0 10px 18px rgba(12,16,48,.35);
+}
+label.q{display:block; font-size:14px; color:var(--muted)}
+input[type=search]{
+  width:100%; margin-top:4px; min-height:44px; padding:10px 12px;
+  border-radius:10px; border:1px solid var(--line); background:rgba(12,16,48,.75); outline:none;
+}
+input[type=search]:focus{border-color:var(--holo); box-shadow:0 0 0 3px rgba(127,234,255,.2)}
+.chips{display:flex; gap:8px; overflow-x:auto; padding:10px 0 4px; scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip, .btn{
+  flex:none; min-height:44px; padding:8px 12px;
+  border-radius:999px; border:1px solid var(--line); background:rgba(28,32,78,.7);
+}
+.chip[aria-pressed=true]{background:var(--holo); color:#142046; border-color:var(--holo); font-weight:700}
+.row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.legend{display:flex; flex-wrap:wrap; gap:8px 14px; color:var(--muted); font-size:14px; margin:4px 0 0}
+.legend b{color:var(--warn); font-weight:600}
+#hit{color:var(--muted); font-size:14px}
+.subj{margin:10px 0; overflow:hidden}
+.subj > h2, .part > h3{margin:0}
+.subj > h2 button, .part > h3 button, .node > button{
+  width:100%; text-align:left; background:transparent; border:0; padding:12px 14px; min-height:44px;
+}
+.subj > h2 button{display:flex; flex-wrap:wrap; gap:6px 10px; align-items:baseline}
+.rank{color:#142046; background:var(--holo); border-radius:999px; padding:2px 8px; font-size:13px; font-weight:700}
+.subj .count, .node .meta, .part .count{color:var(--muted); font-size:14px; font-weight:400}
+.count .gap, .meta .gap, .miss{color:var(--warn)}
+.part{margin:0 10px 10px; background:rgba(16,20,52,.45)}
+.part > h3 button{color:var(--soft)}
+.node{margin:0 10px 8px; background:rgba(8,12,36,.35)}
+.node > button{display:block}
+.node .ttl{display:block; font-size:17px; font-weight:700}
+.tag{display:inline-block; margin-right:6px; color:var(--holo); font-weight:700}
+.tag.gap, .miss{color:var(--warn); font-weight:600}
+.tag.low{color:#ffb45a}
+.qitem{margin:8px 0; padding:10px 12px; border-radius:12px; background:rgba(8,12,36,.35); border:1px solid rgba(150,225,255,.28)}
+.qitem.mid{border-color:#ffd166}
+.qitem.low{border:2px dashed #ffb020; background:rgba(255,176,32,.16)}
+.qitem.unknown{border:2px solid #ff8aa0; background:rgba(255,90,120,.16)}
+.badge{display:inline-block; margin:0 6px 0 0; padding:2px 8px; border-radius:999px; font-size:13px; font-weight:700}
+.badge.ai{background:#7feaff; color:#142046}
+.badge.high{background:#16323c; color:#7feaff; border:1px solid #7feaff}
+.badge.mid{background:#ffd166; color:#2a2108}
+.badge.low, .badge.unknown{background:#ff8aa0; color:#2a1020}
+.sumbox{margin:8px 0 12px; padding:10px 12px; border-radius:12px; background:rgba(127,234,255,.06); border:1px solid rgba(127,234,255,.28)}
+.sumbox li, .qitem .muted{color:var(--muted); font-size:14px}
+.qmeta{margin-bottom:6px}
+.caret{color:var(--holo); font-weight:700; margin-right:4px}
+.detail{padding:0 14px 12px; border-top:1px solid rgba(150,225,255,.2)}
+.detail p{margin:8px 0}
+.stem{margin:4px 0 10px; overflow-wrap:anywhere}
+.qmeta{color:var(--soft); font-size:14px; margin-bottom:0}
+.src{margin:0; padding-left:1.2em}
+.fold[hidden], .detail[hidden]{display:none}
+button:focus-visible, a:focus-visible, input:focus-visible{outline:3px solid var(--warn); outline-offset:2px}
+footer{color:var(--muted); font-size:14px; padding:8px 0 calc(28px + env(safe-area-inset-bottom))}
+@media (max-width:760px){
+  h1{font-size:24px}
+  .wrap{width:min(100% - 20px, 880px)}
+  .node .ttl{font-size:16px}
+}
+.modbox{margin:10px 0}
+.modbox details{margin:6px 0; padding:8px 10px; border-radius:12px; background:rgba(8,12,36,.35); border:1px solid rgba(150,225,255,.22)}
+.modbox summary{cursor:pointer; font-weight:600; min-height:32px; line-height:32px}
+.modbox details details{background:rgba(8,12,36,.25)}
+.modbox li{margin:4px 0; overflow-wrap:anywhere}
+.modbox .src2, .modbox .muted{color:var(--muted); font-size:13px}
+.modbox pre{white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; font-size:14px; margin:6px 0}
+.modbox a{color:inherit; overflow-wrap:anywhere}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到內容</a>
+<header>
+  <div class="wrap">
+    <a class="back" href="index.html">← 回法學記憶宇宙</a>
+    <h1>法律初學者唸書流程</h1>
+    <p class="lead">照章節看建議順序。沒有的資料標「待補」或「待查」，不補造。</p>
+    <p id="status" role="status">正在讀取章節資料…</p>
+  </div>
+</header>
+<main id="main" class="wrap"></main>
+<footer><div class="wrap">補資料時只改 <code>data/study-flow.json</code>。不用改這個頁面。</div></footer>
+<script>
+'use strict';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s ?? '').toLowerCase().replace(/\s+/g, '');
+const $ = id => document.getElementById(id);
+
+let data = null;
+let subject = '全部';
+let query = '';
+let activeTerm = '';
+let confFilter = '全部';
+let lookup = null, lookupP = null;
+const qCache = new Map();
+const openTopic = new Set();
+const openPend = new Set();
+let outsideOpen = false;
+const openSubj = new Set();
+const openPart = new Set();
+const openNode = new Set();
+
+function countOf(slot){
+  if (!slot || typeof slot === 'string') return null;
+  if (Array.isArray(slot)) return slot.length || null;
+  const items = Array.isArray(slot.items) ? slot.items : null;
+  if (items && items.length) return items.length;
+  if (typeof slot.count === 'number' && slot.count > 0) return slot.count;
+  return null;
+}
+function slotText(slot){
+  const n = countOf(slot);
+  return n == null ? '待補' : String(n);
+}
+function confCount(node, key){
+  return (node.bank && node.bank.conf && node.bank.conf[key]) || 0;
+}
+function bankHtml(node){
+  const b = node.bank || {};
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') {
+    const n = confCount(node, confFilter);
+    return n ? tag(String(n)) : tag('待補');
+  }
+  if (!(b.count > 0)) return tag('待補');
+  const low = confCount(node, '低');
+  return tag(String(b.count)) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
+}
+function sumBankHtml(nodes){
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') {
+    let n = 0;
+    nodes.forEach(node => { n += confCount(node, confFilter); });
+    return n ? tag(String(n)) : tag('待補');
+  }
+  let low = 0;
+  nodes.forEach(node => { low += confCount(node, '低'); });
+  return tag(sumText(nodes, 'bank')) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
+}
+function confOk(conf){
+  if (confFilter === '全部') return true;
+  if (confFilter === '待查') return conf === '待查';
+  return conf === confFilter;
+}
+function searchHits(){
+  const q = norm(activeTerm);
+  if (!lookup || q.length < 2) return null;
+  if (searchHits.cache && searchHits.cache.q === q && searchHits.cache.f === confFilter) return searchHits.cache;
+  const nodes = new Set(), topics = new Set(), subjects = new Set();
+  lookup.forEach(x => {
+    if (!confOk(x.conf)) return;
+    if (!norm(x.id + ' ' + x.kw).includes(q)) return;
+    if (x.node) nodes.add(x.node);
+    else if (x.topic) topics.add(x.topic);
+    else subjects.add(x.subject);
+  });
+  const cache = {q, f: confFilter, nodes, topics, subjects};
+  searchHits.cache = cache;
+  return cache;
+}
+function ensureLookup(){
+  if (lookup || lookupP) return;
+  lookupP = fetchPack('study-flow/lookup.json').then(j => { lookup = j; searchHits.cache = null; renderTree(null, true); }).catch(() => { lookupP = null; });
+}
+function tag(text){
+  const gap = text === '待補' || text === '待查';
+  return `<span class="tag${gap ? ' gap' : ''}">${esc(text)}</span>`;
+}
+function allNodes(list){
+  const out = [];
+  (list || data.subjects).forEach(s => s.parts.forEach(p => p.nodes.forEach(n => out.push(n))));
+  return out;
+}
+function sumText(nodes, key){
+  let n = 0, any = false, miss = 0;
+  nodes.forEach(node => {
+    const c = countOf(node[key]);
+    if (c == null) miss += 1;
+    else { any = true; n += c; }
+  });
+  if (!any) return '待補';
+  if (!miss) return String(n);
+  return n + '（還有 ' + miss + ' 節待補）';
+}
+function pageText(page){
+  if (page == null || page === '') return '<span class="miss">頁碼待查</span>';
+  return '第 ' + esc(page) + ' 頁';
+}
+function partKey(subjectName, partTitle){ return subjectName + '||' + partTitle; }
+function deepHit(node){
+  const q = norm(activeTerm);
+  if (q.length < 2) return false;
+  const bits = [node.title, node.id, node.note];
+  const items = node.exams && node.exams.items || [];
+  items.forEach(it => bits.push(it.exam, it.stem));
+  return norm(bits.join(' ')).includes(q);
+}
+function hay(node){
+  const bits = [node.id, node.title, node.subject, node.part, node.note];
+  (node.sources || []).forEach(s => bits.push(s.name));
+  const items = node.exams && node.exams.items || [];
+  items.forEach(it => bits.push(it.exam, it.no, it.stem, it.answer));
+  return norm(bits.join(' '));
+}
+function bankVisible(node){
+  if (confFilter === '待查') return false;
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') return confCount(node, confFilter) > 0;
+  return true;
+}
+function matchNode(node){
+  if (!bankVisible(node)) return false;
+  if (subject !== '全部' && node.subject !== subject) return false;
+  const q = norm(activeTerm);
+  if (!q) return true;
+  if (hay(node).includes(q)) return true;
+  const hits = searchHits();
+  return !!(hits && hits.nodes.has(node.id));
+}
+function answerText(it){
+  if (!it || typeof it !== 'object' || it.answer == null || it.answer === '' || it.answer === '待填') return '待查';
+  return String(it.answer);
+}
+function itemBody(it){
+  if (it == null) return '';
+  if (typeof it !== 'object') return esc(it);
+  const head = [it.exam, it.no != null ? ('第 ' + it.no + ' 題') : ''].filter(Boolean).join(' ');
+  const stem = it.stem || it.title || it.name || it.text || '';
+  return esc(head ? (stem ? head + '：' + stem : head) : stem);
+}
+
+function renderShell(){
+  const nodes = allNodes();
+  const examNodes = nodes.filter(n => countOf(n.exams) != null);
+  const examN = examNodes.reduce((s, n) => s + countOf(n.exams), 0);
+  const labels = data.meta.labels || {};
+  const legend = Object.keys(labels).map(k => `<span><b>${esc(k)}</b> ${esc(labels[k])}</span>`).join('');
+  const chips = ['全部'].concat(data.subjects.map(s => s.name)).map(name =>
+    `<button type="button" class="chip" data-subject="${esc(name)}" aria-pressed="${name === subject ? 'true' : 'false'}">${esc(name)}</button>`
+  ).join('');
+  const confs = ['全部', '高', '中', '低', '待查'].map(name =>
+    `<button type="button" class="chip" data-conf="${esc(name)}" aria-pressed="${name === confFilter ? 'true' : 'false'}">${name === '待查' ? '只看待查' : name === '全部' ? '全部信心' : '信心' + name}</button>`
+  ).join('');
+  const ai = data.aiBank;
+  const aiLine = ai ? ` AI 對應題庫 ${ai.total} 題：掛上章節 ${ai.onNodes}，待查 ${ai.pending}。信心高 ${ai.conf['高']}、中 ${ai.conf['中']}、低 ${ai.conf['低']}、待查 ${ai.conf['待查']}。${esc(ai.note)}` : '';
+  $('main').innerHTML = `
+    <p class="card" id="summary">共 ${nodes.length} 節。已掛考題 ${examN} 題，在 ${examNodes.length} 個節點。題庫 ${sumBankHtml(nodes)}。判例 ${tag(sumText(nodes, 'cases'))}。${aiLine}</p>
+    <div class="tools" id="tools">
+      <label class="q" for="q">搜尋章節、科目或題幹
+        <input id="q" type="search" placeholder="例如：行政處分、平等權、普考" autocomplete="off" enterkeyhint="search" value="${esc(query)}">
+      </label>
+      <div class="chips" role="toolbar" aria-label="依科目篩選">${chips}</div>
+      <div class="chips confchips" role="toolbar" aria-label="依信心篩選">${confs}</div>
+      <div class="row">
+        <button type="button" class="btn" id="openAll">展開章節</button>
+        <button type="button" class="btn" id="closeAll">收合全部</button>
+        <span id="hit" role="status"></span>
+      </div>
+      <div class="legend">${legend}</div>
+    </div>
+    <section class="card" id="start">
+      <h2>${esc(data.beginner.title)}</h2>
+      <p class="caveat">${esc(data.beginner.caveat)}</p>
+      <p>${esc(data.beginner.mapNote)}</p>
+      <h3>${esc(data.beginner.methodsTitle)}</h3>
+      ${data.beginner.methods.map(m => `<p class="method"><b>${esc(m.from)}</b>　${esc(m.text)}</p>`).join('')}
+      <div class="modbox" data-mod="study-flow/method.json" data-kind="method">正在讀取方法篇…</div>
+      <h3>${esc(data.beginner.subjectOrderTitle)}</h3>
+      <ol class="order">${data.subjects.slice().sort((a,b)=>a.suggestRank-b.suggestRank).map(s =>
+        `<li><button type="button" class="btn" data-subject="${esc(s.name)}">第 ${esc(s.suggestRank)} 科　${esc(s.name)}</button><div>${esc(s.why)}</div></li>`
+      ).join('')}</ol>
+      <p>${esc(data.beginner.insideSubject)}</p>
+      <h3>${esc(data.beginner.weeksTitle)}</h3>
+      <p>${esc(data.beginner.weeksIntro)}</p>
+      <div class="weeks">${data.beginner.weeks.map(w => `
+        <article class="week">
+          <b>第 ${esc(w.weeks)} 週　${esc(w.subjectLabel || w.subject || '')}</b>
+          <span>${esc(w.content)}</span>
+          ${w.subject ? `<div><button type="button" class="btn" data-subject="${esc(w.subject)}" data-scroll="1">看${esc(w.subjectLabel || w.subject)}的章節</button></div>` : '<p>這一週是總複習，不對到單一科目。</p>'}
+        </article>`).join('')}</div>
+      <p>${esc(data.beginner.habit)}</p>
+    </section>
+    <section class="gapbox">
+      <h2>目前還缺什麼</h2>
+      <ul>${(data.gaps || []).map(g => `<li>${esc(g)}</li>`).join('')}</ul>
+    </section>
+    <div id="tree"></div>
+    <div id="outside"></div>`;
+  $('q').addEventListener('input', () => {
+    activeTerm = $('q').value;
+    query = activeTerm;
+    if (norm(activeTerm).length >= 2) ensureLookup();
+    renderTree(null, true);
+  });
+  $('openAll').onclick = () => {
+    visibleSubjects().forEach(s => {
+      openSubj.add(s.name);
+      s.parts.forEach(p => { if (p.nodes.some(matchNode)) openPart.add(partKey(s.name, p.title)); });
+    });
+    renderTree();
+  };
+  $('closeAll').onclick = () => { openSubj.clear(); openPart.clear(); openNode.clear(); renderTree(); };
+  $('main').addEventListener('click', onClick);
+  renderTree();
+}
+
+function visibleSubjects(){
+  return data.subjects.map(s => ({
+    ...s,
+    parts: s.parts.map(p => ({...p, nodes: p.nodes.filter(matchNode)})).filter(p => p.nodes.length)
+  })).filter(s => s.parts.length);
+}
+function onClick(e){
+  const confBtn = e.target.closest('[data-conf]');
+  if (confBtn && !confBtn.closest('#tree') && !confBtn.closest('#outside')) {
+    confFilter = confBtn.dataset.conf;
+    searchHits.cache = null;
+    document.querySelectorAll('[data-conf]').forEach(b => b.setAttribute('aria-pressed', b.dataset.conf === confFilter ? 'true' : 'false'));
+    renderTree();
+    return;
+  }
+  const subBtn = e.target.closest('[data-subject]');
+  if (subBtn && !subBtn.closest('#tree')) {
+    subject = subBtn.dataset.subject;
+    if (subject !== '全部') openSubj.add(subject);
+    document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.subject === subject ? 'true' : 'false'));
+    renderTree();
+    if (subBtn.dataset.scroll) $('tree').scrollIntoView({behavior:'smooth', block:'start'});
+    return;
+  }
+  const t = e.target.closest('[data-toggle]');
+  if (!t) return;
+  const kind = t.dataset.toggle;
+  const key = t.dataset.key;
+  if (kind === 'outside') { outsideOpen = !outsideOpen; renderTree(); return; }
+  const set = kind === 'subj' ? openSubj : kind === 'part' ? openPart : kind === 'topic' ? openTopic : kind === 'pend' ? openPend : openNode;
+  if (set.has(key)) set.delete(key); else set.add(key);
+  const focusId = kind === 'subj' ? ('subj-' + encodeURIComponent(key)) : kind === 'part' ? ('part-' + encodeURIComponent(key)) : ('nodebtn-' + key);
+  renderTree(focusId);
+}
+let hashScrolled = false;
+function renderTree(focusId, expandMatches){
+  const qNow = norm(activeTerm);
+  const hits = searchHits();
+  if (expandMatches && qNow) {
+    data.subjects.forEach(s => {
+      const parts = s.parts.map(p => ({...p, nodes: p.nodes.filter(matchNode)})).filter(p => p.nodes.length);
+      if (!parts.length) return;
+      openSubj.add(s.name);
+      parts.forEach(p => {
+        openPart.add(partKey(s.name, p.title));
+        p.nodes.forEach(n => { if (deepHit(n) || (hits && hits.nodes.size <= 6 && hits.nodes.has(n.id))) openNode.add(n.id); });
+      });
+    });
+  }
+  const shown = visibleSubjects();
+  const n = shown.reduce((s, sub) => s + sub.parts.reduce((a, p) => a + p.nodes.length, 0), 0);
+  const total = allNodes().length;
+  $('hit').textContent = confFilter === '待查'
+    ? '只看還沒對上章節的題'
+    : (n === total && !qNow && subject === '全部'
+      ? '共 ' + total + ' 節'
+      : (n ? '顯示 ' + n + ' 節' : '沒有符合的章節。試著少打幾個字，或改選全部科目。'));
+  if (!n) {
+    $('tree').innerHTML = confFilter === '待查' ? '<p class="card">這些題沒有對上章節，列在下面。</p>' : '';
+    renderOutside();
+    hydrate();
+    const browsing0 = !norm(activeTerm) && subject === '全部' && confFilter === '全部';
+    const start0 = document.getElementById('start');
+    const gap0 = document.querySelector('.gapbox');
+    if (start0) start0.hidden = !browsing0;
+    if (gap0 && gap0.parentElement && gap0.parentElement.id !== 'outside') gap0.hidden = !browsing0;
+    return;
+  }
+  $('tree').innerHTML = shown.map(s => {
+    const nodes = s.parts.flatMap(p => p.nodes);
+    const open = openSubj.has(s.name);
+    const orders = nodes.map(x => x.order);
+    return `<section class="subj">
+      <h2><button type="button" id="subj-${esc(encodeURIComponent(s.name))}" data-toggle="subj" data-key="${esc(s.name)}" aria-expanded="${open ? 'true' : 'false'}">
+        <span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>
+        <span class="rank">建議第 ${esc(s.suggestRank)} 科</span>
+        <strong>${esc(s.name)}</strong>
+        <span class="count">${nodes.length} 節 · 順序 ${Math.min(...orders)}–${Math.max(...orders)} · 考題 ${esc(sumText(nodes,'exams'))} · 題庫 ${sumBankHtml(nodes)} · 判例 ${tag(sumText(nodes,'cases'))}</span>
+      </button></h2>
+      <div class="fold"${open ? '' : ' hidden'}>${s.parts.map(p => partHtml(s, p)).join('')}</div>
+    </section>`;
+  }).join('');
+  const hash = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if (!hashScrolled && hash && openNode.has(hash)) {
+    hashScrolled = true;
+    document.getElementById('n-' + hash)?.scrollIntoView({block:'center'});
+  }
+  if (focusId) document.getElementById(focusId)?.focus();
+  const browsing = !norm(activeTerm) && subject === '全部' && confFilter === '全部';
+  const start = document.getElementById('start');
+  const gap = document.querySelector('#main > .gapbox');
+  if (start) start.hidden = !browsing;
+  if (gap) gap.hidden = !browsing;
+  renderOutside();
+  hydrate();
+  hydrateMod();
+}
+function partHtml(s, p){
+  const key = partKey(s.name, p.title);
+  const open = openPart.has(key);
+  return `<section class="part">
+    <h3><button type="button" id="part-${esc(encodeURIComponent(key))}" data-toggle="part" data-key="${esc(key)}" aria-expanded="${open ? 'true' : 'false'}">
+      <span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(p.title)}
+      <span class="count"> · ${p.nodes.length} 節 · 考題 ${esc(sumText(p.nodes,'exams'))} · 題庫 ${sumBankHtml(p.nodes)} · 判例 ${tag(sumText(p.nodes,'cases'))}</span>
+    </button></h3>
+    <div class="fold"${open ? '' : ' hidden'}>${p.nodes.map(nodeHtml).join('')}</div>
+  </section>`;
+}
+function nodeHtml(n){
+  const open = openNode.has(n.id);
+  const exams = n.exams || {};
+  const items = Array.isArray(exams.items) ? exams.items : [];
+  const missing = Array.isArray(exams.missingNos) ? exams.missingNos : [];
+  const src = (n.sources || []).map(s => `<li>${esc(s.name)}，${pageText(s.page)}</li>`).join('') || '<li><span class="miss">來源待查</span></li>';
+  let examBlock = '';
+  if (items.length || missing.length) {
+    examBlock = `<p>${esc(data.meta.examCaution || '')}</p>`
+      + (exams.note ? `<p>${esc(exams.note)}</p>` : '')
+      + (missing.length ? `<p class="miss">未抽出的題號：${missing.map(esc).join('、')}。這些題待補。</p>` : '')
+      + items.map(it => `<p class="qmeta">${esc(it.exam || '')} · ${it.no == null || it.no === '' ? '<span class="miss">題號待查</span>' : ('第 ' + esc(it.no) + ' 題')} · 答案：${answerText(it) === '待查' ? '<span class="miss">待查</span>' : esc(answerText(it))}</p><p class="stem">${esc(it.stem || '')}</p>`).join('')
+      + `<p>題庫：${esc(slotText(n.bank))}。判例：${esc(slotText(n.cases))}。</p>`;
+  } else examBlock = `<p>考題：${esc(slotText(n.exams))}。題庫：${esc(slotText(n.bank))}。判例：${esc(slotText(n.cases))}。</p>`;
+  const bankItems = n.bank && Array.isArray(n.bank.items) ? n.bank.items : [];
+  const caseItems = n.cases && Array.isArray(n.cases.items) ? n.cases.items : [];
+  const extra = (bankItems.length ? `<h3>題庫</h3>${bankItems.map(it => `<p>${itemBody(it)}</p>`).join('')}` : '')
+    + (caseItems.length ? `<h3>判例</h3>${caseItems.map(it => `<p>${itemBody(it)}</p>`).join('')}` : '');
+  return `<article class="node" id="n-${esc(n.id)}">
+    <button type="button" id="nodebtn-${esc(n.id)}" data-toggle="node" data-key="${esc(n.id)}" aria-expanded="${open ? 'true' : 'false'}">
+      <span class="ttl"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(n.title)}</span>
+      <span class="meta">順序 ${esc(n.order)} · ${esc(n.subject)} · 考題 ${tag(slotText(n.exams))} · 題庫 ${bankHtml(n)} · 判例 ${tag(slotText(n.cases))}</span>
+    </button>
+    <div class="detail"${open ? '' : ' hidden'}>
+      ${open && n.bank && n.bank.file ? `<div class="qbox" data-file="${esc(n.bank.file)}" data-node="${esc(n.id)}">正在讀取這個章節的題目…</div>` : (n.mod ? '<p>本章彙整待查。題庫待補。</p>' : '<p>本章彙整待查。題庫待補。判例待補。</p>')}
+      ${open && n.mod ? `<div class="modbox" data-mod="${esc(n.mod)}">正在讀取本節模組…</div>` : ''}
+      <p>${esc(n.id)} · ${esc(n.part)}</p>
+      <ul class="src">${src}</ul>
+      ${n.note ? `<p>${esc(n.note)}</p>` : ''}
+      ${examBlock}
+      ${extra}
+    </div>
+  </article>`;
+}
+
+function listBlock(title, arr){
+  if (!arr || !arr.length) return '';
+  return `<h3>${esc(title)}</h3><ul>${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+}
+function qMatch(q, nodeId){
+  const term = norm(activeTerm);
+  if (term.length < 2) return true;
+  const blob = norm([q.id, ...(q.keywords || []), q.beginner, q.reason].join(' '));
+  if (blob.includes(term)) return true;
+  const hits = searchHits();
+  if (hits && nodeId && hits.nodes.has(nodeId)) return false;
+  if (hits && !nodeId) return false;
+  return true;
+}
+function renderQ(q){
+  const conf = q.conf || '待查';
+  const cls = conf === '低' ? 'low' : conf === '待查' ? 'unknown' : conf === '中' ? 'mid' : 'high';
+  const beginner = !q.beginner || q.beginner === '待查' ? '<span class="miss">待查</span>' : esc(q.beginner);
+  const kws = (q.keywords || []).length ? esc(q.keywords.join('、')) : '<span class="miss">待查</span>';
+  const alt = (q.alt || []).length ? esc(q.alt.join('、')) : '沒有';
+  return `<article class="qitem ${cls}"><p class="qmeta"><span class="badge ai">AI 對應</span><span class="badge ${cls}">信心${esc(conf)}</span>題號 ${esc(q.id)}</p><p>${beginner}</p><p class="muted">關鍵字：${kws}</p><p class="muted">對應理由：${esc(q.reason || '待查')}</p><p class="muted">其他可能章節：${alt}。題幹全文待查。判例待補。</p></article>`;
+}
+function renderPack(pack, nodeId){
+  const s = pack.summary;
+  let html = '';
+  if (s) {
+    html += `<section class="sumbox"><h3>本章彙整</h3><p class="caveat">這是 AI 依已對上的題目歸納，不是正式講義。</p>${s.study_order ? `<p>${esc(s.study_order)}</p>` : ''}${listBlock('常考重點', s.exam_focus)}${listBlock('初學者可以先記', s.beginner_points)}${listBlock('容易混', s.confusions)}${s.gaps ? `<p><b>還沒有的部分</b>　${esc(s.gaps)}</p>` : ''}</section>`;
+  } else html += '<p>本章彙整待查。</p>';
+  const qs = (pack.questions || []).filter(q => confOk(q.conf) && qMatch(q, nodeId));
+  html += `<h3>題目與白話重點</h3><p class="caveat">每一題都標 AI 對應和信心。低信心、待查不是正式詳解。題幹全文不在檔案裡。</p>`;
+  html += qs.length ? qs.map(renderQ).join('') : '<p>這裡沒有符合的題。</p>';
+  return html;
+}
+function outsideBlock(t, kind, set){
+  const open = set.has(t.id);
+  const title = t.label || t.title || t.id;
+  const nameNote = t.label ? '' : (t.subject ? t.subject : '中文名稱待查');
+  return `<article class="node"><button type="button" data-toggle="${kind}" data-key="${esc(t.id)}" aria-expanded="${open ? 'true' : 'false'}"><span class="ttl"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(title)}</span><span class="meta">${esc(nameNote)} · ${esc(t.count)} 題 · <span class="badge unknown">待查</span> · <span class="badge ai">AI 對應</span></span></button><div class="detail"${open ? '' : ' hidden'}>${open ? `<div class="qbox" data-file="${esc(t.file)}" data-node=""></div>` : ''}</div></article>`;
+}
+function renderOutside(){
+  const el = document.getElementById('outside');
+  if (!el) return;
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  const hits = searchHits();
+  const q = norm(activeTerm);
+  let topics = data.outsideTopics || [];
+  let groups = data.pendingGroups || [];
+  if (q.length >= 2 && hits) {
+    topics = topics.filter(t => hits.topics.has(t.id));
+    groups = groups.filter(g => hits.subjects.has(g.id));
+  }
+  const pendingN = data.aiBank ? data.aiBank.pending : '';
+  const force = confFilter === '待查' || (q.length >= 2 && !!hits);
+  const open = force || outsideOpen;
+  let html = `<section class="gapbox"><h2><button type="button" data-toggle="outside" data-key="all" aria-expanded="${open ? 'true' : 'false'}"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>對不上章節的題 ${esc(pendingN)}</button></h2>`;
+  html += `<div${open ? '' : ' hidden'}><p class="caveat">這些題標待查，沒有硬掛到上面的章節。點開才載入。判例待補。</p>`;
+  html += topics.map(t => outsideBlock(t, 'topic', openTopic)).join('');
+  html += '<h3>還沒歸進主題</h3>';
+  html += groups.map(g => outsideBlock(g, 'pend', openPend)).join('');
+  if (q.length >= 2 && hits && !topics.length && !groups.length) html += '<p>待查題裡沒有符合的。</p>';
+  html += '</div></section>';
+  el.innerHTML = html;
+}
+async function fetchPack(rel){
+  const urls = ['data/' + rel, '../data/' + rel];
+  let last = '讀取失敗';
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, {cache: 'no-store'});
+      if (!res.ok) throw new Error(String(res.status));
+      return await res.json();
+    } catch (e) { last = e && e.message ? e.message : String(e); }
+  }
+  throw new Error(last);
+}
+function hydrate(){
+  document.querySelectorAll('.qbox[data-file]').forEach(box => {
+    if (box.closest('[hidden]')) return;
+    const rel = box.dataset.file;
+    const paint = pack => { box.innerHTML = renderPack(pack, box.dataset.node || ''); };
+    if (qCache.has(rel)) { paint(qCache.get(rel)); return; }
+    if (box.dataset.loading === '1') return;
+    box.dataset.loading = '1';
+    box.textContent = '正在讀取這個章節的題目…';
+    fetchPack(rel).then(pack => {
+      qCache.set(rel, pack);
+      const live = [...document.querySelectorAll('.qbox')].find(el => el.dataset.file === rel);
+      if (live) live.innerHTML = renderPack(pack, live.dataset.node || '');
+    }).catch(() => { box.textContent = '題目讀取失敗。請用網站網址重新開啟。'; });
+  });
+}
+const modCache = new Map();
+const badge = st => `<span class="tag${st === '已有' ? '' : ' gap'}">${esc(st || '待查')}</span>`;
+const safeUrl = u => /^https?:\/\//.test(String(u || '')) ? String(u) : '';
+const link = (u, t) => safeUrl(u) ? `<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener">${esc(t || '原始網頁')}</a>` : '';
+const pg = x => x && x.頁 != null ? `（頁 ${esc(x.頁)}）` : '';
+const basis = x => x && x.依據 ? `<div class="src2">依據原文：「${esc(x.依據)}」${pg(x)}</div>` : '';
+function modHead(title, m, extra){
+  const src = (m.來源 || []).join('、');
+  return `<summary>${esc(title)} ${badge(m.狀態)}${extra ? ' <span class="muted">' + extra + '</span>' : ''}</summary><p class="src2">來源：${esc(src || '待查')}。信心：${esc(m.信心 || '—')}。${esc(m.說明 || '')}</p>${m.說明附註 ? `<p class="caveat">${esc(m.說明附註)}</p>` : ''}`;
+}
+function renderMod(d){
+  const nt = d.筆記重點 || {}, c = nt.內容 || {};
+  const ul = (arr, f) => arr && arr.length ? `<ul>${arr.map(f).join('')}</ul>` : '';
+  let h = `<h3>本節模組</h3><p class="caveat">${esc(d.說明 || '')}</p>`;
+  h += `<details>${modHead('筆記重點', nt, (c.要點 || []).length + ' 條')}${c.一句話 ? `<p><b>一句話</b>　${esc(c.一句話)}</p>` : ''}`
+    + (c.要點 && c.要點.length ? '<h3>要點</h3>' + ul(c.要點, x => `<li>${esc(x.內容)}${basis(x)}</li>`) : '')
+    + (c.定義 && c.定義.length ? '<h3>定義</h3>' + ul(c.定義, x => `<li><b>${esc(x.名詞)}</b>　${esc(x.定義)}${basis(x)}</li>`) : '')
+    + (c.爭點 && c.爭點.length ? '<h3>爭點</h3>' + ul(c.爭點, x => `<li><b>${esc(x.爭點)}</b>${ul(x.學說 || [], y => `<li>${esc(y.說)}：${esc(y.內容)}${basis(y)}</li>`)}</li>`) : '')
+    + (c.法條 && c.法條.length ? '<h3>筆記寫到的條文</h3>' + ul(c.法條, x => `<li>${esc(x.法規)} 第 ${esc(x.條號)} 條：${esc(x.筆記怎麼說)}${basis(x)}</li>`) : '')
+    + (c.字號線索 && c.字號線索.length ? '<h3>筆記寫到的字號</h3>' + ul(c.字號線索, x => `<li>${esc(x.字號)}${basis(x)}</li>`) : '')
+    + (c.口訣 && c.口訣.length ? '<h3>口訣</h3>' + ul(c.口訣, x => `<li>${esc(x.口訣)}${basis(x)}</li>`) : '')
+    + (c.待查 && c.待查.length ? '<h3 class="miss">待查</h3>' + ul(c.待查, x => `<li><span class="miss">待查</span>　${esc(x.項目)}：${esc(x.原因)}</li>`) : '')
+    + '</details>';
+  const lw = d.法條 || {}, items = lw.條文 || [];
+  h += `<details>${modHead('法條', lw, items.filter(x => x.狀態 === '已有').length + ' 條')}`
+    + ul(items, x => x.狀態 === '已有'
+      ? `<li><b>${esc(x.法規)} ${esc(x.條號)}</b>　${esc(x.條文)}<div class="src2">資料庫修正日 ${esc(x.法規修正日 || '待查')}，資料版本 ${esc(x.資料版本 || '待查')}${x.廢止 ? '，已廢止' : ''}。${link(x.網址, '全國法規資料庫')}</div></li>`
+      : `<li><span class="miss">待查</span>　${esc(x.法規 || '')} ${esc(x.條號 || '')}：${esc(x.說明 || '')}</li>`)
+    + ((lw.近期修正提醒 || []).length ? `<p class="caveat">近期修正過（筆記可能是舊條文）：${esc(lw.近期修正提醒.join('、'))}</p>` : '')
+    + '</details>';
+  const cs = d.判例釋字 || {}, it = cs.釋字憲判 || [], jd = cs.裁判 || [];
+  h += `<details>${modHead('判例與釋字', cs, `釋字 ${it.filter(x => x.狀態 === '已有').length}、裁判 ${jd.length}`)}`
+    + (it.length ? '<h3>釋字、憲判字</h3>' + ul(it, x => x.狀態 === '已有'
+      ? `<li><details><summary>${esc(x.字號)}　${esc(x.日期 || '')}</summary><pre>${esc(x.主文原樣 || '')}</pre>${x.主文截斷 ? '<p class="miss">原文過長已截斷，請看原始網頁。</p>' : ''}<div class="src2">${esc(x.來源 || '')}　${link(x.網址, '原始網頁')}</div></details></li>`
+      : `<li><span class="miss">待查</span>　${esc(x.字號)}：${esc(x.說明 || '')}</li>`) : '')
+    + ((cs.書上字號_未查 || []).length ? `<p>書上寫到、還沒查回：${cs.書上字號_未查.map(z => `${esc(z)} <span class="miss">待查</span>`).join('、')}</p>` : '')
+    + (jd.length ? '<h3>相關裁判（語意檢索，未經人工判讀）</h3>' + ul(jd, x => `<li><details><summary>${esc(x.案號)}　${esc(x.裁判日期 || '')}　信心${esc(x.信心 || '低')}${x.被廢棄 ? '　<span class="miss">已被上級審廢棄</span>' : ''}</summary><p class="src2">檢索字串：${esc(x.查詢字串 || '')}</p><pre>${esc(x.理由摘錄原樣 || '')}</pre><div class="src2">${esc(x.註 || '')}　${link(x.網址, '判決全文')}</div></details></li>`) : '')
+    + '</details>';
+  const ex = d.考題 || {};
+  if ((ex.題號 || []).length) h += `<details>${modHead('考題（憲法試題書）', ex, ex.題號.length + ' 題')}<p>題號：${esc(ex.題號.join('、'))}</p>${(ex.答案待查 || []).length ? `<p class="miss">答案待查：${esc(ex.答案待查.join('、'))}</p>` : ''}</details>`;
+  const mt = d.方法篇 || {};
+  h += `<p>方法篇：${(mt.篇 || []).length ? esc(mt.篇.map(x => x.篇名).join('、')) + '（內容在頁首「方法篇」）' : '<span class="miss">待補</span>'}</p>`;
+  const x = (d.交叉 || {}).同字號其他節 || {};
+  const keys = Object.keys(x);
+  if (keys.length) h += `<details><summary>同一個字號還出現在哪些節（${keys.length}）</summary><ul>${keys.map(k => `<li>${esc(k)}：${x[k].map(id => `<a href="#${esc(id)}">${esc(id)}</a>`).join('、')}</li>`).join('')}</ul></details>`;
+  if ((d.待補模組 || []).length) h += `<p>${esc(d.待補模組.join('、'))}：<span class="miss">待補</span></p>`;
+  return h;
+}
+function renderMethod(d){
+  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
+}
+function hydrateMod(){
+  document.querySelectorAll('.modbox[data-mod]').forEach(box => {
+    if (box.closest('[hidden]') || box.dataset.done === '1') return;
+    const rel = box.dataset.mod;
+    const paint = d => { box.innerHTML = box.dataset.kind === 'method' ? renderMethod(d) : renderMod(d); box.dataset.done = '1'; };
+    if (modCache.has(rel)) { paint(modCache.get(rel)); return; }
+    if (box.dataset.loading === '1') return;
+    box.dataset.loading = '1';
+    fetchPack(rel).then(d => { modCache.set(rel, d); document.querySelectorAll('.modbox[data-mod]').forEach(b => { if (b.dataset.mod === rel && b.dataset.done !== '1') { b.innerHTML = b.dataset.kind === 'method' ? renderMethod(d) : renderMod(d); b.dataset.done = '1'; } }); })
+      .catch(() => { box.textContent = '本節模組讀取失敗。請用網站網址重新開啟。'; box.dataset.loading = ''; });
+  });
+}
+function openHash(){
+  const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if (!id) return;
+  const node = allNodes().find(n => n.id === id);
+  if (!node) return;
+  subject = '全部';
+  query = '';
+  activeTerm = '';
+  openSubj.add(node.subject);
+  openPart.add(partKey(node.subject, node.part));
+  openNode.add(node.id);
+}
+
+async function load(){
+  const urls = ['data/study-flow.json', '../data/study-flow.json'];
+  let last = '讀取失敗';
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, {cache: 'no-store'});
+      if (!res.ok) throw new Error(String(res.status));
+      const json = await res.json();
+      if (!json || !Array.isArray(json.subjects) || !json.beginner) throw new Error('格式不符');
+      return json;
+    } catch (e) { last = e && e.message ? e.message : String(e); }
+  }
+  throw new Error(last);
+}
+
+load().then(json => {
+  data = json;
+  document.title = (json.meta && json.meta.title) || '法律初學者唸書流程';
+  openHash();
+  renderShell();
+  $('status').textContent = json.meta && json.meta.sourceNote || '';
+}).catch(() => {
+  $('status').textContent = '讀不到章節資料。請用網站網址開啟，不要直接點開檔案。並確認 data/study-flow.json 放在同一層。';
+});
+</script>
+</body>
+</html>
