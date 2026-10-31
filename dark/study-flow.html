@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#161b46">
-<title>植淬｜法律初學者唸書流程</title>
+<title>法律初學者唸書流程</title>
 <style>
 :root{
   color-scheme:dark;
@@ -125,7 +125,6 @@ footer{color:var(--muted); font-size:14px; padding:8px 0 calc(28px + env(safe-ar
 <header>
   <div class="wrap">
     <a class="back" href="index.html">← 回法學記憶宇宙</a>
-    <p class="brand">植淬</p>
     <h1>法律初學者唸書流程</h1>
     <p class="lead">照章節看建議順序。沒有的資料標「待補」或「待查」，不補造。</p>
     <p id="status" role="status">正在讀取章節資料…</p>
@@ -616,7 +615,7 @@ async function load(){
 
 load().then(json => {
   data = json;
-  document.title = (json.meta && json.meta.project ? json.meta.project + '｜' : '') + (json.meta && json.meta.title || '法律初學者唸書流程');
+  document.title = (json.meta && json.meta.title) || '法律初學者唸書流程';
   openHash();
   renderShell();
   $('status').textContent = json.meta && json.meta.sourceNote || '';
