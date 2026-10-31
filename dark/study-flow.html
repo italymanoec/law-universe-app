@@ -117,6 +117,14 @@ footer{color:var(--muted); font-size:14px; padding:8px 0 calc(28px + env(safe-ar
   .wrap{width:min(100% - 20px, 880px)}
   .node .ttl{font-size:16px}
 }
+.modbox{margin:10px 0}
+.modbox details{margin:6px 0; padding:8px 10px; border-radius:12px; background:rgba(8,12,36,.35); border:1px solid rgba(150,225,255,.22)}
+.modbox summary{cursor:pointer; font-weight:600; min-height:32px; line-height:32px}
+.modbox details details{background:rgba(8,12,36,.25)}
+.modbox li{margin:4px 0; overflow-wrap:anywhere}
+.modbox .src2, .modbox .muted{color:var(--muted); font-size:13px}
+.modbox pre{white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; font-size:14px; margin:6px 0}
+.modbox a{color:inherit; overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
 </head>
@@ -313,6 +321,7 @@ function renderShell(){
       <p>${esc(data.beginner.mapNote)}</p>
       <h3>${esc(data.beginner.methodsTitle)}</h3>
       ${data.beginner.methods.map(m => `<p class="method"><b>${esc(m.from)}</b>　${esc(m.text)}</p>`).join('')}
+      <div class="modbox" data-mod="study-flow/method.json" data-kind="method">正在讀取方法篇…</div>
       <h3>${esc(data.beginner.subjectOrderTitle)}</h3>
       <ol class="order">${data.subjects.slice().sort((a,b)=>a.suggestRank-b.suggestRank).map(s =>
         `<li><button type="button" class="btn" data-subject="${esc(s.name)}">第 ${esc(s.suggestRank)} 科　${esc(s.name)}</button><div>${esc(s.why)}</div></li>`
@@ -447,6 +456,7 @@ function renderTree(focusId, expandMatches){
   if (gap) gap.hidden = !browsing;
   renderOutside();
   hydrate();
+  hydrateMod();
 }
 function partHtml(s, p){
   const key = partKey(s.name, p.title);
@@ -483,7 +493,8 @@ function nodeHtml(n){
       <span class="meta">順序 ${esc(n.order)} · ${esc(n.subject)} · 考題 ${tag(slotText(n.exams))} · 題庫 ${bankHtml(n)} · 判例 ${tag(slotText(n.cases))}</span>
     </button>
     <div class="detail"${open ? '' : ' hidden'}>
-      ${open && n.bank && n.bank.file ? `<div class="qbox" data-file="${esc(n.bank.file)}" data-node="${esc(n.id)}">正在讀取這個章節的題目…</div>` : '<p>本章彙整待查。題庫待補。判例待補。</p>'}
+      ${open && n.bank && n.bank.file ? `<div class="qbox" data-file="${esc(n.bank.file)}" data-node="${esc(n.id)}">正在讀取這個章節的題目…</div>` : (n.mod ? '<p>本章彙整待查。題庫待補。</p>' : '<p>本章彙整待查。題庫待補。判例待補。</p>')}
+      ${open && n.mod ? `<div class="modbox" data-mod="${esc(n.mod)}">正在讀取本節模組…</div>` : ''}
       <p>${esc(n.id)} · ${esc(n.part)}</p>
       <ul class="src">${src}</ul>
       ${n.note ? `<p>${esc(n.note)}</p>` : ''}
@@ -583,6 +594,69 @@ function hydrate(){
       const live = [...document.querySelectorAll('.qbox')].find(el => el.dataset.file === rel);
       if (live) live.innerHTML = renderPack(pack, live.dataset.node || '');
     }).catch(() => { box.textContent = '題目讀取失敗。請用網站網址重新開啟。'; });
+  });
+}
+const modCache = new Map();
+const badge = st => `<span class="tag${st === '已有' ? '' : ' gap'}">${esc(st || '待查')}</span>`;
+const safeUrl = u => /^https?:\/\//.test(String(u || '')) ? String(u) : '';
+const link = (u, t) => safeUrl(u) ? `<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener">${esc(t || '原始網頁')}</a>` : '';
+const pg = x => x && x.頁 != null ? `（頁 ${esc(x.頁)}）` : '';
+const basis = x => x && x.依據 ? `<div class="src2">依據原文：「${esc(x.依據)}」${pg(x)}</div>` : '';
+function modHead(title, m, extra){
+  const src = (m.來源 || []).join('、');
+  return `<summary>${esc(title)} ${badge(m.狀態)}${extra ? ' <span class="muted">' + extra + '</span>' : ''}</summary><p class="src2">來源：${esc(src || '待查')}。信心：${esc(m.信心 || '—')}。${esc(m.說明 || '')}</p>${m.說明附註 ? `<p class="caveat">${esc(m.說明附註)}</p>` : ''}`;
+}
+function renderMod(d){
+  const nt = d.筆記重點 || {}, c = nt.內容 || {};
+  const ul = (arr, f) => arr && arr.length ? `<ul>${arr.map(f).join('')}</ul>` : '';
+  let h = `<h3>本節模組</h3><p class="caveat">${esc(d.說明 || '')}</p>`;
+  h += `<details>${modHead('筆記重點', nt, (c.要點 || []).length + ' 條')}${c.一句話 ? `<p><b>一句話</b>　${esc(c.一句話)}</p>` : ''}`
+    + (c.要點 && c.要點.length ? '<h3>要點</h3>' + ul(c.要點, x => `<li>${esc(x.內容)}${basis(x)}</li>`) : '')
+    + (c.定義 && c.定義.length ? '<h3>定義</h3>' + ul(c.定義, x => `<li><b>${esc(x.名詞)}</b>　${esc(x.定義)}${basis(x)}</li>`) : '')
+    + (c.爭點 && c.爭點.length ? '<h3>爭點</h3>' + ul(c.爭點, x => `<li><b>${esc(x.爭點)}</b>${ul(x.學說 || [], y => `<li>${esc(y.說)}：${esc(y.內容)}${basis(y)}</li>`)}</li>`) : '')
+    + (c.法條 && c.法條.length ? '<h3>筆記寫到的條文</h3>' + ul(c.法條, x => `<li>${esc(x.法規)} 第 ${esc(x.條號)} 條：${esc(x.筆記怎麼說)}${basis(x)}</li>`) : '')
+    + (c.字號線索 && c.字號線索.length ? '<h3>筆記寫到的字號</h3>' + ul(c.字號線索, x => `<li>${esc(x.字號)}${basis(x)}</li>`) : '')
+    + (c.口訣 && c.口訣.length ? '<h3>口訣</h3>' + ul(c.口訣, x => `<li>${esc(x.口訣)}${basis(x)}</li>`) : '')
+    + (c.待查 && c.待查.length ? '<h3 class="miss">待查</h3>' + ul(c.待查, x => `<li><span class="miss">待查</span>　${esc(x.項目)}：${esc(x.原因)}</li>`) : '')
+    + '</details>';
+  const lw = d.法條 || {}, items = lw.條文 || [];
+  h += `<details>${modHead('法條', lw, items.filter(x => x.狀態 === '已有').length + ' 條')}`
+    + ul(items, x => x.狀態 === '已有'
+      ? `<li><b>${esc(x.法規)} ${esc(x.條號)}</b>　${esc(x.條文)}<div class="src2">資料庫修正日 ${esc(x.法規修正日 || '待查')}，資料版本 ${esc(x.資料版本 || '待查')}${x.廢止 ? '，已廢止' : ''}。${link(x.網址, '全國法規資料庫')}</div></li>`
+      : `<li><span class="miss">待查</span>　${esc(x.法規 || '')} ${esc(x.條號 || '')}：${esc(x.說明 || '')}</li>`)
+    + ((lw.近期修正提醒 || []).length ? `<p class="caveat">近期修正過（筆記可能是舊條文）：${esc(lw.近期修正提醒.join('、'))}</p>` : '')
+    + '</details>';
+  const cs = d.判例釋字 || {}, it = cs.釋字憲判 || [], jd = cs.裁判 || [];
+  h += `<details>${modHead('判例與釋字', cs, `釋字 ${it.filter(x => x.狀態 === '已有').length}、裁判 ${jd.length}`)}`
+    + (it.length ? '<h3>釋字、憲判字</h3>' + ul(it, x => x.狀態 === '已有'
+      ? `<li><details><summary>${esc(x.字號)}　${esc(x.日期 || '')}</summary><pre>${esc(x.主文原樣 || '')}</pre>${x.主文截斷 ? '<p class="miss">原文過長已截斷，請看原始網頁。</p>' : ''}<div class="src2">${esc(x.來源 || '')}　${link(x.網址, '原始網頁')}</div></details></li>`
+      : `<li><span class="miss">待查</span>　${esc(x.字號)}：${esc(x.說明 || '')}</li>`) : '')
+    + ((cs.書上字號_未查 || []).length ? `<p>書上寫到、還沒查回：${cs.書上字號_未查.map(z => `${esc(z)} <span class="miss">待查</span>`).join('、')}</p>` : '')
+    + (jd.length ? '<h3>相關裁判（語意檢索，未經人工判讀）</h3>' + ul(jd, x => `<li><details><summary>${esc(x.案號)}　${esc(x.裁判日期 || '')}　信心${esc(x.信心 || '低')}${x.被廢棄 ? '　<span class="miss">已被上級審廢棄</span>' : ''}</summary><p class="src2">檢索字串：${esc(x.查詢字串 || '')}</p><pre>${esc(x.理由摘錄原樣 || '')}</pre><div class="src2">${esc(x.註 || '')}　${link(x.網址, '判決全文')}</div></details></li>`) : '')
+    + '</details>';
+  const ex = d.考題 || {};
+  if ((ex.題號 || []).length) h += `<details>${modHead('考題（憲法試題書）', ex, ex.題號.length + ' 題')}<p>題號：${esc(ex.題號.join('、'))}</p>${(ex.答案待查 || []).length ? `<p class="miss">答案待查：${esc(ex.答案待查.join('、'))}</p>` : ''}</details>`;
+  const mt = d.方法篇 || {};
+  h += `<p>方法篇：${(mt.篇 || []).length ? esc(mt.篇.map(x => x.篇名).join('、')) + '（內容在頁首「方法篇」）' : '<span class="miss">待補</span>'}</p>`;
+  const x = (d.交叉 || {}).同字號其他節 || {};
+  const keys = Object.keys(x);
+  if (keys.length) h += `<details><summary>同一個字號還出現在哪些節（${keys.length}）</summary><ul>${keys.map(k => `<li>${esc(k)}：${x[k].map(id => `<a href="#${esc(id)}">${esc(id)}</a>`).join('、')}</li>`).join('')}</ul></details>`;
+  if ((d.待補模組 || []).length) h += `<p>${esc(d.待補模組.join('、'))}：<span class="miss">待補</span></p>`;
+  return h;
+}
+function renderMethod(d){
+  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
+}
+function hydrateMod(){
+  document.querySelectorAll('.modbox[data-mod]').forEach(box => {
+    if (box.closest('[hidden]') || box.dataset.done === '1') return;
+    const rel = box.dataset.mod;
+    const paint = d => { box.innerHTML = box.dataset.kind === 'method' ? renderMethod(d) : renderMod(d); box.dataset.done = '1'; };
+    if (modCache.has(rel)) { paint(modCache.get(rel)); return; }
+    if (box.dataset.loading === '1') return;
+    box.dataset.loading = '1';
+    fetchPack(rel).then(d => { modCache.set(rel, d); document.querySelectorAll('.modbox[data-mod]').forEach(b => { if (b.dataset.mod === rel && b.dataset.done !== '1') { b.innerHTML = b.dataset.kind === 'method' ? renderMethod(d) : renderMod(d); b.dataset.done = '1'; } }); })
+      .catch(() => { box.textContent = '本節模組讀取失敗。請用網站網址重新開啟。'; box.dataset.loading = ''; });
   });
 }
 function openHash(){
