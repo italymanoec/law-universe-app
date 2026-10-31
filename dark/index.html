@@ -2527,6 +2527,7 @@ function sresStart(){ const ex=(SUBJ_LAWS[SK]||[]).length?[LAWM[SUBJ_LAWS[SK][0]
   if(rs.length) h+='<div class="sgh">最近看過</div>'+rs.map(r=>'<button type="button" data-nav="'+esc(r.h)+'"><span>'+esc(r.t)+'</span><em>›</em></button>').join('');
   h+='<div class="sgh">照章節找</div><button type="button" data-toc="1"><span>'+esc(S.name)+' 目錄（全部考點照書本順序）</span><em>›</em></button>';
   h+='<div class="sgh">用聽的</div><button type="button" data-pod="1"><span>法律 Podcast（開車聽考點・雙人對談）</span><em>›</em></button>';
+  h+='<div class="sgh">用刷的</div><button type="button" data-shorts="1"><span>法律短影音（三秒挑戰・上下滑刷題）</span><em>›</em></button>';
   if(ex.length) h+='<div class="sgh">直接打字就能查，例如</div><div class="sex">'+ex.map(t=>'<button type="button" data-ex="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div>';
   sres.innerHTML=h; sres.hidden=false; lawPrep(); }
 sres.addEventListener('pointerdown',e=>e.preventDefault());
@@ -2535,6 +2536,7 @@ sres.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) re
   if(b.dataset.nav){ const hh=b.dataset.nav; if(navApplyGo) navApplyGo(hh); return; }
   if(b.dataset.toc){ openToc(); return; }
   if(b.dataset.pod){ location.href='/law-podcast/'; return; }
+  if(b.dataset.shorts){ location.href='/law-shorts/'; return; }
   if(b.dataset.q1){ startSession([b.dataset.q1]); return; }
   if(b.dataset.qs){ if(qHits.length) startSession(qHits.map(x=>x.id)); return; } const o=nodes[b.dataset.id]; if(o){ if(hidden.has(o.g)){ hidden.delete(o.g); const c=chips.querySelector('.chip[data-g="'+o.g+'"]'); if(c) c.classList.remove('off'); applyVis(); } select(o); } });
 qEl.addEventListener('blur',()=>setTimeout(()=>{ sres.hidden=true; if(document.activeElement!==qEl) document.body.classList.remove('qOn'); },200));
