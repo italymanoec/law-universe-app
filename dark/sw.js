@@ -1,8 +1,8 @@
 // All required files, including Three.js and every subject, install atomically.
-const VERSION = 'db-26451b3139';
+const VERSION = 'db-e6caad0540';
 const PREFIX = 'lawu-' + encodeURIComponent(self.registration.scope) + '-';
 const CORE = PREFIX + VERSION;
-const PRECACHE = ["data/essay_packs.json", "data/DONE_data.txt", "vendor/mindmap.js", "essay.html", "index.html", "manifest.json", "law/_pend.js", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "pwa/pwa-boot.js", "pwa/pwa.css", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "vendor/THREE-LICENSE.txt", "vendor/three.min.js"];
+const PRECACHE = ["data/essay_packs.json", "data/DONE_data.txt", "data/study-flow.json", "vendor/mindmap.js", "essay.html", "study-flow.html", "index.html", "manifest.json", "law/_pend.js", "qb/administrative.js", "qb/bills.js", "qb/civil.js", "qb/civpro.js", "qb/company.js", "qb/constitution.js", "qb/criminal.js", "qb/crimpro.js", "qb/enforcement.js", "qb/english.js", "qb/ethics.js", "qb/insurance.js", "qb/pil.js", "qb/pvt.js", "qb/securities.js", "qb/tax.js", "pwa/pwa-boot.js", "pwa/pwa.css", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "vendor/THREE-LICENSE.txt", "vendor/three.min.js"];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CORE);
@@ -29,7 +29,7 @@ self.addEventListener('fetch', event => {
     const path = url.href.slice(self.registration.scope.length).split('?')[0];
     const isEntry = path === '' || path === 'index.html' || path === 'v68.html';
     const hit = await cache.match(isEntry ? new URL('index.html', self.registration.scope).href : event.request, {ignoreSearch: true});
-    if (path === 'data/essay_packs.json' || path === 'data/DONE_data.txt') {
+    if (path === 'data/essay_packs.json' || path === 'data/DONE_data.txt' || path === 'data/study-flow.json') {
       try { const response = await fetch(event.request); if(response.ok) { await cache.put(event.request, response.clone()); return response; } return hit || response; }
       catch(error) { if(hit) return hit; throw error; }
     }
