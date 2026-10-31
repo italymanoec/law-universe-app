@@ -39,6 +39,7 @@ h1{margin:2px 0 6px; font-size:28px; line-height:1.3; letter-spacing:.04em}
 }
 .card, .gapbox{padding:14px 16px; margin:12px 0}
 h2{font-size:22px; margin:0 0 8px}
+.gapbox h2 button{background:none; border:0; color:inherit; font:inherit; font-size:22px; font-weight:700; text-align:left; min-height:44px; width:100%; cursor:pointer}
 h3{font-size:18px; margin:14px 0 8px}
 .caveat{color:var(--warn)}
 .method{margin:0 0 8px}
@@ -89,6 +90,19 @@ input[type=search]:focus{border-color:var(--holo); box-shadow:0 0 0 3px rgba(127
 .node .ttl{display:block; font-size:17px; font-weight:700}
 .tag{display:inline-block; margin-right:6px; color:var(--holo); font-weight:700}
 .tag.gap, .miss{color:var(--warn); font-weight:600}
+.tag.low{color:#ffb45a}
+.qitem{margin:8px 0; padding:10px 12px; border-radius:12px; background:rgba(8,12,36,.35); border:1px solid rgba(150,225,255,.28)}
+.qitem.mid{border-color:#ffd166}
+.qitem.low{border:2px dashed #ffb020; background:rgba(255,176,32,.16)}
+.qitem.unknown{border:2px solid #ff8aa0; background:rgba(255,90,120,.16)}
+.badge{display:inline-block; margin:0 6px 0 0; padding:2px 8px; border-radius:999px; font-size:13px; font-weight:700}
+.badge.ai{background:#7feaff; color:#142046}
+.badge.high{background:#16323c; color:#7feaff; border:1px solid #7feaff}
+.badge.mid{background:#ffd166; color:#2a2108}
+.badge.low, .badge.unknown{background:#ff8aa0; color:#2a1020}
+.sumbox{margin:8px 0 12px; padding:10px 12px; border-radius:12px; background:rgba(127,234,255,.06); border:1px solid rgba(127,234,255,.28)}
+.sumbox li, .qitem .muted{color:var(--muted); font-size:14px}
+.qmeta{margin-bottom:6px}
 .caret{color:var(--holo); font-weight:700; margin-right:4px}
 .detail{padding:0 14px 12px; border-top:1px solid rgba(150,225,255,.2)}
 .detail p{margin:8px 0}
@@ -129,6 +143,12 @@ let data = null;
 let subject = '全部';
 let query = '';
 let activeTerm = '';
+let confFilter = '全部';
+let lookup = null, lookupP = null;
+const qCache = new Map();
+const openTopic = new Set();
+const openPend = new Set();
+let outsideOpen = false;
 const openSubj = new Set();
 const openPart = new Set();
 const openNode = new Set();
@@ -144,6 +164,54 @@ function countOf(slot){
 function slotText(slot){
   const n = countOf(slot);
   return n == null ? '待補' : String(n);
+}
+function confCount(node, key){
+  return (node.bank && node.bank.conf && node.bank.conf[key]) || 0;
+}
+function bankHtml(node){
+  const b = node.bank || {};
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') {
+    const n = confCount(node, confFilter);
+    return n ? tag(String(n)) : tag('待補');
+  }
+  if (!(b.count > 0)) return tag('待補');
+  const low = confCount(node, '低');
+  return tag(String(b.count)) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
+}
+function sumBankHtml(nodes){
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') {
+    let n = 0;
+    nodes.forEach(node => { n += confCount(node, confFilter); });
+    return n ? tag(String(n)) : tag('待補');
+  }
+  let low = 0;
+  nodes.forEach(node => { low += confCount(node, '低'); });
+  return tag(sumText(nodes, 'bank')) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
+}
+function confOk(conf){
+  if (confFilter === '全部') return true;
+  if (confFilter === '待查') return conf === '待查';
+  return conf === confFilter;
+}
+function searchHits(){
+  const q = norm(activeTerm);
+  if (!lookup || q.length < 2) return null;
+  if (searchHits.cache && searchHits.cache.q === q && searchHits.cache.f === confFilter) return searchHits.cache;
+  const nodes = new Set(), topics = new Set(), subjects = new Set();
+  lookup.forEach(x => {
+    if (!confOk(x.conf)) return;
+    if (!norm(x.id + ' ' + x.kw).includes(q)) return;
+    if (x.node) nodes.add(x.node);
+    else if (x.topic) topics.add(x.topic);
+    else subjects.add(x.subject);
+  });
+  const cache = {q, f: confFilter, nodes, topics, subjects};
+  searchHits.cache = cache;
+  return cache;
+}
+function ensureLookup(){
+  if (lookup || lookupP) return;
+  lookupP = fetchPack('study-flow/lookup.json').then(j => { lookup = j; searchHits.cache = null; renderTree(null, true); }).catch(() => { lookupP = null; });
 }
 function tag(text){
   const gap = text === '待補' || text === '待查';
@@ -185,11 +253,19 @@ function hay(node){
   items.forEach(it => bits.push(it.exam, it.no, it.stem, it.answer));
   return norm(bits.join(' '));
 }
+function bankVisible(node){
+  if (confFilter === '待查') return false;
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') return confCount(node, confFilter) > 0;
+  return true;
+}
 function matchNode(node){
+  if (!bankVisible(node)) return false;
   if (subject !== '全部' && node.subject !== subject) return false;
   const q = norm(activeTerm);
   if (!q) return true;
-  return hay(node).includes(q);
+  if (hay(node).includes(q)) return true;
+  const hits = searchHits();
+  return !!(hits && hits.nodes.has(node.id));
 }
 function answerText(it){
   if (!it || typeof it !== 'object' || it.answer == null || it.answer === '' || it.answer === '待填') return '待查';
@@ -212,13 +288,19 @@ function renderShell(){
   const chips = ['全部'].concat(data.subjects.map(s => s.name)).map(name =>
     `<button type="button" class="chip" data-subject="${esc(name)}" aria-pressed="${name === subject ? 'true' : 'false'}">${esc(name)}</button>`
   ).join('');
+  const confs = ['全部', '高', '中', '低', '待查'].map(name =>
+    `<button type="button" class="chip" data-conf="${esc(name)}" aria-pressed="${name === confFilter ? 'true' : 'false'}">${name === '待查' ? '只看待查' : name === '全部' ? '全部信心' : '信心' + name}</button>`
+  ).join('');
+  const ai = data.aiBank;
+  const aiLine = ai ? ` AI 對應題庫 ${ai.total} 題：掛上章節 ${ai.onNodes}，待查 ${ai.pending}。信心高 ${ai.conf['高']}、中 ${ai.conf['中']}、低 ${ai.conf['低']}、待查 ${ai.conf['待查']}。${esc(ai.note)}` : '';
   $('main').innerHTML = `
-    <p class="card" id="summary">共 ${nodes.length} 節。已掛考題 ${examN} 題，在 ${examNodes.length} 個節點。題庫 ${tag(sumText(nodes, 'bank'))}。判例 ${tag(sumText(nodes, 'cases'))}。</p>
+    <p class="card" id="summary">共 ${nodes.length} 節。已掛考題 ${examN} 題，在 ${examNodes.length} 個節點。題庫 ${sumBankHtml(nodes)}。判例 ${tag(sumText(nodes, 'cases'))}。${aiLine}</p>
     <div class="tools" id="tools">
       <label class="q" for="q">搜尋章節、科目或題幹
         <input id="q" type="search" placeholder="例如：行政處分、平等權、普考" autocomplete="off" enterkeyhint="search" value="${esc(query)}">
       </label>
       <div class="chips" role="toolbar" aria-label="依科目篩選">${chips}</div>
+      <div class="chips confchips" role="toolbar" aria-label="依信心篩選">${confs}</div>
       <div class="row">
         <button type="button" class="btn" id="openAll">展開章節</button>
         <button type="button" class="btn" id="closeAll">收合全部</button>
@@ -251,10 +333,12 @@ function renderShell(){
       <h2>目前還缺什麼</h2>
       <ul>${(data.gaps || []).map(g => `<li>${esc(g)}</li>`).join('')}</ul>
     </section>
-    <div id="tree"></div>`;
+    <div id="tree"></div>
+    <div id="outside"></div>`;
   $('q').addEventListener('input', () => {
     activeTerm = $('q').value;
     query = activeTerm;
+    if (norm(activeTerm).length >= 2) ensureLookup();
     renderTree(null, true);
   });
   $('openAll').onclick = () => {
@@ -276,6 +360,14 @@ function visibleSubjects(){
   })).filter(s => s.parts.length);
 }
 function onClick(e){
+  const confBtn = e.target.closest('[data-conf]');
+  if (confBtn && !confBtn.closest('#tree') && !confBtn.closest('#outside')) {
+    confFilter = confBtn.dataset.conf;
+    searchHits.cache = null;
+    document.querySelectorAll('[data-conf]').forEach(b => b.setAttribute('aria-pressed', b.dataset.conf === confFilter ? 'true' : 'false'));
+    renderTree();
+    return;
+  }
   const subBtn = e.target.closest('[data-subject]');
   if (subBtn && !subBtn.closest('#tree')) {
     subject = subBtn.dataset.subject;
@@ -289,7 +381,8 @@ function onClick(e){
   if (!t) return;
   const kind = t.dataset.toggle;
   const key = t.dataset.key;
-  const set = kind === 'subj' ? openSubj : kind === 'part' ? openPart : openNode;
+  if (kind === 'outside') { outsideOpen = !outsideOpen; renderTree(); return; }
+  const set = kind === 'subj' ? openSubj : kind === 'part' ? openPart : kind === 'topic' ? openTopic : kind === 'pend' ? openPend : openNode;
   if (set.has(key)) set.delete(key); else set.add(key);
   const focusId = kind === 'subj' ? ('subj-' + encodeURIComponent(key)) : kind === 'part' ? ('part-' + encodeURIComponent(key)) : ('nodebtn-' + key);
   renderTree(focusId);
@@ -297,6 +390,7 @@ function onClick(e){
 let hashScrolled = false;
 function renderTree(focusId, expandMatches){
   const qNow = norm(activeTerm);
+  const hits = searchHits();
   if (expandMatches && qNow) {
     data.subjects.forEach(s => {
       const parts = s.parts.map(p => ({...p, nodes: p.nodes.filter(matchNode)})).filter(p => p.nodes.length);
@@ -304,17 +398,29 @@ function renderTree(focusId, expandMatches){
       openSubj.add(s.name);
       parts.forEach(p => {
         openPart.add(partKey(s.name, p.title));
-        p.nodes.forEach(n => { if (deepHit(n)) openNode.add(n.id); });
+        p.nodes.forEach(n => { if (deepHit(n) || (hits && hits.nodes.size <= 6 && hits.nodes.has(n.id))) openNode.add(n.id); });
       });
     });
   }
   const shown = visibleSubjects();
   const n = shown.reduce((s, sub) => s + sub.parts.reduce((a, p) => a + p.nodes.length, 0), 0);
   const total = allNodes().length;
-  $('hit').textContent = n === total && !qNow && subject === '全部'
-    ? '共 ' + total + ' 節'
-    : (n ? '顯示 ' + n + ' 節' : '沒有符合的章節。試著少打幾個字，或改選全部科目。');
-  if (!n) { $('tree').innerHTML = ''; return; }
+  $('hit').textContent = confFilter === '待查'
+    ? '只看還沒對上章節的題'
+    : (n === total && !qNow && subject === '全部'
+      ? '共 ' + total + ' 節'
+      : (n ? '顯示 ' + n + ' 節' : '沒有符合的章節。試著少打幾個字，或改選全部科目。'));
+  if (!n) {
+    $('tree').innerHTML = confFilter === '待查' ? '<p class="card">這些題沒有對上章節，列在下面。</p>' : '';
+    renderOutside();
+    hydrate();
+    const browsing0 = !norm(activeTerm) && subject === '全部' && confFilter === '全部';
+    const start0 = document.getElementById('start');
+    const gap0 = document.querySelector('.gapbox');
+    if (start0) start0.hidden = !browsing0;
+    if (gap0 && gap0.parentElement && gap0.parentElement.id !== 'outside') gap0.hidden = !browsing0;
+    return;
+  }
   $('tree').innerHTML = shown.map(s => {
     const nodes = s.parts.flatMap(p => p.nodes);
     const open = openSubj.has(s.name);
@@ -324,7 +430,7 @@ function renderTree(focusId, expandMatches){
         <span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>
         <span class="rank">建議第 ${esc(s.suggestRank)} 科</span>
         <strong>${esc(s.name)}</strong>
-        <span class="count">${nodes.length} 節 · 順序 ${Math.min(...orders)}–${Math.max(...orders)} · 考題 ${esc(sumText(nodes,'exams'))} · 題庫 ${tag(sumText(nodes,'bank'))} · 判例 ${tag(sumText(nodes,'cases'))}</span>
+        <span class="count">${nodes.length} 節 · 順序 ${Math.min(...orders)}–${Math.max(...orders)} · 考題 ${esc(sumText(nodes,'exams'))} · 題庫 ${sumBankHtml(nodes)} · 判例 ${tag(sumText(nodes,'cases'))}</span>
       </button></h2>
       <div class="fold"${open ? '' : ' hidden'}>${s.parts.map(p => partHtml(s, p)).join('')}</div>
     </section>`;
@@ -335,11 +441,13 @@ function renderTree(focusId, expandMatches){
     document.getElementById('n-' + hash)?.scrollIntoView({block:'center'});
   }
   if (focusId) document.getElementById(focusId)?.focus();
-  const browsing = !norm(activeTerm) && subject === '全部';
+  const browsing = !norm(activeTerm) && subject === '全部' && confFilter === '全部';
   const start = document.getElementById('start');
-  const gap = document.querySelector('.gapbox');
+  const gap = document.querySelector('#main > .gapbox');
   if (start) start.hidden = !browsing;
   if (gap) gap.hidden = !browsing;
+  renderOutside();
+  hydrate();
 }
 function partHtml(s, p){
   const key = partKey(s.name, p.title);
@@ -347,7 +455,7 @@ function partHtml(s, p){
   return `<section class="part">
     <h3><button type="button" id="part-${esc(encodeURIComponent(key))}" data-toggle="part" data-key="${esc(key)}" aria-expanded="${open ? 'true' : 'false'}">
       <span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(p.title)}
-      <span class="count"> · ${p.nodes.length} 節 · 考題 ${esc(sumText(p.nodes,'exams'))} · 題庫 ${tag(sumText(p.nodes,'bank'))} · 判例 ${tag(sumText(p.nodes,'cases'))}</span>
+      <span class="count"> · ${p.nodes.length} 節 · 考題 ${esc(sumText(p.nodes,'exams'))} · 題庫 ${sumBankHtml(p.nodes)} · 判例 ${tag(sumText(p.nodes,'cases'))}</span>
     </button></h3>
     <div class="fold"${open ? '' : ' hidden'}>${p.nodes.map(nodeHtml).join('')}</div>
   </section>`;
@@ -373,9 +481,10 @@ function nodeHtml(n){
   return `<article class="node" id="n-${esc(n.id)}">
     <button type="button" id="nodebtn-${esc(n.id)}" data-toggle="node" data-key="${esc(n.id)}" aria-expanded="${open ? 'true' : 'false'}">
       <span class="ttl"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(n.title)}</span>
-      <span class="meta">順序 ${esc(n.order)} · ${esc(n.subject)} · 考題 ${tag(slotText(n.exams))} · 題庫 ${tag(slotText(n.bank))} · 判例 ${tag(slotText(n.cases))}</span>
+      <span class="meta">順序 ${esc(n.order)} · ${esc(n.subject)} · 考題 ${tag(slotText(n.exams))} · 題庫 ${bankHtml(n)} · 判例 ${tag(slotText(n.cases))}</span>
     </button>
     <div class="detail"${open ? '' : ' hidden'}>
+      ${open && n.bank && n.bank.file ? `<div class="qbox" data-file="${esc(n.bank.file)}" data-node="${esc(n.id)}">正在讀取這個章節的題目…</div>` : '<p>本章彙整待查。題庫待補。判例待補。</p>'}
       <p>${esc(n.id)} · ${esc(n.part)}</p>
       <ul class="src">${src}</ul>
       ${n.note ? `<p>${esc(n.note)}</p>` : ''}
@@ -385,6 +494,98 @@ function nodeHtml(n){
   </article>`;
 }
 
+function listBlock(title, arr){
+  if (!arr || !arr.length) return '';
+  return `<h3>${esc(title)}</h3><ul>${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+}
+function qMatch(q, nodeId){
+  const term = norm(activeTerm);
+  if (term.length < 2) return true;
+  const blob = norm([q.id, ...(q.keywords || []), q.beginner, q.reason].join(' '));
+  if (blob.includes(term)) return true;
+  const hits = searchHits();
+  if (hits && nodeId && hits.nodes.has(nodeId)) return false;
+  if (hits && !nodeId) return false;
+  return true;
+}
+function renderQ(q){
+  const conf = q.conf || '待查';
+  const cls = conf === '低' ? 'low' : conf === '待查' ? 'unknown' : conf === '中' ? 'mid' : 'high';
+  const beginner = !q.beginner || q.beginner === '待查' ? '<span class="miss">待查</span>' : esc(q.beginner);
+  const kws = (q.keywords || []).length ? esc(q.keywords.join('、')) : '<span class="miss">待查</span>';
+  const alt = (q.alt || []).length ? esc(q.alt.join('、')) : '沒有';
+  return `<article class="qitem ${cls}"><p class="qmeta"><span class="badge ai">AI 對應</span><span class="badge ${cls}">信心${esc(conf)}</span>題號 ${esc(q.id)}</p><p>${beginner}</p><p class="muted">關鍵字：${kws}</p><p class="muted">對應理由：${esc(q.reason || '待查')}</p><p class="muted">其他可能章節：${alt}。題幹全文待查。判例待補。</p></article>`;
+}
+function renderPack(pack, nodeId){
+  const s = pack.summary;
+  let html = '';
+  if (s) {
+    html += `<section class="sumbox"><h3>本章彙整</h3><p class="caveat">這是 AI 依已對上的題目歸納，不是正式講義。</p>${s.study_order ? `<p>${esc(s.study_order)}</p>` : ''}${listBlock('常考重點', s.exam_focus)}${listBlock('初學者可以先記', s.beginner_points)}${listBlock('容易混', s.confusions)}${s.gaps ? `<p><b>還沒有的部分</b>　${esc(s.gaps)}</p>` : ''}</section>`;
+  } else html += '<p>本章彙整待查。</p>';
+  const qs = (pack.questions || []).filter(q => confOk(q.conf) && qMatch(q, nodeId));
+  html += `<h3>題目與白話重點</h3><p class="caveat">每一題都標 AI 對應和信心。低信心、待查不是正式詳解。題幹全文不在檔案裡。</p>`;
+  html += qs.length ? qs.map(renderQ).join('') : '<p>這裡沒有符合的題。</p>';
+  return html;
+}
+function outsideBlock(t, kind, set){
+  const open = set.has(t.id);
+  const title = t.label || t.title || t.id;
+  const nameNote = t.label ? '' : (t.subject ? t.subject : '中文名稱待查');
+  return `<article class="node"><button type="button" data-toggle="${kind}" data-key="${esc(t.id)}" aria-expanded="${open ? 'true' : 'false'}"><span class="ttl"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>${esc(title)}</span><span class="meta">${esc(nameNote)} · ${esc(t.count)} 題 · <span class="badge unknown">待查</span> · <span class="badge ai">AI 對應</span></span></button><div class="detail"${open ? '' : ' hidden'}>${open ? `<div class="qbox" data-file="${esc(t.file)}" data-node=""></div>` : ''}</div></article>`;
+}
+function renderOutside(){
+  const el = document.getElementById('outside');
+  if (!el) return;
+  if (confFilter === '高' || confFilter === '中' || confFilter === '低') { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  const hits = searchHits();
+  const q = norm(activeTerm);
+  let topics = data.outsideTopics || [];
+  let groups = data.pendingGroups || [];
+  if (q.length >= 2 && hits) {
+    topics = topics.filter(t => hits.topics.has(t.id));
+    groups = groups.filter(g => hits.subjects.has(g.id));
+  }
+  const pendingN = data.aiBank ? data.aiBank.pending : '';
+  const force = confFilter === '待查' || (q.length >= 2 && !!hits);
+  const open = force || outsideOpen;
+  let html = `<section class="gapbox"><h2><button type="button" data-toggle="outside" data-key="all" aria-expanded="${open ? 'true' : 'false'}"><span class="caret" aria-hidden="true">${open ? '▾' : '▸'}</span>對不上章節的題 ${esc(pendingN)}</button></h2>`;
+  html += `<div${open ? '' : ' hidden'}><p class="caveat">這些題標待查，沒有硬掛到上面的章節。點開才載入。判例待補。</p>`;
+  html += topics.map(t => outsideBlock(t, 'topic', openTopic)).join('');
+  html += '<h3>還沒歸進主題</h3>';
+  html += groups.map(g => outsideBlock(g, 'pend', openPend)).join('');
+  if (q.length >= 2 && hits && !topics.length && !groups.length) html += '<p>待查題裡沒有符合的。</p>';
+  html += '</div></section>';
+  el.innerHTML = html;
+}
+async function fetchPack(rel){
+  const urls = ['data/' + rel, '../data/' + rel];
+  let last = '讀取失敗';
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, {cache: 'no-store'});
+      if (!res.ok) throw new Error(String(res.status));
+      return await res.json();
+    } catch (e) { last = e && e.message ? e.message : String(e); }
+  }
+  throw new Error(last);
+}
+function hydrate(){
+  document.querySelectorAll('.qbox[data-file]').forEach(box => {
+    if (box.closest('[hidden]')) return;
+    const rel = box.dataset.file;
+    const paint = pack => { box.innerHTML = renderPack(pack, box.dataset.node || ''); };
+    if (qCache.has(rel)) { paint(qCache.get(rel)); return; }
+    if (box.dataset.loading === '1') return;
+    box.dataset.loading = '1';
+    box.textContent = '正在讀取這個章節的題目…';
+    fetchPack(rel).then(pack => {
+      qCache.set(rel, pack);
+      const live = [...document.querySelectorAll('.qbox')].find(el => el.dataset.file === rel);
+      if (live) live.innerHTML = renderPack(pack, live.dataset.node || '');
+    }).catch(() => { box.textContent = '題目讀取失敗。請用網站網址重新開啟。'; });
+  });
+}
 function openHash(){
   const id = decodeURIComponent(location.hash.replace(/^#/, ''));
   if (!id) return;

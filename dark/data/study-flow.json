@@ -2,8 +2,8 @@
   "meta": {
     "project": "植淬",
     "title": "法律初學者唸書流程",
-    "sourceNote": "章節骨架來自自製電子書目錄（憲法、行政法、刑法總則、民法一至四，含讀書妙計所依的同一套筆記）。頁碼是原書頁碼。看不清的頁碼，頁面上顯示待查。",
-    "howToUpdate": "之後補資料，只改這個 JSON，不用改頁面程式。題庫、考題、判例填進該節點的 items。items 有內容，頁面就用筆數當數量。沒有就維持 status 為待補，不要填假數字、假條號、假釋字或假答案。看不清的頁碼維持 null。答案沒有就寫待查。",
+    "sourceNote": "章節骨架來自自製電子書目錄（憲法、行政法、刑法總則、民法一至四，含讀書妙計所依的同一套筆記）。頁碼是原書頁碼。看不清的頁碼，頁面上顯示待查。 題庫對應、白話重點、章節彙整是 AI 批次結果，頁面上會標成 AI 對應。",
+    "howToUpdate": "章節骨架在 study-flow.json。某一節的題目在 study-flow/q/節點id.json，展開才載入。架構外的主題在 study-flow/topics/。還沒歸主題的待查在 study-flow/pending/。補題時改這些檔，並維持沒有的欄位寫待查。不要填假條號、假釋字、假答案或假判例。判例維持待補。",
     "labels": {
       "待補": "這欄還沒有資料",
       "待查": "資料裡沒有，或原文看不清，不能當成確定內容"
@@ -11,15 +11,17 @@
     "examCaution": "題幹是 OCR 原文，錯字還沒改。裡面出現的釋字、憲判字尚未核對，不列入判例。答案沒有抽出，標待查。"
   },
   "gaps": [
-    "題庫：每個章節都還沒有，標待補。",
-    "判例：每個章節都還沒有，標待補。題幹裡的釋字是 OCR 原文，未核對，所以不填。",
+    "題庫：AI 對上章節 1350 題，分布在有檔案的節點。沒有對上的 1617 題標待查，不硬掛。沒有題目的章節仍是待補。",
+    "判例：仍然全部待補。AI 白話或題幹裡出現的條號、釋字沒有核對，不填進判例。",
     "考題：只掛在三個試題節點。115 年普考辨識 10 題、115 年高考辨識 7 題、114 年各類國考辨識 38 題。其他章節待補。",
     "這三批題還沒對到憲法筆記各章。對不上的章節不硬掛。",
     "114 年考古題的 38 題整批掛在單元 1。單元 2 到單元 4 沒有拆開，仍待補。",
     "113 年到 110 年考古題，以及模擬試題，在 PDF 第 25 頁以後，還沒抽，待補。",
     "已抽出的考題有缺號。缺的題待補，不補造題幹。",
     "選擇題答案被 OCR 讀壞，答案標待查，不猜。",
-    "有些章節頁碼看不清，頁碼標待查。"
+    "有些章節頁碼看不清，頁碼標待查。",
+    "題幹全文不在對應檔裡，題目列表只顯示題號和 AI 白話重點。沒有白話的標待查。",
+    "低信心與待查都是 AI 自己標的，不是定論。"
   ],
   "beginner": {
     "title": "初學者從這裡開始",
@@ -134,8 +136,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 0,
+                  "中": 2,
+                  "低": 1
+                },
+                "file": "study-flow/q/CON-01-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -162,8 +170,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 16,
+                "conf": {
+                  "高": 10,
+                  "中": 6,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-01-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -190,8 +204,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 42,
+                "conf": {
+                  "高": 31,
+                  "中": 11,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-01-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -218,8 +238,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 26,
+                "conf": {
+                  "高": 13,
+                  "中": 12,
+                  "低": 1
+                },
+                "file": "study-flow/q/CON-01-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -246,8 +272,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 3,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-01-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -274,8 +306,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 10,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-01-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -307,8 +345,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 39,
+                "conf": {
+                  "高": 34,
+                  "中": 4,
+                  "低": 1
+                },
+                "file": "study-flow/q/CON-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -335,8 +379,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 4,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -363,8 +413,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 10,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -391,8 +447,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 6,
+                "conf": {
+                  "高": 5,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-02-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -419,8 +481,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 7,
+                "conf": {
+                  "高": 6,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -452,8 +520,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-03-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -480,8 +554,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 16,
+                "conf": {
+                  "高": 12,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-03-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -513,8 +593,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 1
+                },
+                "file": "study-flow/q/CON-04-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -542,6 +628,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -570,6 +662,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -598,6 +696,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -626,6 +730,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -721,6 +831,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -796,6 +912,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1065,8 +1187,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 1
+                },
+                "file": "study-flow/q/CON-04-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -1094,6 +1222,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1122,6 +1256,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1149,8 +1289,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 1,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-04-11.json"
               },
               "exams": {
                 "status": "待補",
@@ -1177,8 +1323,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 1,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-04-12.json"
               },
               "exams": {
                 "status": "待補",
@@ -1205,8 +1357,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 1,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-04-13.json"
               },
               "exams": {
                 "status": "待補",
@@ -1233,8 +1391,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 2,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CON-04-14.json"
               },
               "exams": {
                 "status": "待補",
@@ -1262,6 +1426,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1309,8 +1479,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 19,
+                "conf": {
+                  "高": 12,
+                  "中": 7,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-01-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -1341,8 +1517,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 16,
+                "conf": {
+                  "高": 9,
+                  "中": 6,
+                  "低": 1
+                },
+                "file": "study-flow/q/ADM-01-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -1369,8 +1551,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-01-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -1397,8 +1585,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 11,
+                "conf": {
+                  "高": 4,
+                  "中": 5,
+                  "低": 2
+                },
+                "file": "study-flow/q/ADM-01-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -1438,8 +1632,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 14,
+                "conf": {
+                  "高": 10,
+                  "中": 3,
+                  "低": 1
+                },
+                "file": "study-flow/q/ADM-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -1466,8 +1666,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 2,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -1494,8 +1700,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 1,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -1523,6 +1735,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1554,8 +1772,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 1,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -1582,8 +1806,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 3,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -1610,8 +1840,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 5,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-07.json"
               },
               "exams": {
                 "status": "待補",
@@ -1646,8 +1882,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 9,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-02-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -1687,8 +1929,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 11,
+                "conf": {
+                  "高": 10,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -1715,8 +1963,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 8,
+                "conf": {
+                  "高": 6,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -1755,8 +2009,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 52,
+                "conf": {
+                  "高": 39,
+                  "中": 13,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -1791,8 +2051,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 15,
+                "conf": {
+                  "高": 14,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -1831,8 +2097,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 17,
+                "conf": {
+                  "高": 12,
+                  "中": 5,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -1860,6 +2132,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1888,6 +2166,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -1915,8 +2199,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 7,
+                "conf": {
+                  "高": 6,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-03-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -1956,8 +2246,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 21,
+                "conf": {
+                  "高": 19,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-04-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -1992,8 +2288,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 15,
+                "conf": {
+                  "高": 13,
+                  "中": 1,
+                  "低": 1
+                },
+                "file": "study-flow/q/ADM-04-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -2033,8 +2335,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 16,
+                "conf": {
+                  "高": 14,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-05-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -2073,8 +2381,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 57,
+                "conf": {
+                  "高": 47,
+                  "中": 10,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-05-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -2109,8 +2423,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 27,
+                "conf": {
+                  "高": 21,
+                  "中": 6,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-05-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -2142,8 +2462,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/ADM-06-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -2171,6 +2497,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2211,6 +2543,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2239,6 +2577,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2271,8 +2615,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 1,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -2299,8 +2649,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 28,
+                "conf": {
+                  "高": 24,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -2327,8 +2683,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 6,
+                "conf": {
+                  "高": 2,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -2355,8 +2717,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 4,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -2383,8 +2751,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 2,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -2411,8 +2785,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 20,
+                "conf": {
+                  "高": 17,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -2439,8 +2819,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 15,
+                "conf": {
+                  "高": 12,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-07.json"
               },
               "exams": {
                 "status": "待補",
@@ -2468,6 +2854,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2495,8 +2887,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 9,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV1-02-09.json"
               },
               "exams": {
                 "status": "待補",
@@ -2524,6 +2922,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2557,6 +2961,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2585,6 +2995,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2625,6 +3041,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -2652,8 +3074,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 37,
+                "conf": {
+                  "高": 20,
+                  "中": 17,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-01-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -2680,8 +3108,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 16,
+                "conf": {
+                  "高": 8,
+                  "中": 8,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-01-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -2708,8 +3142,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 6,
+                "conf": {
+                  "高": 5,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-01-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -2736,8 +3176,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 17,
+                "conf": {
+                  "高": 14,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-01-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -2764,8 +3210,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 1,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-01-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -2797,8 +3249,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 15,
+                "conf": {
+                  "高": 11,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -2825,8 +3283,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 6,
+                "conf": {
+                  "高": 6,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -2853,8 +3317,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 20,
+                "conf": {
+                  "高": 17,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -2881,8 +3351,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 4,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -2909,8 +3385,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 6,
+                  "中": 6,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -2937,8 +3419,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 7,
+                "conf": {
+                  "高": 6,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -2965,8 +3453,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 7,
+                "conf": {
+                  "高": 7,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-07.json"
               },
               "exams": {
                 "status": "待補",
@@ -2993,8 +3487,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 3,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-02-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -3031,6 +3531,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3062,8 +3568,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 0,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV2-03-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3103,6 +3615,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3131,6 +3649,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3158,8 +3682,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 10,
+                "conf": {
+                  "高": 5,
+                  "中": 5,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-01-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -3191,8 +3721,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 36,
+                "conf": {
+                  "高": 24,
+                  "中": 12,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -3219,8 +3755,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 12,
+                "conf": {
+                  "高": 10,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3247,8 +3789,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 1,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -3276,6 +3824,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3303,8 +3857,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 31,
+                "conf": {
+                  "高": 27,
+                  "中": 4,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -3331,8 +3891,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 2,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -3359,8 +3925,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 2,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-07.json"
               },
               "exams": {
                 "status": "待補",
@@ -3387,8 +3959,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 1,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -3415,8 +3993,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 10,
+                "conf": {
+                  "高": 7,
+                  "中": 3,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV3-02-09.json"
               },
               "exams": {
                 "status": "待補",
@@ -3449,6 +4033,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3489,6 +4079,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3516,8 +4112,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 8,
+                "conf": {
+                  "高": 7,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-01-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3544,8 +4146,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 33,
+                "conf": {
+                  "高": 25,
+                  "中": 8,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-01-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -3572,8 +4180,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 38,
+                "conf": {
+                  "高": 27,
+                  "中": 11,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-01-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -3605,8 +4219,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 18,
+                "conf": {
+                  "高": 12,
+                  "中": 6,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -3633,8 +4253,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 29,
+                "conf": {
+                  "高": 24,
+                  "中": 5,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3661,8 +4287,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 15,
+                "conf": {
+                  "高": 10,
+                  "中": 5,
+                  "低": 0
+                },
+                "file": "study-flow/q/CIV4-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -3695,6 +4327,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3722,8 +4360,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 2
+                },
+                "file": "study-flow/q/CIV4-03-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3763,6 +4407,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3791,6 +4441,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3819,6 +4475,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3847,6 +4509,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3874,8 +4542,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-01-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -3903,6 +4577,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -3939,8 +4619,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 7,
+                "conf": {
+                  "高": 4,
+                  "中": 0,
+                  "低": 3
+                },
+                "file": "study-flow/q/CRI-02-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -3971,8 +4657,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 46,
+                "conf": {
+                  "高": 21,
+                  "中": 24,
+                  "低": 1
+                },
+                "file": "study-flow/q/CRI-02-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -3999,8 +4691,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 14,
+                "conf": {
+                  "高": 5,
+                  "中": 9,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -4031,8 +4729,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 27,
+                "conf": {
+                  "高": 12,
+                  "中": 15,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-04.json"
               },
               "exams": {
                 "status": "待補",
@@ -4059,8 +4763,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 3,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-05.json"
               },
               "exams": {
                 "status": "待補",
@@ -4091,8 +4801,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 8,
+                "conf": {
+                  "高": 6,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-06.json"
               },
               "exams": {
                 "status": "待補",
@@ -4119,8 +4835,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 2,
+                "conf": {
+                  "高": 2,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-07.json"
               },
               "exams": {
                 "status": "待補",
@@ -4147,8 +4869,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 23,
+                "conf": {
+                  "高": 11,
+                  "中": 12,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-08.json"
               },
               "exams": {
                 "status": "待補",
@@ -4175,8 +4903,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 3,
+                  "中": 2,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-09.json"
               },
               "exams": {
                 "status": "待補",
@@ -4203,8 +4937,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 4,
+                "conf": {
+                  "高": 4,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-10.json"
               },
               "exams": {
                 "status": "待補",
@@ -4231,8 +4971,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 0,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-11.json"
               },
               "exams": {
                 "status": "待補",
@@ -4259,8 +5005,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 1,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-12.json"
               },
               "exams": {
                 "status": "待補",
@@ -4287,8 +5039,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 5,
+                "conf": {
+                  "高": 5,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-02-13.json"
               },
               "exams": {
                 "status": "待補",
@@ -4320,8 +5078,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 49,
+                "conf": {
+                  "高": 41,
+                  "中": 8,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-03-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -4348,8 +5112,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 46,
+                "conf": {
+                  "高": 35,
+                  "中": 11,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-03-02.json"
               },
               "exams": {
                 "status": "待補",
@@ -4376,8 +5146,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 69,
+                "conf": {
+                  "高": 41,
+                  "中": 22,
+                  "低": 6
+                },
+                "file": "study-flow/q/CRI-03-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -4409,8 +5185,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 1,
+                "conf": {
+                  "高": 1,
+                  "中": 0,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-04-01.json"
               },
               "exams": {
                 "status": "待補",
@@ -4438,6 +5220,12 @@
               ],
               "bank": {
                 "status": "待補",
+                "count": 0,
+                "conf": {
+                  "高": 0,
+                  "中": 0,
+                  "低": 0
+                },
                 "items": []
               },
               "exams": {
@@ -4465,8 +5253,14 @@
                 }
               ],
               "bank": {
-                "status": "待補",
-                "items": []
+                "status": "已掛",
+                "count": 3,
+                "conf": {
+                  "高": 2,
+                  "中": 1,
+                  "低": 0
+                },
+                "file": "study-flow/q/CRI-04-03.json"
               },
               "exams": {
                 "status": "待補",
@@ -4483,6 +5277,489 @@
           ]
         }
       ]
+    }
+  ],
+  "aiBank": {
+    "total": 2967,
+    "onNodes": 1350,
+    "pending": 1617,
+    "conf": {
+      "高": 960,
+      "中": 368,
+      "低": 22,
+      "待查": 1617
+    },
+    "note": "題庫對應和白話重點是 AI 批次結果，依題目自帶的答案與解析整理，不是正式詳解。信心只有高、中、低、待查。對不上章節的標待查。題幹全文不在這份對應檔，標待查。判例沒有填，維持待補。"
+  },
+  "outsideTopics": [
+    {
+      "id": "pc_6",
+      "title": "羈押",
+      "subject": "刑事訴訟法",
+      "count": 13,
+      "file": "study-flow/topics/pc_6.json"
+    },
+    {
+      "id": "ex_8",
+      "title": "保全執行",
+      "subject": "強制執行法",
+      "count": 11,
+      "file": "study-flow/topics/ex_8.json"
+    },
+    {
+      "id": "in_6",
+      "title": "危險增加通知",
+      "subject": "保險法",
+      "count": 9,
+      "file": "study-flow/topics/in_6.json"
+    },
+    {
+      "id": "pc_5",
+      "title": "拘提與逮捕",
+      "subject": "刑事訴訟法",
+      "count": 16,
+      "file": "study-flow/topics/pc_5.json"
+    },
+    {
+      "id": "co_14",
+      "title": "董事選任與解任",
+      "subject": "公司法",
+      "count": 8,
+      "file": "study-flow/topics/co_14.json"
+    },
+    {
+      "id": "se_11",
+      "title": "證券詐欺與財報不實",
+      "subject": "證券交易法",
+      "count": 10,
+      "file": "study-flow/topics/se_11.json"
+    },
+    {
+      "id": "in_9",
+      "title": "火災保險與超額保險",
+      "subject": "保險法",
+      "count": 9,
+      "file": "study-flow/topics/in_9.json"
+    },
+    {
+      "id": "bn_14",
+      "title": "支票提示期限",
+      "subject": "票據法",
+      "count": 12,
+      "file": "study-flow/topics/bn_14.json"
+    },
+    {
+      "id": "vp_27",
+      "title": "簡易與小額程序",
+      "subject": "民事訴訟法",
+      "count": 18,
+      "file": "study-flow/topics/vp_27.json"
+    },
+    {
+      "id": "vp_6",
+      "title": "當事人能力與訴訟能力",
+      "subject": "民事訴訟法",
+      "count": 10,
+      "file": "study-flow/topics/vp_6.json"
+    },
+    {
+      "id": "ex_7",
+      "title": "物之交付與行為不行為",
+      "subject": "強制執行法",
+      "count": 11,
+      "file": "study-flow/topics/ex_7.json"
+    },
+    {
+      "id": "vp_3",
+      "title": "闡明義務",
+      "subject": "民事訴訟法",
+      "count": 12,
+      "file": "study-flow/topics/vp_3.json"
+    },
+    {
+      "id": "vp_33",
+      "title": "審判權與程序基本權",
+      "subject": "民事訴訟法",
+      "count": 8,
+      "file": "study-flow/topics/vp_33.json"
+    },
+    {
+      "id": "et_6",
+      "title": "利益衝突",
+      "subject": "法律倫理",
+      "count": 11,
+      "file": "study-flow/topics/et_6.json"
+    },
+    {
+      "id": "ex_4",
+      "title": "動產與不動產執行",
+      "subject": "強制執行法",
+      "count": 17,
+      "file": "study-flow/topics/ex_4.json"
+    },
+    {
+      "id": "et_9",
+      "title": "審判獨立與公正",
+      "subject": "法律倫理",
+      "count": 34,
+      "file": "study-flow/topics/et_9.json"
+    },
+    {
+      "id": "pc_19",
+      "title": "交互詰問與證人",
+      "subject": "刑事訴訟法",
+      "count": 15,
+      "file": "study-flow/topics/pc_19.json"
+    },
+    {
+      "id": "vp_20",
+      "title": "既判力",
+      "subject": "民事訴訟法",
+      "count": 10,
+      "file": "study-flow/topics/vp_20.json"
+    },
+    {
+      "id": "vp_4",
+      "title": "集中審理與失權",
+      "subject": "民事訴訟法",
+      "count": 9,
+      "file": "study-flow/topics/vp_4.json"
+    },
+    {
+      "id": "vp_24",
+      "title": "第二審上訴",
+      "subject": "民事訴訟法",
+      "count": 19,
+      "file": "study-flow/topics/vp_24.json"
+    },
+    {
+      "id": "vp_18",
+      "title": "證據方法",
+      "subject": "民事訴訟法",
+      "count": 10,
+      "file": "study-flow/topics/vp_18.json"
+    },
+    {
+      "id": "vp_10",
+      "title": "當事人恆定與承當",
+      "subject": "民事訴訟法",
+      "count": 9,
+      "file": "study-flow/topics/vp_10.json"
+    },
+    {
+      "id": "pc_25",
+      "title": "上訴通則",
+      "subject": "刑事訴訟法",
+      "count": 9,
+      "file": "study-flow/topics/pc_25.json"
+    },
+    {
+      "id": "vp_26",
+      "title": "再審",
+      "subject": "民事訴訟法",
+      "count": 9,
+      "file": "study-flow/topics/vp_26.json"
+    },
+    {
+      "id": "co_9",
+      "title": "發行新股",
+      "subject": "公司法",
+      "count": 9,
+      "file": "study-flow/topics/co_9.json"
+    },
+    {
+      "id": "vp_32",
+      "title": "家事事件程序",
+      "subject": "民事訴訟法",
+      "count": 30,
+      "file": "study-flow/topics/vp_32.json"
+    },
+    {
+      "id": "pc_8",
+      "title": "搜索",
+      "subject": "刑事訴訟法",
+      "count": 14,
+      "file": "study-flow/topics/pc_8.json"
+    },
+    {
+      "id": "se_2",
+      "title": "申報生效與公開說明書",
+      "subject": "證券交易法",
+      "count": 9,
+      "file": "study-flow/topics/se_2.json"
+    },
+    {
+      "id": "pc_11",
+      "title": "告訴乃論",
+      "subject": "刑事訴訟法",
+      "count": 11,
+      "file": "study-flow/topics/pc_11.json"
+    },
+    {
+      "id": "bn_8",
+      "title": "背書",
+      "subject": "票據法",
+      "count": 13,
+      "file": "study-flow/topics/bn_8.json"
+    },
+    {
+      "id": "pc_15",
+      "title": "證據能力與證明力",
+      "subject": "刑事訴訟法",
+      "count": 10,
+      "file": "study-flow/topics/pc_15.json"
+    },
+    {
+      "id": "pl_19",
+      "title": "國際組織與聯合國",
+      "subject": "國際公法",
+      "count": 10,
+      "file": "study-flow/topics/pl_19.json"
+    },
+    {
+      "id": "co_15",
+      "title": "董事會",
+      "subject": "公司法",
+      "count": 10,
+      "file": "study-flow/topics/co_15.json"
+    },
+    {
+      "id": "pc_3",
+      "title": "辯護制度",
+      "subject": "刑事訴訟法",
+      "count": 10,
+      "file": "study-flow/topics/pc_3.json"
+    },
+    {
+      "id": "co_1",
+      "title": "公司種類",
+      "subject": "公司法",
+      "count": 11,
+      "file": "study-flow/topics/co_1.json"
+    },
+    {
+      "id": "et_12",
+      "title": "檢察官倫理規範",
+      "subject": "法律倫理",
+      "count": 17,
+      "file": "study-flow/topics/et_12.json"
+    },
+    {
+      "id": "pl_15",
+      "title": "國際人權",
+      "subject": "國際公法",
+      "count": 10,
+      "file": "study-flow/topics/pl_15.json"
+    },
+    {
+      "id": "co_27",
+      "title": "有限公司",
+      "subject": "公司法",
+      "count": 17,
+      "file": "study-flow/topics/co_27.json"
+    },
+    {
+      "id": "et_8",
+      "title": "招攬與報酬",
+      "subject": "法律倫理",
+      "count": 12,
+      "file": "study-flow/topics/et_8.json"
+    },
+    {
+      "id": "se_4",
+      "title": "獨立董事與審計委員會",
+      "subject": "證券交易法",
+      "count": 19,
+      "file": "study-flow/topics/se_4.json"
+    },
+    {
+      "id": "vp_12",
+      "title": "訴之變更追加",
+      "subject": "民事訴訟法",
+      "count": 8,
+      "file": "study-flow/topics/vp_12.json"
+    },
+    {
+      "id": "in_10",
+      "title": "責任保險",
+      "subject": "保險法",
+      "count": 9,
+      "file": "study-flow/topics/in_10.json"
+    },
+    {
+      "id": "pv_7",
+      "title": "契約",
+      "subject": "國際私法",
+      "count": 9,
+      "file": "study-flow/topics/pv_7.json"
+    },
+    {
+      "id": "in_3",
+      "title": "保險代位",
+      "subject": "保險法",
+      "count": 9,
+      "file": "study-flow/topics/in_3.json"
+    },
+    {
+      "id": "vp_8",
+      "title": "訴訟參加與告知",
+      "subject": "民事訴訟法",
+      "count": 8,
+      "file": "study-flow/topics/vp_8.json"
+    },
+    {
+      "id": "in_12",
+      "title": "人壽保險與被保險人同意",
+      "subject": "保險法",
+      "count": 9,
+      "file": "study-flow/topics/in_12.json"
+    },
+    {
+      "id": "pc_9",
+      "title": "扣押與通訊監察",
+      "subject": "刑事訴訟法",
+      "count": 12,
+      "file": "study-flow/topics/pc_9.json"
+    },
+    {
+      "id": "vp_7",
+      "title": "共同訴訟",
+      "subject": "民事訴訟法",
+      "count": 12,
+      "file": "study-flow/topics/vp_7.json"
+    },
+    {
+      "id": "vp_22",
+      "title": "訴訟上和解與調解",
+      "subject": "民事訴訟法",
+      "count": 15,
+      "file": "study-flow/topics/vp_22.json"
+    },
+    {
+      "id": "vp_25",
+      "title": "第三審上訴",
+      "subject": "民事訴訟法",
+      "count": 15,
+      "file": "study-flow/topics/vp_25.json"
+    },
+    {
+      "id": "co_24",
+      "title": "關係企業",
+      "subject": "公司法",
+      "count": 16,
+      "file": "study-flow/topics/co_24.json"
+    },
+    {
+      "id": "vp_5",
+      "title": "管轄",
+      "subject": "民事訴訟法",
+      "count": 11,
+      "file": "study-flow/topics/vp_5.json"
+    },
+    {
+      "id": "pc_14",
+      "title": "自訴",
+      "subject": "刑事訴訟法",
+      "count": 13,
+      "file": "study-flow/topics/pc_14.json"
+    }
+  ],
+  "pendingGroups": [
+    {
+      "id": "english",
+      "label": null,
+      "count": 134,
+      "file": "study-flow/pending/english.json"
+    },
+    {
+      "id": "crimpro",
+      "label": "刑事訴訟法",
+      "count": 123,
+      "file": "study-flow/pending/crimpro.json"
+    },
+    {
+      "id": "civpro",
+      "label": "民事訴訟法",
+      "count": 90,
+      "file": "study-flow/pending/civpro.json"
+    },
+    {
+      "id": "company",
+      "label": "公司法",
+      "count": 89,
+      "file": "study-flow/pending/company.json"
+    },
+    {
+      "id": "pvt",
+      "label": "國際私法",
+      "count": 81,
+      "file": "study-flow/pending/pvt.json"
+    },
+    {
+      "id": "bills",
+      "label": "票據法",
+      "count": 71,
+      "file": "study-flow/pending/bills.json"
+    },
+    {
+      "id": "pil",
+      "label": "國際公法",
+      "count": 70,
+      "file": "study-flow/pending/pil.json"
+    },
+    {
+      "id": "securities",
+      "label": "證券交易法",
+      "count": 67,
+      "file": "study-flow/pending/securities.json"
+    },
+    {
+      "id": "insurance",
+      "label": "保險法",
+      "count": 62,
+      "file": "study-flow/pending/insurance.json"
+    },
+    {
+      "id": "ethics",
+      "label": "法律倫理",
+      "count": 61,
+      "file": "study-flow/pending/ethics.json"
+    },
+    {
+      "id": "enforcement",
+      "label": "強制執行法",
+      "count": 51,
+      "file": "study-flow/pending/enforcement.json"
+    },
+    {
+      "id": "tax",
+      "label": null,
+      "count": 35,
+      "file": "study-flow/pending/tax.json"
+    },
+    {
+      "id": "criminal",
+      "label": null,
+      "count": 19,
+      "file": "study-flow/pending/criminal.json"
+    },
+    {
+      "id": "civil",
+      "label": null,
+      "count": 3,
+      "file": "study-flow/pending/civil.json"
+    },
+    {
+      "id": "constitution",
+      "label": null,
+      "count": 3,
+      "file": "study-flow/pending/constitution.json"
+    },
+    {
+      "id": "administrative",
+      "label": null,
+      "count": 1,
+      "file": "study-flow/pending/administrative.json"
     }
   ]
 }
