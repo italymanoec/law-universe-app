@@ -52,7 +52,7 @@ ol.order li{margin:8px 0}
 .week span{color:var(--muted); font-size:14px}
 .week button{margin-top:8px; min-height:44px}
 .tools{
-  position:sticky; top:0; z-index:4;
+  position:sticky; top:env(safe-area-inset-top); z-index:4;
   margin:0 0 12px; padding:10px 0 12px;
   background:#1a1f58;
   box-shadow:0 10px 18px rgba(12,16,48,.35);
@@ -116,10 +116,11 @@ footer{color:var(--muted); font-size:14px; padding:8px 0 calc(28px + env(safe-ar
   h1{font-size:24px}
   .wrap{width:min(100% - 20px, 880px)}
   .node .ttl{font-size:16px}
+  .tools{position:static; box-shadow:none}
 }
 .modbox{margin:10px 0}
 .modbox details{margin:6px 0; padding:8px 10px; border-radius:12px; background:rgba(8,12,36,.35); border:1px solid rgba(150,225,255,.22)}
-.modbox summary{cursor:pointer; font-weight:600; min-height:32px; line-height:32px}
+.modbox summary{cursor:pointer; font-weight:600; min-height:44px; line-height:44px}
 .modbox details details{background:rgba(8,12,36,.25)}
 .modbox li{margin:4px 0; overflow-wrap:anywhere}
 .modbox .src2, .modbox .muted{color:var(--muted); font-size:13px}
@@ -139,7 +140,7 @@ footer{color:var(--muted); font-size:14px; padding:8px 0 calc(28px + env(safe-ar
   </div>
 </header>
 <main id="main" class="wrap"></main>
-<footer><div class="wrap">補資料時只改 <code>data/study-flow.json</code>。不用改這個頁面。</div></footer>
+<footer><div class="wrap">章節在 <code>data/study-flow.json</code>。題目、模組、方法篇在 <code>data/study-flow/</code>。</div></footer>
 <script>
 'use strict';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -168,12 +169,19 @@ function countOf(slot){
   if (typeof slot.count === 'number' && slot.count > 0) return slot.count;
   return null;
 }
+function isPending(slot){
+  return !!(slot && typeof slot === 'object' && slot.status === '待查');
+}
 function slotText(slot){
   const n = countOf(slot);
-  return n == null ? '待補' : String(n);
+  if (n != null) return String(n);
+  return isPending(slot) ? '待查' : '待補';
 }
 function confCount(node, key){
   return (node.bank && node.bank.conf && node.bank.conf[key]) || 0;
+}
+function isSecondary(node){
+  return !!(node.bank && node.bank.secondary);
 }
 function bankHtml(node){
   const b = node.bank || {};
@@ -182,18 +190,22 @@ function bankHtml(node){
     return n ? tag(String(n)) : tag('待補');
   }
   if (!(b.count > 0)) return tag(b.status === '待查' ? '待查' : '待補');
+  if (b.secondary) return tag(String(b.count)) + ' <span class="tag low">次要對應</span>';
   const low = confCount(node, '低');
   return tag(String(b.count)) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
 }
 function sumBankHtml(nodes){
+  const main = nodes.filter(n => !isSecondary(n));
+  const sec = nodes.reduce((s, n) => s + (isSecondary(n) ? (n.bank.count || 0) : 0), 0);
   if (confFilter === '高' || confFilter === '中' || confFilter === '低') {
     let n = 0;
-    nodes.forEach(node => { n += confCount(node, confFilter); });
+    const pool = confFilter === '低' ? nodes : main;
+    pool.forEach(node => { n += confCount(node, confFilter); });
     return n ? tag(String(n)) : tag('待補');
   }
   let low = 0;
-  nodes.forEach(node => { low += confCount(node, '低'); });
-  return tag(sumText(nodes, 'bank')) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '');
+  main.forEach(node => { low += confCount(node, '低'); });
+  return tag(sumText(main, 'bank')) + (low ? ' <span class="tag low">低信心 ' + low + '</span>' : '') + (sec ? ' <span class="tag low">次要對應 ' + sec + '</span>' : '');
 }
 function confOk(conf){
   if (confFilter === '全部') return true;
@@ -230,15 +242,19 @@ function allNodes(list){
   return out;
 }
 function sumText(nodes, key){
-  let n = 0, any = false, miss = 0;
+  let n = 0, any = false, miss = 0, pending = 0;
   nodes.forEach(node => {
-    const c = countOf(node[key]);
-    if (c == null) miss += 1;
+    const slot = node[key];
+    const c = countOf(slot);
+    if (c == null) { if (isPending(slot)) pending += 1; else miss += 1; }
     else { any = true; n += c; }
   });
-  if (!any) return '待補';
-  if (!miss) return String(n);
-  return n + '（還有 ' + miss + ' 節待補）';
+  if (!any) return pending && !miss ? '待查' : '待補';
+  const tail = [];
+  if (pending) tail.push(pending + ' 節待查');
+  if (miss) tail.push(miss + ' 節待補');
+  if (!tail.length) return String(n);
+  return n + '（還有 ' + tail.join('、') + '）';
 }
 function pageText(page){
   if (page == null || page === '') return '<span class="miss">頁碼待查</span>';
@@ -380,7 +396,7 @@ function onClick(e){
   if (subBtn && !subBtn.closest('#tree')) {
     subject = subBtn.dataset.subject;
     if (subject !== '全部') openSubj.add(subject);
-    document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.subject === subject ? 'true' : 'false'));
+    document.querySelectorAll('.chip[data-subject]').forEach(b => b.setAttribute('aria-pressed', b.dataset.subject === subject ? 'true' : 'false'));
     renderTree();
     if (subBtn.dataset.scroll) $('tree').scrollIntoView({behavior:'smooth', block:'start'});
     return;
@@ -443,7 +459,7 @@ function renderTree(focusId, expandMatches){
       <div class="fold"${open ? '' : ' hidden'}>${s.parts.map(p => partHtml(s, p)).join('')}</div>
     </section>`;
   }).join('');
-  const hash = decodeURIComponent(location.hash.replace(/^#/, ''));
+  const hash = hashId();
   if (!hashScrolled && hash && openNode.has(hash)) {
     hashScrolled = true;
     document.getElementById('n-' + hash)?.scrollIntoView({block:'center'});
@@ -518,13 +534,14 @@ function qMatch(q, nodeId){
   if (hits && !nodeId) return false;
   return true;
 }
-function renderQ(q){
+function renderQ(q, nodeId){
   const conf = q.conf || '待查';
   const cls = conf === '低' ? 'low' : conf === '待查' ? 'unknown' : conf === '中' ? 'mid' : 'high';
   const beginner = !q.beginner || q.beginner === '待查' ? '<span class="miss">待查</span>' : esc(q.beginner);
   const kws = (q.keywords || []).length ? esc(q.keywords.join('、')) : '<span class="miss">待查</span>';
   const alt = (q.alt || []).length ? esc(q.alt.join('、')) : '沒有';
-  return `<article class="qitem ${cls}"><p class="qmeta"><span class="badge ai">AI 對應</span>${q.secondary ? '<span class="badge low">次要對應</span>' : ''}<span class="badge ${cls}">信心${esc(conf)}</span>題號 ${esc(q.id)}</p><p>${beginner}</p><p class="muted">關鍵字：${kws}</p><p class="muted">對應理由：${esc(q.reason || '待查')}</p><p class="muted">其他可能章節：${alt}。題幹全文待查。判例待補。</p></article>`;
+  const caseNote = nodeId ? '判例見本節模組' : '判例待補';
+  return `<article class="qitem ${cls}"><p class="qmeta"><span class="badge ai">AI 對應</span>${q.secondary ? '<span class="badge low">次要對應</span>' : ''}<span class="badge ${cls}">信心${esc(conf)}</span>題號 ${esc(q.id)}</p><p>${beginner}</p><p class="muted">關鍵字：${kws}</p><p class="muted">對應理由：${esc(q.reason || '待查')}</p><p class="muted">其他可能章節：${alt}。題幹全文待查。${caseNote}。</p></article>`;
 }
 function renderPack(pack, nodeId){
   const s = pack.summary;
@@ -534,7 +551,7 @@ function renderPack(pack, nodeId){
   } else html += '<p>本章彙整待查。</p>';
   const qs = (pack.questions || []).filter(q => confOk(q.conf) && qMatch(q, nodeId));
   html += `<h3>題目與白話重點</h3><p class="caveat">每一題都標 AI 對應和信心。低信心、待查不是正式詳解。題幹全文不在檔案裡。</p>`;
-  html += qs.length ? qs.map(renderQ).join('') : '<p>這裡沒有符合的題。</p>';
+  html += qs.length ? qs.map(q => renderQ(q, nodeId)).join('') : '<p>這裡沒有符合的題。</p>';
   return html;
 }
 function outsideBlock(t, kind, set){
@@ -640,12 +657,12 @@ function renderMod(d){
   h += `<p>方法篇：${(mt.篇 || []).length ? esc(mt.篇.map(x => x.篇名).join('、')) + '（內容在頁首「方法篇」）' : '<span class="miss">待補</span>'}</p>`;
   const x = (d.交叉 || {}).同字號其他節 || {};
   const keys = Object.keys(x);
-  if (keys.length) h += `<details><summary>同一個字號還出現在哪些節（${keys.length}）</summary><ul>${keys.map(k => `<li>${esc(k)}：${x[k].map(id => `<a href="#${esc(id)}">${esc(id)}</a>`).join('、')}</li>`).join('')}</ul></details>`;
+  if (keys.length) h += `<details><summary>同一個字號還出現在哪些節（${keys.length}）</summary><ul>${keys.map(k => `<li>${esc(k)}：${x[k].map(id => `<a href="#n-${esc(id)}">${esc(id)}</a>`).join('、')}</li>`).join('')}</ul></details>`;
   if ((d.待補模組 || []).length) h += `<p>${esc(d.待補模組.join('、'))}：<span class="miss">待補</span></p>`;
   return h;
 }
 function renderMethod(d){
-  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
+  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查標記 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
 }
 function hydrateMod(){
   document.querySelectorAll('.modbox[data-mod]').forEach(box => {
@@ -659,8 +676,13 @@ function hydrateMod(){
       .catch(() => { box.textContent = '本節模組讀取失敗。請用網站網址重新開啟。'; box.dataset.loading = ''; });
   });
 }
+function hashId(){
+  const raw = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if (!raw || raw === 'main') return '';
+  return raw.startsWith('n-') ? raw.slice(2) : raw;
+}
 function openHash(){
-  const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+  const id = hashId();
   if (!id) return;
   const node = allNodes().find(n => n.id === id);
   if (!node) return;
@@ -686,6 +708,13 @@ async function load(){
   }
   throw new Error(last);
 }
+
+window.addEventListener('hashchange', () => {
+  if (!data) return;
+  hashScrolled = false;
+  openHash();
+  renderTree();
+});
 
 load().then(json => {
   data = json;
