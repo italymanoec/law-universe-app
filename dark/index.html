@@ -2290,6 +2290,7 @@ let lawHit=null, lawT=null;
 qEl.addEventListener('input',()=>{ const raw=qEl.value.trim(), q=raw.replace(/^第|條$/g,''); matches=new Set(); qHits=[];
   const art=raw?parseArt(raw):null; lawHit=(art&&art.pc)?art:null; let h='';
   if(lawHit){ const rc=lookupCites(lawHit.pc,lawHit.no); rc.nodes.forEach(o=>matches.add(o)); qHits=rc.qs; h='<button class="qh" type="button" data-law="1">'+esc(LAWM[lawHit.pc].s)+'§'+lawHit.no+'</button>'; }
+  else if(art&&art.other) h='非本科';
   else { if(q) list.forEach(o=>{ if((o.t+o.a+o.k).includes(q)) matches.add(o); });
     if(q.length>=2) qHits=QB.filter(x=>qText(x).includes(q));
     if(art&&art.need) h='加法名，如 民184'; else if(q) h=matches.size+' 點'+(qHits.length?'<button class="qh" type="button">'+qHits.length+' 題</button>':''); }
@@ -2314,6 +2315,7 @@ function citeLaw(txt,m,def,st){ const pre=m[1]||''; let hit=null, v;
     else { const base=+m[2], inLaw=pc=>!!(pc&&LAWM[pc]&&base<=+String(LAWM[pc].last).split('-')[0]); v=inLaw(def)?def:(inLaw(st.tdef)?st.tdef:def); } }
   if(st.first){ st.tdef=hit; st.first=false; }
   st.last=v; st.lastEnd=m.index+m[0].length; return v; }
+function ownLaw(pc){ return (SUBJ_LAWS[SK]||[]).indexOf(pc)>=0; }   // 1101 科目隔離：只認本科法典
 function lawOf(pre,def){ if(!pre) return def; for(let i=Math.max(0,pre.length-16);i<pre.length;i++){ const suf=pre.slice(i); if(ALIAS[suf]) return ALIAS[suf]; } return LAWISH.test(pre)?null:def; }
 function parseArt(raw){
   let t=raw.replace(/\s+/g,'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248)).replace(/[－—–]/g,'-').replace(/^[§＃#]/,'');
@@ -2322,7 +2324,7 @@ function parseArt(raw){
   if(!m) return null;
   const pre=m[1].replace(/[§第]+$/,'');
   let pc=null;
-  if(pre){ pc=ALIAS[pre]; if(!pc) return null; }
+  if(pre){ pc=ALIAS[pre]; if(!pc) return null; if(!ownLaw(pc)) return {other:pc}; }
   else { pc=(SUBJ_LAWS[SK]||[])[0]; if(!pc) return {need:true}; }
   return {pc, no:m[2]+(m[3]?'-'+m[3]:'')};
 }
@@ -2342,7 +2344,7 @@ function citeIndex(){ if(S._cite) return S._cite; const def=(SUBJ_LAWS[SK]||[])[
   return S._cite=ix; }
 function qArts(){ const ix=citeIndex(); if(ix._qa) return ix._qa; const m={}; Object.keys(ix.map).forEach(k=>{ ix.map[k].q.forEach(id=>{ (m[id]=m[id]||[]).push(k); }); }); return ix._qa=m; }
 function artLabel(k){ const [pc,no]=k.split('|'); const M=LAWM[pc]; return (M?M.s:'')+'§'+no; }
-function topArts(qs,skip){ const qa=qArts(), c={}; qs.forEach(q=>(qa[q.id]||[]).forEach(k=>{ if(k!==skip) c[k]=(c[k]||0)+1; })); return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,10).map(k=>({k,n:c[k]})); }
+function topArts(qs,skip){ const qa=qArts(), c={}; qs.forEach(q=>(qa[q.id]||[]).forEach(k=>{ if(k!==skip&&ownLaw(k.split('|')[0])) c[k]=(c[k]||0)+1; })); return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,10).map(k=>({k,n:c[k]})); }
 const KW_BLOCK=new Set([]);  
 let KW_DF=null, KW_DF_QB=null;
 function kwDf(){ if(KW_DF&&KW_DF_QB===QB) return KW_DF; const T=QB.map(q=>(q.q||'')+(q.ex||'')), d={};
@@ -2386,7 +2388,7 @@ async function fetchPatch(){ try{ if(!window.claude||!window.claude.use){ patchS
   staleSync();
   if(mode==='law'&&lawView) renderPanel(); }catch(e){ patchState='none'; if(mode==='law'&&lawView) renderPanel(); } }
 let lawView=null;
-async function openLaw(pc,no){ if(lawView&&lawView.pc===pc&&lawView.no===no&&mode==='law'&&panel.classList.contains('show')&&!lawView.err) return;
+async function openLaw(pc,no){ if(!ownLaw(pc)) return; if(lawView&&lawView.pc===pc&&lawView.no===no&&mode==='law'&&panel.classList.contains('show')&&!lawView.err) return;
   mode='law'; session=null; concept=null; sel=null; related=new Set(); lawView={pc,no}; lightEdges(); renderPanel(); panel.scrollTop=0;
   try{ await loadLaw(pc); }catch(e){ if(lawView&&lawView.pc===pc) lawView.err=true; }
   if(lawView&&lawView.pc===pc&&lawView.no===no&&mode==='law') renderPanel(); }
