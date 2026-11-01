@@ -662,7 +662,7 @@ function renderMod(d){
   return h;
 }
 function renderMethod(d){
-  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
+  return `<details><summary>方法篇（${(d.篇 || []).length} 篇） ${badge('已有')}</summary><p class="caveat">${esc(d.說明 || '')}</p>${(d.篇 || []).map(p => `<details><summary>${esc(p.篇名)}　<span class="muted">${esc(p.科目)} · ${p.段落.length} 段${p.待查數 ? ' · 待查標記 ' + p.待查數 : ''}</span></summary>${p.段落.map(s => `<article class="qitem${s.狀態 === '待查' ? ' unknown' : ''}"><p><b>${esc(s.標題)}</b>　${s.狀態 === '待查' ? badge('待查') : ''}</p><p>${esc(s.白話重點)}</p>${(s.對初學者要做什麼 || []).length ? `<ul>${s.對初學者要做什麼.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${(s.待查標記 || []).length ? `<p class="miss">待查：${esc(s.待查標記.join('；'))}</p>` : ''}<details><summary class="muted">原文校正（序 ${esc(s.序)}）</summary><pre>${esc(s.原文校正)}</pre></details></article>`).join('')}</details>`).join('')}<p class="src2">來源：${esc(d.來源 || '')}</p></details>`;
 }
 function hydrateMod(){
   document.querySelectorAll('.modbox[data-mod]').forEach(box => {
